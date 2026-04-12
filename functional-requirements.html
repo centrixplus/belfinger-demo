@@ -1,0 +1,1315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Functional Requirements — Belfinger Maintenance System</title>
+<style>
+  :root {
+    --brand: #1e40af;
+    --brand-dark: #1e3a8a;
+    --brand-light: #dbeafe;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --danger: #dc2626;
+    --ink: #0f172a;
+    --ink-2: #334155;
+    --ink-3: #64748b;
+    --line: #e2e8f0;
+    --bg: #f8fafc;
+    --surface: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    color: var(--ink);
+    background: #e2e8f0;
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--brand); text-decoration: none; }
+
+  /* ---------- Page (A4) ---------- */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: white;
+    margin: 20px auto;
+    padding: 18mm 16mm 20mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    position: relative;
+  }
+  .page-footer {
+    position: absolute;
+    bottom: 10mm; left: 16mm; right: 16mm;
+    font-size: 0.65rem;
+    color: var(--ink-3);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--line);
+    padding-top: 5px;
+  }
+
+  /* ---------- Cover ---------- */
+  .cover {
+    background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%);
+    color: white;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .cover-inner {
+    padding: 30mm 18mm 18mm;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .cover .brand-mark {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.15rem;
+  }
+  .cover .brand-sub { font-size: 0.9rem; color: #93c5fd; margin-bottom: auto; }
+  .cover h1 {
+    font-size: 2.75rem;
+    line-height: 1.1;
+    font-weight: 800;
+    margin: 0 0 1rem;
+    max-width: 92%;
+    letter-spacing: -1px;
+  }
+  .cover .tag {
+    font-size: 1.05rem;
+    color: #cbd5e1;
+    max-width: 85%;
+    margin-bottom: 2.5rem;
+  }
+  .big-count {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0 2.5rem;
+  }
+  .big-count > div {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    flex: 1;
+  }
+  .big-count .n {
+    font-size: 2.75rem;
+    font-weight: 800;
+    line-height: 1;
+    color: white;
+  }
+  .big-count .l {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #93c5fd;
+    margin-top: 0.35rem;
+    font-weight: 600;
+  }
+  .cover-meta {
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 1.25rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    font-size: 0.8rem;
+  }
+  .cover-meta .label {
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-size: 0.65rem;
+    color: #93c5fd;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+  .cover-meta .val { color: white; font-weight: 500; }
+  .cover-foot {
+    padding: 9mm 18mm;
+    background: rgba(0,0,0,0.25);
+    font-size: 0.72rem;
+    color: #cbd5e1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cover-foot .seal {
+    padding: 0.4rem 0.9rem;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 999px;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #dbeafe;
+  }
+
+  /* ---------- Headings ---------- */
+  h1, h2, h3, h4 { color: var(--ink); font-weight: 700; letter-spacing: -0.3px; }
+  h2 {
+    font-size: 1.45rem;
+    padding: 0 0 0.6rem 3rem;
+    margin: 0 0 1.2rem;
+    border-bottom: 3px solid var(--brand);
+    position: relative;
+    min-height: 2.2rem;
+  }
+  h2::before {
+    content: attr(data-n);
+    position: absolute;
+    left: 0;
+    top: 0.1rem;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--brand-light);
+    line-height: 1;
+  }
+  h3 { font-size: 1rem; margin: 1.25rem 0 0.6rem; color: var(--brand-dark); }
+  h4 { font-size: 0.88rem; margin: 0.85rem 0 0.4rem; color: var(--ink-2); }
+  p { margin: 0 0 0.75rem; color: var(--ink-2); font-size: 0.85rem; }
+
+  /* ---------- Callouts ---------- */
+  .callout {
+    background: linear-gradient(135deg, var(--brand-light), #eff6ff);
+    border-left: 4px solid var(--brand);
+    padding: 0.85rem 1.1rem;
+    border-radius: 4px;
+    margin: 0.75rem 0;
+    font-size: 0.82rem;
+  }
+  .callout.warning { background: #fffbeb; border-left-color: var(--accent); }
+  .callout.success { background: #f0fdf4; border-left-color: var(--success); }
+
+  /* ---------- Legend / key ---------- */
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+  .legend-item {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.85rem;
+    text-align: center;
+    background: var(--surface);
+  }
+  .legend-item .box {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    margin: 0 auto 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .legend-item .box.agreed { background: #d1fae5; border: 2px solid var(--success); color: #065f46; }
+  .legend-item .box.change { background: #fef3c7; border: 2px solid var(--accent); color: #92400e; }
+  .legend-item .box.not-needed { background: #fee2e2; border: 2px solid var(--danger); color: #991b1b; }
+  .legend-item .box.discuss { background: #dbeafe; border: 2px solid var(--brand); color: var(--brand-dark); }
+  .legend-item .name { font-size: 0.78rem; font-weight: 700; color: var(--ink); margin-bottom: 0.2rem; }
+  .legend-item .desc { font-size: 0.66rem; color: var(--ink-3); line-height: 1.4; }
+
+  /* ---------- Module index ---------- */
+  .index-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  .index-item {
+    display: grid;
+    grid-template-columns: 32px 1fr 40px;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface);
+    font-size: 0.82rem;
+  }
+  .index-item .n {
+    background: var(--brand);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.78rem;
+  }
+  .index-item .name { font-weight: 600; color: var(--ink); }
+  .index-item .desc { font-size: 0.68rem; color: var(--ink-3); }
+  .index-item .count {
+    background: var(--brand-light);
+    color: var(--brand-dark);
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  /* ---------- Module section ---------- */
+  .module {
+    margin-bottom: 1.5rem;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .module-head {
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+    color: white;
+    padding: 0.85rem 1.1rem;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+  .module-head .mn {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .module-head .mt { flex: 1; }
+  .module-head .mt .title { font-size: 1rem; font-weight: 700; }
+  .module-head .mt .sub { font-size: 0.7rem; color: #cbd5e1; font-weight: 500; }
+  .module-head .mc {
+    background: rgba(255,255,255,0.2);
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  /* ---------- Feature table ---------- */
+  table.features {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--line);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    font-size: 0.78rem;
+    background: var(--surface);
+  }
+  table.features th {
+    background: #f8fafc;
+    color: var(--ink-3);
+    padding: 0.45rem 0.55rem;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    font-weight: 700;
+  }
+  table.features th.cbx { text-align: center; width: 26px; }
+  table.features td {
+    padding: 0.55rem 0.55rem;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+  }
+  table.features tr:last-child td { border-bottom: none; }
+  table.features td.id {
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--brand);
+    white-space: nowrap;
+    width: 42px;
+  }
+  table.features td.feat strong {
+    color: var(--ink);
+    display: block;
+    font-size: 0.82rem;
+    margin-bottom: 0.1rem;
+  }
+  table.features td.feat .fd {
+    color: var(--ink-2);
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+  table.features td.who {
+    width: 110px;
+    font-size: 0.68rem;
+    color: var(--ink-2);
+  }
+  table.features td.who .role {
+    display: inline-block;
+    background: var(--brand-light);
+    color: var(--brand-dark);
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  table.features td.cbx {
+    text-align: center;
+    width: 26px;
+  }
+  .check-box {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--ink-3);
+    border-radius: 3px;
+    display: inline-block;
+    background: white;
+  }
+
+  /* ---------- Out-of-scope ---------- */
+  .oos-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .oos {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 0.7rem;
+    padding: 0.75rem 0.9rem;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    font-size: 0.8rem;
+  }
+  .oos .oi {
+    color: #dc2626;
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+  .oos strong { color: #991b1b; display: block; margin-bottom: 0.1rem; }
+  .oos .why { color: var(--ink-2); font-size: 0.72rem; line-height: 1.45; }
+
+  /* ---------- Signature block ---------- */
+  .sig-block {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .sig {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+  }
+  .sig .who {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--brand);
+    font-weight: 700;
+    margin-bottom: 0.9rem;
+  }
+  .sig .lines { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.25rem; }
+  .sig .line { font-size: 0.75rem; }
+  .sig .line-label {
+    color: var(--ink-3);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 0.15rem;
+  }
+  .sig .line-fill {
+    height: 1px;
+    background: var(--ink-2);
+    margin-top: 1.4rem;
+  }
+
+  /* ---------- Summary block ---------- */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.65rem;
+    margin: 0.75rem 0;
+  }
+  .summary-grid .item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 0.7rem;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .summary-grid .item .label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--ink-3);
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+  .summary-grid .item .value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--brand);
+  }
+
+  /* ---------- Print ---------- */
+  @media print {
+    body { background: white; }
+    .page {
+      margin: 0;
+      box-shadow: none;
+      page-break-after: always;
+      min-height: auto;
+    }
+    .page:last-child { page-break-after: auto; }
+    .toolbar { display: none !important; }
+  }
+
+  /* ---------- Toolbar (screen only) ---------- */
+  .toolbar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 999px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    padding: 0.5rem;
+    display: flex;
+    gap: 0.35rem;
+    z-index: 100;
+  }
+  .toolbar button {
+    background: var(--brand);
+    color: white;
+    border: none;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .toolbar button:hover { background: var(--brand-dark); }
+  .toolbar a {
+    color: var(--ink-2);
+    padding: 0.55rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a href="scope-of-work.html">← Scope of Work</a>
+  <button onclick="window.print()">🖨 Print / Save as PDF</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 1 - COVER -->
+<!-- ============================================================ -->
+<div class="page cover">
+  <div class="cover-inner">
+    <div class="brand-mark">Belfinger MMS</div>
+    <div class="brand-sub">Maintenance Management System</div>
+
+    <h1>Functional Requirements</h1>
+    <div class="tag">
+      Complete feature list for client sign-off. Every function the system will
+      provide — organised into 20 modules — with a tick-box for each so the client
+      can formally approve (or revise) what we build.
+    </div>
+
+    <div class="big-count">
+      <div>
+        <div class="n">113</div>
+        <div class="l">Features</div>
+      </div>
+      <div>
+        <div class="n">20</div>
+        <div class="l">Modules</div>
+      </div>
+      <div>
+        <div class="n">4</div>
+        <div class="l">Approval States</div>
+      </div>
+      <div>
+        <div class="n">1</div>
+        <div class="l">Sign-off</div>
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <div>
+        <div class="label">Prepared for</div>
+        <div class="val">Belfinger Engineering &amp; Technologies GmbH</div>
+      </div>
+      <div>
+        <div class="label">End customer</div>
+        <div class="val">Ministry of Electricity &amp; Water (MEW)</div>
+      </div>
+      <div>
+        <div class="label">Contract reference</div>
+        <div class="val">MEW / MC / 6132 / 2024 / 2025</div>
+      </div>
+      <div>
+        <div class="label">Document date</div>
+        <div class="val">11 April 2026 · v1.0</div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-foot">
+    <span>Operation &amp; Maintenance of Water Sector</span>
+    <span class="seal">Draft for Client Review</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2 - HOW TO USE + LEGEND + INDEX -->
+<!-- ============================================================ -->
+<div class="page">
+  <h2 data-n="01">How to use this document</h2>
+
+  <p>
+    This document lists every feature we plan to build in <strong>Phase 1</strong>.
+    It pairs with the <em>Scope of Work</em> (which covers architecture, timeline,
+    and commercials) and the <em>Clickable Prototype</em> (which shows what each
+    screen will look like).
+  </p>
+
+  <p>
+    For each of the <strong>113 features</strong> below, please mark one of the four
+    approval states by ticking the box. Write any changes in the margin or on an
+    accompanying note.
+  </p>
+
+  <h3>Approval legend</h3>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="box agreed">✓</div>
+      <div class="name">Agreed</div>
+      <div class="desc">Build as specified — no changes required</div>
+    </div>
+    <div class="legend-item">
+      <div class="box change">✎</div>
+      <div class="name">Change</div>
+      <div class="desc">Build with modifications (write change in margin)</div>
+    </div>
+    <div class="legend-item">
+      <div class="box not-needed">✗</div>
+      <div class="name">Not needed</div>
+      <div class="desc">Remove from scope — not required in Phase 1</div>
+    </div>
+    <div class="legend-item">
+      <div class="box discuss">?</div>
+      <div class="name">Discuss</div>
+      <div class="desc">Needs more conversation before deciding</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>How approval works:</strong> any feature marked "Change" or "Discuss"
+    will be resolved in a working session with the implementation team before
+    <strong>Phase 2 (Detailed Planning)</strong> begins. All "Agreed" features
+    move directly into the build plan. "Not needed" features are excluded from
+    Phase 1 and do not affect timeline or cost.
+  </div>
+
+  <h2 data-n="02" style="margin-top: 1.75rem;">Module Index</h2>
+
+  <div class="summary-grid">
+    <div class="item"><div class="label">Modules</div><div class="value">20</div></div>
+    <div class="item"><div class="label">Features</div><div class="value">113</div></div>
+    <div class="item"><div class="label">Pages</div><div class="value">14</div></div>
+    <div class="item"><div class="label">Out of Scope</div><div class="value">7</div></div>
+  </div>
+
+  <div class="index-grid">
+    <div class="index-item"><div class="n">1</div><div><div class="name">Authentication &amp; Users</div><div class="desc">Login, 2FA, roles, profile</div></div><div class="count">6</div></div>
+    <div class="index-item"><div class="n">2</div><div><div class="name">Organisations &amp; Sites</div><div class="desc">Orgs, zones, sites, sub-locations</div></div><div class="count">5</div></div>
+    <div class="index-item"><div class="n">3</div><div><div class="name">Equipment Register</div><div class="desc">Asset inventory, tags, history</div></div><div class="count">7</div></div>
+    <div class="index-item"><div class="n">4</div><div><div class="name">PM Scheduling</div><div class="desc">Cadences, auto-gen, KW holidays</div></div><div class="count">8</div></div>
+    <div class="index-item"><div class="n">5</div><div><div class="name">Issue Requests</div><div class="desc">MEW-initiated defect reports</div></div><div class="count">6</div></div>
+    <div class="index-item"><div class="n">6</div><div><div class="name">Approval Chain</div><div class="desc">Forward routing, state machine</div></div><div class="count">6</div></div>
+    <div class="index-item"><div class="n">7</div><div><div class="name">Rejection &amp; Rework</div><div class="desc">"Choose who to send back to"</div></div><div class="count">5</div></div>
+    <div class="index-item"><div class="n">8</div><div><div class="name">iPad Field App</div><div class="desc">Offline PWA, QR scan, sync</div></div><div class="count">9</div></div>
+    <div class="index-item"><div class="n">9</div><div><div class="name">Checklists &amp; Reports</div><div class="desc">Typed, calibration math, photos</div></div><div class="count">7</div></div>
+    <div class="index-item"><div class="n">10</div><div><div class="name">Work Permits</div><div class="desc">First-class field, enforced</div></div><div class="count">4</div></div>
+    <div class="index-item"><div class="n">11</div><div><div class="name">Invoice Management</div><div class="desc">BOQ drafting, versioning, chain</div></div><div class="count">8</div></div>
+    <div class="index-item"><div class="n">12</div><div><div class="name">BOQ Catalog</div><div class="desc">Master items, departments, CSV</div></div><div class="count">4</div></div>
+    <div class="index-item"><div class="n">13</div><div><div class="name">Notifications</div><div class="desc">In-app, email, SMS, digest</div></div><div class="count">6</div></div>
+    <div class="index-item"><div class="n">14</div><div><div class="name">SLA Tracking</div><div class="desc">Urgency, escalation, reporting</div></div><div class="count">4</div></div>
+    <div class="index-item"><div class="n">15</div><div><div class="name">Dashboards &amp; Reports</div><div class="desc">Per role, KPIs, exports</div></div><div class="count">6</div></div>
+    <div class="index-item"><div class="n">16</div><div><div class="name">Audit &amp; Compliance</div><div class="desc">Append-only log, tamper-evident</div></div><div class="count">4</div></div>
+    <div class="index-item"><div class="n">17</div><div><div class="name">Bilingual (EN / AR)</div><div class="desc">Full UI, RTL, content fields</div></div><div class="count">3</div></div>
+    <div class="index-item"><div class="n">18</div><div><div class="name">Admin &amp; Config</div><div class="desc">Users, BOQ, templates, settings</div></div><div class="count">6</div></div>
+    <div class="index-item"><div class="n">19</div><div><div class="name">Data Import / Export</div><div class="desc">CSV, JSON, PDF</div></div><div class="count">4</div></div>
+    <div class="index-item"><div class="n">20</div><div><div class="name">Security &amp; Hosting</div><div class="desc">HTTPS, RBAC, backups, options</div></div><div class="count">5</div></div>
+  </div>
+
+  <div class="page-footer">
+    <span>Functional Requirements · Belfinger MMS · v1.0</span>
+    <span>Page 1 of 14</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3 - MODULES 1-3 -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">1</div>
+      <div class="mt">
+        <div class="title">Authentication &amp; User Management</div>
+        <div class="sub">Secure sign-in, 2FA for privileged roles, and user admin</div>
+      </div>
+      <div class="mc">6 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr>
+          <th style="width: 45px;">ID</th>
+          <th>Feature</th>
+          <th>Who uses</th>
+          <th class="cbx">✓</th>
+          <th class="cbx">✎</th>
+          <th class="cbx">✗</th>
+          <th class="cbx">?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F1.1</td><td class="feat"><strong>Email + password login</strong><div class="fd">Standard sign-in. Session persists until manual logout or 12-hour expiry.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F1.2</td><td class="feat"><strong>Two-factor authentication (TOTP)</strong><div class="fd">Managers &amp; Approvers must scan QR into Google Authenticator + enter 6-digit code.</div></td><td class="who"><span class="role">Manager / Approver</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F1.3</td><td class="feat"><strong>Forgot password flow</strong><div class="fd">Password reset by email; reset link valid for 30 minutes.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F1.4</td><td class="feat"><strong>Role-based access control</strong><div class="fd">Every user has one role. UI hides screens &amp; actions the user cannot access.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F1.5</td><td class="feat"><strong>User profile page</strong><div class="fd">Users can update name, phone, language (EN/AR), notification preferences.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F1.6</td><td class="feat"><strong>Admin-managed user creation</strong><div class="fd">Only Admin can create / activate / deactivate users. No public sign-up.</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">2</div>
+      <div class="mt">
+        <div class="title">Organisations, Zones, Sites &amp; Sub-locations</div>
+        <div class="sub">Multi-tenant data model matching MEW's geographical hierarchy</div>
+      </div>
+      <div class="mc">5 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F2.1</td><td class="feat"><strong>Multi-organisation model</strong><div class="fd">MEW, Belfinger, and each subcontractor exist as separate orgs. Users scoped to their own.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F2.2</td><td class="feat"><strong>Zone management</strong><div class="fd">Create / edit / deactivate zones (e.g. North, South, Central).</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F2.3</td><td class="feat"><strong>Site management</strong><div class="fd">Create / edit sites (Mina Abdulla Tower, Shuwaikh PS, Qairawan, Az-Zour). Each in a zone.</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F2.4</td><td class="feat"><strong>Sub-location hierarchy</strong><div class="fd">Each site has sub-locations (D1–D12, Main Reservoir, Chamber 1). Matches MEW numbering.</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F2.5</td><td class="feat"><strong>Supervisor &amp; Engineer scoping</strong><div class="fd">Supervisors assigned to zones; Engineers to site groups. Users see only their scope.</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">3</div>
+      <div class="mt">
+        <div class="title">Equipment / Asset Register</div>
+        <div class="sub">Per-site tagged instrument inventory with live status and history</div>
+      </div>
+      <div class="mc">7 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F3.1</td><td class="feat"><strong>Per-site equipment list</strong><div class="fd">Unique Tag No. (LTD-1211, LSD-1211-H, FSD-121-1), description, type, sub-location, install date.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F3.2</td><td class="feat"><strong>Equipment types</strong><div class="fd">Level Transmitter, Level Switch, Flow Switch, Pressure Switch, DP Switch, Flowmeter, etc.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F3.3</td><td class="feat"><strong>Equipment status tracking</strong><div class="fd">Live status: Working / Defective / Under Repair / Decommissioned. Auto-updates from WOs.</div></td><td class="who"><span class="role">System + Engineer</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F3.4</td><td class="feat"><strong>Last serviced date</strong><div class="fd">Shows when each equipment was last serviced and by whom. Pre-fills iPad checklists.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F3.5</td><td class="feat"><strong>QR / barcode on tag stickers</strong><div class="fd">Engineers scan with iPad camera to jump directly to that equipment's checklist.</div></td><td class="who"><span class="role">Site Engineer</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F3.6</td><td class="feat"><strong>Equipment history view</strong><div class="fd">Shows full maintenance history per equipment: WOs, checklists, photos, signatures.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F3.7</td><td class="feat"><strong>Bulk equipment import (CSV)</strong><div class="fd">Bulk import of tags, descriptions, types, sites. Initial load and future additions.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">
+    <span>Functional Requirements · Belfinger MMS · v1.0</span>
+    <span>Page 2 of 14</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4 - MODULES 4-5 -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">4</div>
+      <div class="mt">
+        <div class="title">Preventive Maintenance (PM) Scheduling</div>
+        <div class="sub">Automated PM generation with MEW approval and KW-holiday awareness</div>
+      </div>
+      <div class="mc">8 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F4.1</td><td class="feat"><strong>PM schedule per site × department</strong><div class="fd">Cadence: weekly / monthly / quarterly / semi-annual / annual per (site, dept, equip type).</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F4.2</td><td class="feat"><strong>Nightly auto-generation</strong><div class="fd">Cron at 00:05 creates PM WOs due within next lead_days (default 3 days).</div></td><td class="who"><span class="role">System (cron)</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F4.3</td><td class="feat"><strong>MEW approval gate</strong><div class="fd">Every PM enters PENDING_MEW_APPROVAL. Approver can approve, decline, or postpone.</div></td><td class="who"><span class="role">MEW Approver</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F4.4</td><td class="feat"><strong>Kuwait holiday awareness</strong><div class="fd">Skips KW holidays &amp; weekends. Fires on next working day so notifications don't go off-hours.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F4.5</td><td class="feat"><strong>Duplicate guard</strong><div class="fd">Won't create a new PM if an open one exists for same (site, sub-location, dept, cadence).</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F4.6</td><td class="feat"><strong>Grace window &amp; escalation</strong><div class="fd">If MEW hasn't approved within N days of due date, escalates to Belfinger Mgr.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F4.7</td><td class="feat"><strong>Scheduler run log</strong><div class="fd">Each run logs started_at, finished_at, WOs created, errors. Admin can re-run.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F4.8</td><td class="feat"><strong>PM calendar view</strong><div class="fd">Upcoming calendar of all PMs across all sites for planning and resourcing.</div></td><td class="who"><span class="role">Admin / Manager</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">5</div>
+      <div class="mt">
+        <div class="title">Issue Request Workflow (MEW-initiated)</div>
+        <div class="sub">Corrective work raised by MEW when a fault is found in the field</div>
+      </div>
+      <div class="mc">6 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F5.1</td><td class="feat"><strong>Raise Issue Request form</strong><div class="fd">Web form: site, sub-location, dept, urgency, description (EN/AR), photos, optional tag.</div></td><td class="who"><span class="role">MEW Requester</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F5.2</td><td class="feat"><strong>Urgency levels</strong><div class="fd">Very Urgent (4h / 24h) · Same Day (8h / 24h) · Normal (48h / 7d). Drives SLA tracking.</div></td><td class="who"><span class="role">MEW Requester</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F5.3</td><td class="feat"><strong>Duplicate detection</strong><div class="fd">Warns if an open WO exists for same (site, sub-location, dept) in last 7 days.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F5.4</td><td class="feat"><strong>Auto-routing by department</strong><div class="fd">On submission, WO auto-routes to the org that owns that department.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F5.5</td><td class="feat"><strong>Belfinger Manager triage</strong><div class="fd">Mgr reviews before final routing. Can accept, re-route, or reject with reason.</div></td><td class="who"><span class="role">Belfinger Manager</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F5.6</td><td class="feat"><strong>MEW cancel / withdraw</strong><div class="fd">Before work starts, MEW Requester can cancel their own request with reason.</div></td><td class="who"><span class="role">MEW Requester</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">
+    <span>Functional Requirements · Belfinger MMS · v1.0</span>
+    <span>Page 3 of 14</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5 - MODULES 6-7 -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">6</div>
+      <div class="mt">
+        <div class="title">Approval Chain &amp; Routing</div>
+        <div class="sub">Enforced state machine from MEW down to Site Engineer</div>
+      </div>
+      <div class="mc">6 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F6.1</td><td class="feat"><strong>Forward approval chain</strong><div class="fd">MEW → Belfinger Mgr → Contractor Mgr → Supervisor → Site Engineer. Enforced by system.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F6.2</td><td class="feat"><strong>Skip-contractor-mgr rule</strong><div class="fd">If dept owned by Belfinger (e.g. Water), the Contractor Mgr step is skipped automatically.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F6.3</td><td class="feat"><strong>Visible state on every WO</strong><div class="fd">Always shows current state + current actor (whose court the ball is in). No guesswork.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F6.4</td><td class="feat"><strong>Permit enforcement</strong><div class="fd">Cannot transition to ASSIGNED_TO_ENGINEER without Work Permit attached. No bypass.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F6.5</td><td class="feat"><strong>Supervisor engineer assignment</strong><div class="fd">Supervisor picks engineer from available team. List shows open WO count + site distance.</div></td><td class="who"><span class="role">Supervisor</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F6.6</td><td class="feat"><strong>Engineer acceptance</strong><div class="fd">Engineer can acknowledge or reject back to Supervisor with reason (wrong assign, safety, no permit).</div></td><td class="who"><span class="role">Site Engineer</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">7</div>
+      <div class="mt">
+        <div class="title">Rejection &amp; Rework</div>
+        <div class="sub">"Choose who to send it back to" logic with constrained targets</div>
+      </div>
+      <div class="mc">5 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F7.1</td><td class="feat"><strong>Forward-chain rejection</strong><div class="fd">Any approver can reject back upstream with mandatory reason.</div></td><td class="who"><span class="role">Any approver</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F7.2</td><td class="feat"><strong>"Choose who to send back to"</strong><div class="fd">Approver picks specific target from dropdown of legal upstream roles. Not just one step back.</div></td><td class="who"><span class="role">Approver</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F7.3</td><td class="feat"><strong>Constrained targets by role</strong><div class="fd">Can only reassign upstream — never sideways. Prevents blame-ping-pong.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F7.4</td><td class="feat"><strong>Mandatory rejection reason</strong><div class="fd">System refuses empty reason. Stored in audit log and shown in all later views.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F7.5</td><td class="feat"><strong>Rework returns to IN_PROGRESS</strong><div class="fd">Rejected work re-enters IN_PROGRESS on same WO (not a new one). More data added.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">
+    <span>Functional Requirements · Belfinger MMS · v1.0</span>
+    <span>Page 4 of 14</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6 - MODULE 8 (iPad) -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">8</div>
+      <div class="mt">
+        <div class="title">Field App — iPad PWA</div>
+        <div class="sub">Offline-first Progressive Web App for Site Engineers</div>
+      </div>
+      <div class="mc">9 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F8.1</td><td class="feat"><strong>Installable PWA on iPad</strong><div class="fd">Installed to iPad home screen with app icon. No App Store review needed.</div></td><td class="who"><span class="role">Site Engineer</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F8.2</td><td class="feat"><strong>Engineer inbox (Today / Overdue / Upcoming)</strong><div class="fd">Card list by due date. Each card: site, sub-loc, dept, urgency, SLA countdown, permit.</div></td><td class="who"><span class="role">Site Engineer</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F8.3</td><td class="feat"><strong>Work Order detail screen</strong><div class="fd">Tabs: Equipment, Report, Photos, Signatures. Big Start Work with GPS + timestamp.</div></td><td class="who"><span class="role">Site Engineer</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F8.4</td><td class="feat"><strong>QR code scanning</strong><div class="fd">Scan tag sticker with iPad camera → jump directly to that equipment's checklist.</div></td><td class="who"><span class="role">Site Engineer</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F8.5</td><td class="feat"><strong>Offline-first (IndexedDB + Workbox)</strong><div class="fd">Pulls engineer's WOs + templates to local storage. All entry writes locally first.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F8.6</td><td class="feat"><strong>Sync indicator</strong><div class="fd">Persistent "X items pending sync" badge. Engineer can't log out until sync drains.</div></td><td class="who"><span class="role">Site Engineer</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F8.7</td><td class="feat"><strong>Conflict resolution rules</strong><div class="fd">Field-side wins on checklist/photos/sigs. Server-side wins on state transitions.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F8.8</td><td class="feat"><strong>Previous-reading prefill</strong><div class="fd">Last serviced values shown in gray under each input for context before entering today's.</div></td><td class="who"><span class="role">Site Engineer</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F8.9</td><td class="feat"><strong>Submit gate</strong><div class="fd">Submit button disabled until all mandatory fields, photos, and both signatures present.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">9</div>
+      <div class="mt">
+        <div class="title">Checklists &amp; Reports</div>
+        <div class="sub">Per-equipment-type templates with calibration math and photo tagging</div>
+      </div>
+      <div class="mc">7 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F9.1</td><td class="feat"><strong>Templates per equipment type</strong><div class="fd">Each type (Level TX, Flow Sw, etc.) has its own checklist template defined by Admin.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F9.2</td><td class="feat"><strong>Typed checklist items</strong><div class="fd">Types: boolean, number (unit+range), pass/fail, text, measured-vs-expected (calibration).</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F9.3</td><td class="feat"><strong>Calibration matrix with auto-math</strong><div class="fd">5-row (0/25/50/75/100%) matrix. Engineer enters inputs; system computes % Error and After-Cal.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F9.4</td><td class="feat"><strong>Mandatory photo flags</strong><div class="fd">Admin can mark items as "photo required" (before/after/defect). Enforced before submit.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F9.5</td><td class="feat"><strong>Photos tagged to equipment</strong><div class="fd">Photos associated with a specific equipment tag, not just the WO. Easier to audit.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F9.6</td><td class="feat"><strong>Free-form work report mode</strong><div class="fd">For non-checklist jobs (printer install, etc.): Work Report + Spare + Remarks + Note.</div></td><td class="who"><span class="role">Site Engineer</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F9.7</td><td class="feat"><strong>Auto-save draft</strong><div class="fd">iPad app auto-saves checklist progress every few seconds. Network loss is safe.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">
+    <span>Functional Requirements · Belfinger MMS · v1.0</span>
+    <span>Page 5 of 14</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 7 - MODULES 10-12 -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">10</div>
+      <div class="mt">
+        <div class="title">Work Permits</div>
+        <div class="sub">First-class permit field on every WO with enforcement</div>
+      </div>
+      <div class="mc">4 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F10.1</td><td class="feat"><strong>Permit as first-class WO field</strong><div class="fd">Permit number, issuer, date, validity, extensions. Matches MEW's Maintenance/Defect Sheet.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F10.2</td><td class="feat"><strong>Permit extension tracking</strong><div class="fd">Extensions 1 and 2 recorded with dates. Visible to all downstream actors.</div></td><td class="who"><span class="role">Supervisor</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F10.3</td><td class="feat"><strong>No permit → no work</strong><div class="fd">State machine blocks assign-to-engineer without permit. Cannot be bypassed.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F10.4</td><td class="feat"><strong>Permit visible on iPad</strong><div class="fd">Permit number and validity window prominent on iPad WO detail screen.</div></td><td class="who"><span class="role">Site Engineer</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">11</div>
+      <div class="mt">
+        <div class="title">Invoice Management</div>
+        <div class="sub">BOQ-based drafting with versioning and MEW approval chain</div>
+      </div>
+      <div class="mc">8 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F11.1</td><td class="feat"><strong>Draft invoice from BOQ</strong><div class="fd">Supervisor picks BOQ items from dropdown (filtered by dept) and enters quantities.</div></td><td class="who"><span class="role">Supervisor</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F11.2</td><td class="feat"><strong>Unit price snapshotting</strong><div class="fd">BOQ price "snapshotted" when line is added. Later BOQ edits don't change old invoices.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F11.3</td><td class="feat"><strong>Invoice approval chain</strong><div class="fd">Supervisor → Contractor Mgr → Belfinger Mgr → MEW Approver. Each must approve.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F11.4</td><td class="feat"><strong>Invoice versioning</strong><div class="fd">If rejected, corrected version saved as v(n+1). Old versions preserved for audit.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F11.5</td><td class="feat"><strong>"Send back to X" on rejection</strong><div class="fd">Same as forward chain: approver picks who to reassign to. Walks back up chain once fixed.</div></td><td class="who"><span class="role">Approver</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F11.6</td><td class="feat"><strong>Zero-value / no-invoice WOs</strong><div class="fd">If no billable items, Supervisor closes WO directly. No zero-value invoice through chain.</div></td><td class="who"><span class="role">Supervisor</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F11.7</td><td class="feat"><strong>Invoice PDF export</strong><div class="fd">On RECEIVABLE, invoice exported as bilingual (EN/AR) PDF for MEW finance handover.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F11.8</td><td class="feat"><strong>Receivables dashboard</strong><div class="fd">Manager sees all RECEIVABLE invoices by month, site, dept. Outstanding + trend.</div></td><td class="who"><span class="role">Belfinger Manager</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">12</div>
+      <div class="mt">
+        <div class="title">BOQ Master Catalog</div>
+        <div class="sub">MEW pre-approved catalog with departmental filtering</div>
+      </div>
+      <div class="mc">4 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F12.1</td><td class="feat"><strong>Centralised BOQ catalog</strong><div class="fd">Master list: code, description (EN/AR), unit, unit price (KWD), linked department.</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F12.2</td><td class="feat"><strong>MEW pre-approval</strong><div class="fd">BOQ structure pre-approved by MEW once. Per-invoice approval is only qty, not catalog.</div></td><td class="who"><span class="role">Admin process</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F12.3</td><td class="feat"><strong>Department filtering</strong><div class="fd">Drafting invoice only shows BOQ items for that WO's dept. Less noise, fewer mistakes.</div></td><td class="who"><span class="role">Supervisor</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F12.4</td><td class="feat"><strong>BOQ import / update</strong><div class="fd">Admin updates BOQ via CSV upload. New prices apply to future; existing unchanged.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">
+    <span>Functional Requirements · Belfinger MMS · v1.0</span>
+    <span>Page 6 of 14</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 8 - MODULES 13-15 -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">13</div>
+      <div class="mt">
+        <div class="title">Notifications &amp; Alerts</div>
+        <div class="sub">Multi-channel notifications with user preferences and digest mode</div>
+      </div>
+      <div class="mc">6 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F13.1</td><td class="feat"><strong>In-app notifications</strong><div class="fd">Every state change creates in-app notification. Bell icon with unread count.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F13.2</td><td class="feat"><strong>Email notifications</strong><div class="fd">State changes also go by email. Users configure which events trigger email.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F13.3</td><td class="feat"><strong>SMS notifications</strong><div class="fd">SMS only for Very Urgent + SLA breach. Provider-agnostic adapter.</div></td><td class="who"><span class="role">Mgr / Eng</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F13.4</td><td class="feat"><strong>Daily digest mode</strong><div class="fd">Optional single 08:00 digest instead of per-event. Very Urgent always sends immediately.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F13.5</td><td class="feat"><strong>Notification preferences</strong><div class="fd">User settings page to toggle channels (in-app / email / SMS) per event type.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F13.6</td><td class="feat"><strong>Notification audit</strong><div class="fd">Admin views log of all notifications sent in last 30 days: recipient, channel, status.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">14</div>
+      <div class="mt">
+        <div class="title">SLA Tracking</div>
+        <div class="sub">Configurable targets with automated warnings and breach escalation</div>
+      </div>
+      <div class="mc">4 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F14.1</td><td class="feat"><strong>SLA clock on Issues</strong><div class="fd">Every Issue has countdown based on urgency. Top-right of WO detail screen.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F14.2</td><td class="feat"><strong>Configurable SLA targets</strong><div class="fd">Admin sets on-site and close-by targets per urgency per department. Not hard-coded.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F14.3</td><td class="feat"><strong>75% warning notification</strong><div class="fd">At 75% of SLA target, warning pushed to engineer and supervisor.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F14.4</td><td class="feat"><strong>Breach escalation</strong><div class="fd">On breach, WO flagged red, escalated to Belfinger Mgr, logged for monthly SLA report.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">15</div>
+      <div class="mt">
+        <div class="title">Dashboards &amp; Reporting</div>
+        <div class="sub">Role-tailored dashboards with monthly exports</div>
+      </div>
+      <div class="mc">6 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F15.1</td><td class="feat"><strong>MEW Requester dashboard</strong><div class="fd">Open WOs, pending approvals, SLA risk, closed this month + quick actions.</div></td><td class="who"><span class="role">MEW Requester</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F15.2</td><td class="feat"><strong>Belfinger Manager dashboard</strong><div class="fd">Triage queue, invoice approvals, SLA breaches, department health (7-day rolling).</div></td><td class="who"><span class="role">Belfinger Manager</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F15.3</td><td class="feat"><strong>Supervisor dashboard</strong><div class="fd">WOs awaiting assignment, reports to review, invoices to draft, team workload.</div></td><td class="who"><span class="role">Supervisor</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F15.4</td><td class="feat"><strong>Monthly SLA report</strong><div class="fd">% closed within SLA by dept, breach list. Exportable PDF/Excel.</div></td><td class="who"><span class="role">Manager</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F15.5</td><td class="feat"><strong>Equipment health report</strong><div class="fd">Working vs defective counts per equipment type across sites. Identifies failure patterns.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F15.6</td><td class="feat"><strong>Revenue report</strong><div class="fd">Total RECEIVABLE by month/site/dept. Trend chart. Exportable.</div></td><td class="who"><span class="role">Manager</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">
+    <span>Functional Requirements · Belfinger MMS · v1.0</span>
+    <span>Page 7 of 14</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 9 - MODULES 16-18 -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">16</div>
+      <div class="mt">
+        <div class="title">Audit Log &amp; Compliance</div>
+        <div class="sub">Tamper-evident append-only log for MEW review</div>
+      </div>
+      <div class="mc">4 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F16.1</td><td class="feat"><strong>Append-only audit log</strong><div class="fd">Every state change (WO + Invoice) in immutable log: who, when, from→to, comment.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F16.2</td><td class="feat"><strong>Timeline view</strong><div class="fd">Any WO or Invoice viewable as visual timeline. Makes rework easy to explain.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F16.3</td><td class="feat"><strong>Exportable audit reports</strong><div class="fd">Admin exports audit report for any date range / site / user / WO as PDF.</div></td><td class="who"><span class="role">Manager / Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F16.4</td><td class="feat"><strong>Tamper-evident</strong><div class="fd">Log rows cannot be edited or deleted. Enforced at database schema level.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">17</div>
+      <div class="mt">
+        <div class="title">Bilingual Support (EN / AR)</div>
+        <div class="sub">Full English and Arabic with RTL layout</div>
+      </div>
+      <div class="mc">3 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F17.1</td><td class="feat"><strong>Full EN/AR interface</strong><div class="fd">Every button, label, menu, message in both languages. One-click toggle.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F17.2</td><td class="feat"><strong>RTL layout</strong><div class="fd">In Arabic, UI flips to right-to-left (menus, tables, forms).</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F17.3</td><td class="feat"><strong>Bilingual content fields</strong><div class="fd">Equipment desc, site names, notes can be stored in both EN and AR.</div></td><td class="who"><span class="role">All users</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">18</div>
+      <div class="mt">
+        <div class="title">Admin &amp; Configuration</div>
+        <div class="sub">System management by Belfinger Admin</div>
+      </div>
+      <div class="mc">6 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F18.1</td><td class="feat"><strong>User management screen</strong><div class="fd">List/create/edit/deactivate users. Assign roles, zones, site groups, depts.</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F18.2</td><td class="feat"><strong>Organisation management</strong><div class="fd">Add/edit/deactivate Belfinger, MEW, subcontractors. Link depts to owning orgs.</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F18.3</td><td class="feat"><strong>Department management</strong><div class="fd">Add/edit/deactivate depts (Instrum, Electrical, HVAC, Network). Link to contractor.</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F18.4</td><td class="feat"><strong>Checklist template builder</strong><div class="fd">Admin builds/edits templates per equip type. Adds items, sets types and required flags.</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F18.5</td><td class="feat"><strong>BOQ management screen</strong><div class="fd">List/add/edit/deactivate BOQ items. Import from CSV.</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F18.6</td><td class="feat"><strong>System settings</strong><div class="fd">Holidays, SLA targets, lead days, notification templates, email/SMS providers.</div></td><td class="who"><span class="role">Belfinger Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">
+    <span>Functional Requirements · Belfinger MMS · v1.0</span>
+    <span>Page 8 of 14</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 10 - MODULES 19-20 + OUT OF SCOPE -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">19</div>
+      <div class="mt">
+        <div class="title">Data Import / Export</div>
+        <div class="sub">Bulk operations for onboarding and archival</div>
+      </div>
+      <div class="mc">4 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F19.1</td><td class="feat"><strong>Equipment CSV import</strong><div class="fd">Bulk import of equipment tags. Initial load and future site additions.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F19.2</td><td class="feat"><strong>BOQ CSV import</strong><div class="fd">Bulk import of BOQ items and prices. Initial load and periodic updates.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F19.3</td><td class="feat"><strong>User CSV import</strong><div class="fd">Bulk import of users (for onboarding a new subcontractor quickly).</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F19.4</td><td class="feat"><strong>Historical data export</strong><div class="fd">Export all WOs, invoices, checklists as JSON/CSV/PDF for archive or analysis.</div></td><td class="who"><span class="role">Admin</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <div class="mn">20</div>
+      <div class="mt">
+        <div class="title">Security &amp; Hosting</div>
+        <div class="sub">Encryption, row-level access, backups, hosting options</div>
+      </div>
+      <div class="mc">5 features</div>
+    </div>
+    <table class="features">
+      <thead>
+        <tr><th style="width: 45px;">ID</th><th>Feature</th><th>Who uses</th><th class="cbx">✓</th><th class="cbx">✎</th><th class="cbx">✗</th><th class="cbx">?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">F20.1</td><td class="feat"><strong>HTTPS everywhere</strong><div class="fd">All traffic encrypted in transit. HTTP is rejected.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F20.2</td><td class="feat"><strong>Encrypted at rest</strong><div class="fd">Database + file storage encrypted at rest.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F20.3</td><td class="feat"><strong>Row-level security</strong><div class="fd">Queries filtered by user's org, zones, sites, depts. No data leakage even via URL.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F20.4</td><td class="feat"><strong>Daily automated backups</strong><div class="fd">Full DB + file storage backed up daily, kept 30 days. Documented restore drill.</div></td><td class="who"><span class="role">System</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+        <tr><td class="id">F20.5</td><td class="feat"><strong>Hosting options</strong><div class="fd">AWS Bahrain (me-south-1) OR on-prem / KW government cloud. Decide with client.</div></td><td class="who"><span class="role">Client + Impl</span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td><td class="cbx"><span class="check-box"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 data-n="21" style="margin-top: 1.75rem;">Out of Scope (Phase 1)</h2>
+  <p>These items are <strong>not included</strong> in Phase 1. They can be added in a future phase if required.</p>
+
+  <div class="oos-list">
+    <div class="oos"><div class="oi">O1</div><div><strong>MEW finance / GL integration</strong><div class="why">Invoices exported as PDF for manual handover in Phase 1. Direct API integration can be added in Phase 2.</div></div></div>
+    <div class="oos"><div class="oi">O2</div><div><strong>Subcontractor → Belfinger pricing</strong><div class="why">Handled offline in v1. Only the MEW-approved BOQ is tracked.</div></div></div>
+    <div class="oos"><div class="oi">O3</div><div><strong>Predictive maintenance &amp; analytics</strong><div class="why">Needs historical data first. Best for Phase 2 after 6+ months of live data.</div></div></div>
+    <div class="oos"><div class="oi">O4</div><div><strong>Native iOS / Android apps</strong><div class="why">PWA covers iPad and Android tablet without App Store review.</div></div></div>
+    <div class="oos"><div class="oi">O5</div><div><strong>Real-time DCS / SCADA telemetry</strong><div class="why">Phase 2 feature once MEW's DCS APIs are understood.</div></div></div>
+    <div class="oos"><div class="oi">O6</div><div><strong>Parts / inventory management</strong><div class="why">v1 captures "spare installed" as a text field. Full parts module is a future phase.</div></div></div>
+    <div class="oos"><div class="oi">O7</div><div><strong>Financial accounting (GL, AR, AP)</strong><div class="why">Out of scope — use Belfinger's existing accounting system.</div></div></div>
+  </div>
+
+  <div class="page-footer">
+    <span>Functional Requirements · Belfinger MMS · v1.0</span>
+    <span>Page 9 of 14</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 11 - ACCEPTANCE / SIGN-OFF -->
+<!-- ============================================================ -->
+<div class="page">
+  <h2 data-n="22">Acceptance &amp; Sign-off</h2>
+
+  <p>By signing below, the parties confirm that:</p>
+
+  <ul style="font-size: 0.82rem; color: var(--ink-2); padding-left: 1.1rem;">
+    <li>They have reviewed all <strong>113 features</strong> listed in this document.</li>
+    <li>Each feature has been marked as <strong>Agreed</strong>, <strong>Change</strong>, <strong>Not needed</strong>, or <strong>Discuss</strong>.</li>
+    <li>Any features marked "Change" or "Discuss" will be resolved together with the implementation team before <strong>Phase 2 (Detailed Planning)</strong> begins.</li>
+    <li>This document — together with the Scope of Work dated 2026-04-11 — forms the basis for the implementation plan and commercial proposal.</li>
+  </ul>
+
+  <div class="callout success">
+    <strong>Changes after sign-off:</strong> features added after this document is signed will be handled as
+    change requests and priced separately. Minor clarifications to existing features do not require re-signing.
+  </div>
+
+  <div class="sig-block">
+    <div class="sig">
+      <div class="who">For Belfinger Engineering &amp; Technologies GmbH</div>
+      <div class="lines">
+        <div class="line"><div class="line-label">Name</div><div class="line-fill"></div></div>
+        <div class="line"><div class="line-label">Title</div><div class="line-fill"></div></div>
+        <div class="line"><div class="line-label">Date</div><div class="line-fill"></div></div>
+        <div class="line"><div class="line-label">Signature</div><div class="line-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="sig">
+      <div class="who">For MEW (for features involving MEW users directly)</div>
+      <div class="lines">
+        <div class="line"><div class="line-label">Name</div><div class="line-fill"></div></div>
+        <div class="line"><div class="line-label">Title</div><div class="line-fill"></div></div>
+        <div class="line"><div class="line-label">Date</div><div class="line-fill"></div></div>
+        <div class="line"><div class="line-label">Signature</div><div class="line-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="sig">
+      <div class="who">For the Implementation Team</div>
+      <div class="lines">
+        <div class="line"><div class="line-label">Name</div><div class="line-fill"></div></div>
+        <div class="line"><div class="line-label">Title</div><div class="line-fill"></div></div>
+        <div class="line"><div class="line-label">Date</div><div class="line-fill"></div></div>
+        <div class="line"><div class="line-label">Signature</div><div class="line-fill"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top: 2rem;">
+    <strong>Next step:</strong> once this document is signed and returned, we proceed with the
+    open-questions working session (see Section 9 of the Scope of Work), and then
+    move directly into Phase 2 (Detailed Planning).
+  </div>
+
+  <div class="page-footer">
+    <span>Functional Requirements · Belfinger MMS · v1.0</span>
+    <span>Page 10 of 10 · End of document</span>
+  </div>
+</div>
+
+</body>
+</html>

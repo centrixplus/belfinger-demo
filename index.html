@@ -1,805 +1,188 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Belfinger CMMS — Maintenance Management System</title>
+<title>Belfinger Maintenance Management System — Project Package</title>
 <style>
-:root{--blue:#1e40af;--blue-d:#1e3a8a;--blue-l:#dbeafe;--green:#10b981;--green-l:#d1fae5;--red:#dc2626;--red-l:#fee2e2;--amber:#f59e0b;--amber-l:#fef3c7;--ink:#0f172a;--ink2:#334155;--ink3:#64748b;--line:#e2e8f0;--bg:#f1f5f9;--white:#fff}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
-a{color:var(--blue);text-decoration:none}
+  :root {
+    --brand: #1e40af;
+    --brand-dark: #1e3a8a;
+    --accent: #f59e0b;
+    --ink: #0f172a;
+    --ink-2: #475569;
+    --ink-3: #94a3b8;
+    --line: #e2e8f0;
+    --bg: #f1f5f9;
+    --surface: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 720px;
+    width: 100%;
+  }
+  .header {
+    text-align: center;
+    color: white;
+    margin-bottom: 2.5rem;
+  }
+  .header .brand {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #93c5fd;
+    margin-bottom: 0.5rem;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+  .header p {
+    font-size: 1rem;
+    color: #cbd5e1;
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .header .contract {
+    display: inline-block;
+    margin-top: 1rem;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+  }
 
-/* Layout */
-.shell{display:grid;grid-template-columns:220px 1fr;grid-template-rows:56px 1fr;min-height:100vh}
-.side{grid-row:1/3;background:var(--ink);color:#94a3b8;padding:0}
-.top{background:var(--white);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem}
-.body{padding:1.25rem 1.5rem 3rem;overflow-y:auto}
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid transparent;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    border-color: var(--brand);
+  }
+  .card .icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .card .icon.blue { background: #dbeafe; color: var(--brand); }
+  .card .icon.amber { background: #fef3c7; color: #b45309; }
+  .card .icon.green { background: #d1fae5; color: #059669; }
+  .card .body { flex: 1; }
+  .card .title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .card .desc {
+    font-size: 0.9rem;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .card .badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
 
-/* Sidebar */
-.side .logo{padding:1rem 1.25rem;border-bottom:1px solid #1e293b}
-.side .logo h2{color:#fff;font-size:1rem;font-weight:800;letter-spacing:-.5px}
-.side .logo p{font-size:.65rem;color:#64748b;margin-top:2px}
-.side nav{padding:.75rem 0}
-.side nav .group{padding:.25rem 0}
-.side nav .group-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.8px;color:#475569;padding:.5rem 1.25rem .25rem;font-weight:700}
-.side nav a{display:flex;align-items:center;gap:.6rem;padding:.5rem 1.25rem;color:#94a3b8;font-size:.85rem;border-left:3px solid transparent;transition:.15s}
-.side nav a:hover{background:#1e293b;color:#fff}
-.side nav a.on{background:#1e293b;color:#fff;border-left-color:var(--blue)}
-.side nav a .badge{margin-left:auto;background:var(--red);color:#fff;font-size:.6rem;padding:1px 6px;border-radius:99px;font-weight:700}
-.side nav a .badge.warn{background:var(--amber)}
-.side nav a .badge.ok{background:var(--green)}
+  .footer {
+    text-align: center;
+    margin-top: 2.5rem;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.8rem;
+  }
 
-/* Top bar */
-.top .title{font-weight:700;font-size:.95rem}
-.top .user{display:flex;align-items:center;gap:.6rem;font-size:.82rem;color:var(--ink3)}
-.top .avatar{width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem}
-
-/* Cards */
-.card{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:1.25rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.card h3{font-size:1rem;font-weight:700;margin-bottom:.75rem}
-.grid{display:grid;gap:1rem}
-.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.g4{grid-template-columns:1fr 1fr 1fr 1fr}.g5{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
-.mb{margin-bottom:1rem}
-
-/* Stat cards */
-.stat{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:1rem 1.25rem;border-left:4px solid var(--blue)}
-.stat.green{border-left-color:var(--green)}.stat.red{border-left-color:var(--red)}.stat.amber{border-left-color:var(--amber)}
-.stat .num{font-size:1.8rem;font-weight:800;line-height:1;color:var(--ink)}
-.stat.green .num{color:var(--green)}.stat.red .num{color:var(--red)}.stat.amber .num{color:var(--amber)}.stat.blue .num{color:var(--blue)}
-.stat .label{font-size:.7rem;text-transform:uppercase;letter-spacing:.4px;color:var(--ink3);margin-top:.3rem;font-weight:600}
-.stat .sub{font-size:.72rem;color:var(--ink3);margin-top:.15rem}
-
-/* Table */
-table{width:100%;border-collapse:collapse;font-size:.82rem}
-th{text-align:left;font-weight:700;color:var(--ink3);font-size:.68rem;text-transform:uppercase;letter-spacing:.3px;padding:.55rem .65rem;border-bottom:1px solid var(--line);background:#f8fafc}
-td{padding:.6rem .65rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
-tr:hover td{background:#f8fafc}
-
-/* Badges */
-.b{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
-.b-blue{background:var(--blue-l);color:var(--blue-d)}.b-green{background:var(--green-l);color:#065f46}
-.b-red{background:var(--red-l);color:#991b1b}.b-amber{background:var(--amber-l);color:#92400e}
-.b-gray{background:#e2e8f0;color:#334155}
-
-/* Bar chart (CSS only) */
-.bar-chart{display:flex;flex-direction:column;gap:.4rem}
-.bar-row{display:grid;grid-template-columns:100px 1fr 70px;align-items:center;gap:.5rem;font-size:.78rem}
-.bar-label{color:var(--ink2);font-weight:600;text-align:right}
-.bar-track{height:22px;background:#f1f5f9;border-radius:4px;overflow:hidden;position:relative}
-.bar-fill{height:100%;border-radius:4px;transition:.3s}
-.bar-val{font-weight:700;color:var(--ink);font-size:.78rem}
-
-/* Donut */
-.donut-wrap{display:flex;align-items:center;gap:1.5rem}
-.donut{width:120px;height:120px;border-radius:50%;position:relative;flex-shrink:0}
-.donut-center{position:absolute;inset:20px;background:var(--white);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.donut-center .n{font-size:1.5rem;font-weight:800;color:var(--ink)}
-.donut-center .l{font-size:.6rem;color:var(--ink3);text-transform:uppercase}
-.donut-legend{display:flex;flex-direction:column;gap:.4rem;font-size:.78rem}
-.donut-legend .item{display:flex;align-items:center;gap:.5rem}
-.donut-legend .dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-
-/* Monthly chart */
-.month-chart{display:flex;align-items:flex-end;gap:.35rem;height:140px;padding-top:10px}
-.month-bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:.25rem}
-.month-bar .fill{width:100%;border-radius:4px 4px 0 0;transition:.3s}
-.month-bar .fill.recv{background:var(--green)}.month-bar .fill.pend{background:var(--amber)}
-.month-bar .lbl{font-size:.6rem;color:var(--ink3);font-weight:600}
-.month-bar .val{font-size:.6rem;font-weight:700;color:var(--ink)}
-.month-stack{display:flex;flex-direction:column;align-items:center;gap:0;width:100%}
-
-/* Tabs */
-.tabs{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:1rem}
-.tab{padding:.5rem 1rem;font-size:.82rem;font-weight:600;color:var(--ink3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
-.tab.on{color:var(--blue);border-bottom-color:var(--blue)}
-
-/* Page nav (screen-level) */
-.page{display:none}.page.show{display:block}
-.screen-tabs{display:flex;gap:.25rem;margin-bottom:1.25rem}
-.screen-tab{padding:.45rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--ink3);background:var(--white);border:1px solid var(--line)}
-.screen-tab.on{background:var(--blue);color:#fff;border-color:var(--blue)}
-
-/* Misc */
-.text-muted{color:var(--ink3)}.text-sm{font-size:.78rem}.fw{font-weight:700}
-.flex{display:flex}.between{justify-content:space-between}.center{align-items:center}.gap{gap:.75rem}
-.btn{display:inline-flex;align-items:center;padding:.45rem .85rem;border-radius:6px;font-size:.78rem;font-weight:600;border:1px solid transparent;cursor:pointer;gap:.4rem;font-family:inherit}
-.btn-blue{background:var(--blue);color:#fff}.btn-white{background:#fff;color:var(--ink);border-color:var(--line)}
-.btn-green{background:var(--green);color:#fff}.btn-red{background:var(--red);color:#fff}
-.progress-bar{height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden}
-.progress-bar .fill{height:100%;border-radius:3px}
+  @media (max-width: 600px) {
+    body { padding: 1rem; }
+    .header h1 { font-size: 1.6rem; }
+    .card { padding: 1.25rem; gap: 1rem; }
+    .card .icon { width: 44px; height: 44px; font-size: 1.2rem; }
+  }
 </style>
 </head>
 <body>
-<div class="shell">
 
-<!-- ========== SIDEBAR ========== -->
-<div class="side">
-  <div class="logo">
-    <h2>Belfinger CMMS</h2>
-    <p>Maintenance Management System</p>
-  </div>
-  <nav>
-    <div class="group">
-      <div class="group-label">Overview</div>
-      <a class="on" href="#" onclick="show('dashboard')">📊 Dashboard</a>
-    </div>
-    <div class="group">
-      <div class="group-label">Work Management</div>
-      <a href="#" onclick="show('jobs')">📋 All Jobs <span class="badge">34</span></a>
-      <a href="#" onclick="show('invoices')">💰 Invoices <span class="badge warn">6</span></a>
-    </div>
-    <div class="group">
-      <div class="group-label">Assets</div>
-      <a href="#" onclick="show('equipment')">🔧 Equipment</a>
-      <a href="#" onclick="show('sites')">🏢 Sites (37)</a>
-    </div>
-    <div class="group">
-      <div class="group-label">Field App</div>
-      <a href="#" onclick="show('ipad')">📱 iPad Preview</a>
-    </div>
-  </nav>
-</div>
-
-<!-- ========== TOP BAR ========== -->
-<div class="top">
-  <div class="title" id="page-title">Dashboard</div>
-  <div class="user">
-    <span>Thomas Weber · Belfinger Manager</span>
-    <div class="avatar">TW</div>
-  </div>
-</div>
-
-<!-- ========== MAIN CONTENT ========== -->
-<div class="body">
-
-<!-- ==================== DASHBOARD ==================== -->
-<div class="page show" id="p-dashboard">
-
-  <!-- Row 1: Top-level stats -->
-  <div class="grid g5 mb">
-    <div class="stat blue"><div class="num">34</div><div class="label">Active Jobs</div><div class="sub">12 PM · 22 Issue</div></div>
-    <div class="stat amber"><div class="num">6</div><div class="label">Pending Approval</div><div class="sub">Needs your action</div></div>
-    <div class="stat red"><div class="num">2</div><div class="label">SLA Breached</div><div class="sub">Escalated today</div></div>
-    <div class="stat green"><div class="num">47</div><div class="label">Closed This Month</div><div class="sub">94% within SLA</div></div>
-    <div class="stat green"><div class="num">14,832</div><div class="label">Receivable (KWD)</div><div class="sub">MEW-approved</div></div>
+<div class="container">
+  <div class="header">
+    <div class="brand">Belfinger Engineering & Technologies</div>
+    <h1>Maintenance Management System</h1>
+    <p>Complete project package for the digital transformation of MEW Water Sector maintenance operations across 37 sites.</p>
+    <div class="contract">Contract MEW/MC/6132/2024/2025</div>
   </div>
 
-  <div class="grid g2 mb">
-    <!-- Jobs by Department -->
-    <div class="card">
-      <h3>Jobs by Department</h3>
-      <div class="bar-chart">
-        <div class="bar-row">
-          <div class="bar-label">Instrumentation</div>
-          <div class="bar-track"><div class="bar-fill" style="width:75%;background:var(--blue)"></div></div>
-          <div class="bar-val">12 jobs</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">DCS & Computer</div>
-          <div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--blue)"></div></div>
-          <div class="bar-val">8 jobs</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Chemical</div>
-          <div class="bar-track"><div class="bar-fill" style="width:37%;background:var(--blue)"></div></div>
-          <div class="bar-val">6 jobs</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Electrical</div>
-          <div class="bar-track"><div class="bar-fill" style="width:31%;background:var(--amber)"></div></div>
-          <div class="bar-val">5 jobs</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">HVAC</div>
-          <div class="bar-track"><div class="bar-fill" style="width:19%;background:var(--amber)"></div></div>
-          <div class="bar-val">3 jobs</div>
-        </div>
+  <div class="cards">
+    <a class="card" href="scope-of-work.html">
+      <div class="icon blue">&#128196;</div>
+      <div class="body">
+        <div class="title">Scope of Work</div>
+        <div class="desc">Full project scope — stakeholders, features overview, architecture, timeline (26 weeks), deliverables, commercial options, and acceptance.</div>
       </div>
-    </div>
+      <div class="badge">10 pages</div>
+    </a>
 
-    <!-- Job Status Breakdown -->
-    <div class="card">
-      <h3>Job Status</h3>
-      <div class="donut-wrap">
-        <div class="donut" style="background:conic-gradient(var(--green) 0% 38%,var(--blue) 38% 62%,var(--amber) 62% 79%,var(--red) 79% 85%,#e2e8f0 85% 100%)">
-          <div class="donut-center"><div class="n">34</div><div class="l">Active</div></div>
-        </div>
-        <div class="donut-legend">
-          <div class="item"><div class="dot" style="background:var(--green)"></div><strong>13</strong> In Progress</div>
-          <div class="item"><div class="dot" style="background:var(--blue)"></div><strong>8</strong> Assigned to Engineer</div>
-          <div class="item"><div class="dot" style="background:var(--amber)"></div><strong>6</strong> Pending Approval</div>
-          <div class="item"><div class="dot" style="background:var(--red)"></div><strong>2</strong> SLA Breached</div>
-          <div class="item"><div class="dot" style="background:#e2e8f0"></div><strong>5</strong> Pending Triage</div>
-        </div>
+    <a class="card" href="functional-requirements.html">
+      <div class="icon amber">&#9745;</div>
+      <div class="body">
+        <div class="title">Functional Requirements</div>
+        <div class="desc">113 features across 20 modules with approval checkboxes — Agreed, Change, Not Needed, or Discuss for each feature.</div>
       </div>
-    </div>
+      <div class="badge">113 features</div>
+    </a>
+
+    <a class="card" href="prototype.html">
+      <div class="icon green">&#128187;</div>
+      <div class="body">
+        <div class="title">Interactive Prototype</div>
+        <div class="desc">Live demo — Dashboard with KPIs & charts, job tracking by department, invoice pipeline, equipment register, and iPad field app preview.</div>
+      </div>
+      <div class="badge">Interactive</div>
+    </a>
   </div>
 
-  <div class="grid g2 mb">
-    <!-- Invoice Status -->
-    <div class="card">
-      <h3>Invoice Pipeline</h3>
-      <div class="bar-chart">
-        <div class="bar-row">
-          <div class="bar-label">Draft</div>
-          <div class="bar-track"><div class="bar-fill" style="width:30%;background:#94a3b8"></div></div>
-          <div class="bar-val">3 · 1,240 KWD</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Pending Blfgr</div>
-          <div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--blue)"></div></div>
-          <div class="bar-val">2 · 1,614 KWD</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Pending MEW</div>
-          <div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--amber)"></div></div>
-          <div class="bar-val">4 · 3,247 KWD</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Rejected</div>
-          <div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--red)"></div></div>
-          <div class="bar-val">1 · 664 KWD</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Receivable ✓</div>
-          <div class="bar-track"><div class="bar-fill" style="width:90%;background:var(--green)"></div></div>
-          <div class="bar-val">18 · 14,832 KWD</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Monthly Receivables -->
-    <div class="card">
-      <h3>Monthly Receivables (KWD)</h3>
-      <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
-        <div class="flex center gap" style="font-size:.7rem"><div class="dot" style="width:10px;height:10px;background:var(--green);border-radius:3px"></div> Received</div>
-        <div class="flex center gap" style="font-size:.7rem"><div class="dot" style="width:10px;height:10px;background:var(--amber);border-radius:3px"></div> Pending</div>
-      </div>
-      <div class="month-chart">
-        <div class="month-bar"><div class="val">2,840</div><div class="month-stack"><div class="fill recv" style="height:85px"></div></div><div class="lbl">Jun</div></div>
-        <div class="month-bar"><div class="val">3,127</div><div class="month-stack"><div class="fill recv" style="height:94px"></div></div><div class="lbl">Jul</div></div>
-        <div class="month-bar"><div class="val">2,455</div><div class="month-stack"><div class="fill recv" style="height:74px"></div></div><div class="lbl">Aug</div></div>
-        <div class="month-bar"><div class="val">3,563</div><div class="month-stack"><div class="fill recv" style="height:107px"></div></div><div class="lbl">Sep</div></div>
-        <div class="month-bar"><div class="val">2,847</div><div class="month-stack"><div class="fill recv" style="height:85px"></div></div><div class="lbl">Oct</div></div>
-        <div class="month-bar"><div class="val">3,210</div><div class="month-stack"><div class="fill recv" style="height:96px"></div></div><div class="lbl">Nov</div></div>
-        <div class="month-bar"><div class="val">2,190</div><div class="month-stack"><div class="fill recv" style="height:66px"></div></div><div class="lbl">Dec</div></div>
-        <div class="month-bar"><div class="val">2,980</div><div class="month-stack"><div class="fill recv" style="height:89px"></div></div><div class="lbl">Jan</div></div>
-        <div class="month-bar"><div class="val">3,415</div><div class="month-stack"><div class="fill recv" style="height:102px"></div></div><div class="lbl">Feb</div></div>
-        <div class="month-bar"><div class="val">3,037</div><div class="month-stack"><div class="fill recv" style="height:91px"></div></div><div class="lbl">Mar</div></div>
-        <div class="month-bar"><div class="val">3,247</div><div class="month-stack"><div class="fill pend" style="height:40px"></div><div class="fill recv" style="height:57px"></div></div><div class="lbl">Apr</div></div>
-      </div>
-      <div class="flex between" style="margin-top:.5rem;font-size:.72rem;color:var(--ink3)">
-        <span>YTD Total: <strong style="color:var(--ink)">32,911 KWD</strong></span>
-        <span>Avg/month: <strong style="color:var(--ink)">2,993 KWD</strong></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- PM Schedule This Month -->
-  <div class="card mb">
-    <div class="flex between center mb">
-      <h3 style="margin:0">PM Schedule — April 2026</h3>
-      <div class="flex gap">
-        <span class="b b-green">6 Completed</span>
-        <span class="b b-blue">4 In Progress</span>
-        <span class="b b-amber">3 Upcoming</span>
-        <span class="b b-red">1 Overdue</span>
-      </div>
-    </div>
-    <table>
-      <thead><tr><th>Site</th><th>Zone</th><th>Type</th><th>Week</th><th>Equipment</th><th>Status</th><th>Engineer</th></tr></thead>
-      <tbody>
-        <tr><td class="fw">Subiya Pumping Station</td><td>North</td><td><span class="b b-blue">PS</span></td><td>Week 1 (1-5 Apr)</td><td>68 instruments</td><td><span class="b b-green">Completed ✓</span></td><td>Khalid Al-Otaibi</td></tr>
-        <tr><td class="fw">Shuwaikh FW PS</td><td>Middle</td><td><span class="b b-blue">PS</span></td><td>Week 1 (1-5 Apr)</td><td>52 instruments</td><td><span class="b b-green">Completed ✓</span></td><td>Mohammad Rafique</td></tr>
-        <tr><td class="fw">Mina Abdullah PS 1</td><td>South</td><td><span class="b b-blue">PS</span></td><td>Week 1 (1-5 Apr)</td><td>46 instruments</td><td><span class="b b-green">Completed ✓</span></td><td>Naveen Kumar</td></tr>
-        <tr><td class="fw">Jahra Towers D8</td><td>North</td><td><span class="b b-green">Tower</span></td><td>Week 1 (1-5 Apr)</td><td>55 instruments</td><td><span class="b b-green">Completed ✓</span></td><td>Bilal Siddiqui</td></tr>
-        <tr><td class="fw">Ardiya Towers D3</td><td>Middle</td><td><span class="b b-green">Tower</span></td><td>Week 1 (1-5 Apr)</td><td>34 instruments</td><td><span class="b b-green">Completed ✓</span></td><td>Mohammad Rafique</td></tr>
-        <tr><td class="fw">Ahmadi Towers D7</td><td>South</td><td><span class="b b-green">Tower</span></td><td>Week 1 (1-5 Apr)</td><td>42 instruments</td><td><span class="b b-green">Completed ✓</span></td><td>Naveen Kumar</td></tr>
-        <tr style="background:var(--blue-l)"><td class="fw">Mutla High Reservoirs</td><td>North</td><td><span class="b b-blue">PS</span></td><td>Week 2 (6-12 Apr)</td><td>45 instruments</td><td><span class="b b-blue">In Progress</span></td><td>Khalid Al-Otaibi</td></tr>
-        <tr style="background:var(--blue-l)"><td class="fw">Hawally PS</td><td>Middle</td><td><span class="b b-blue">PS</span></td><td>Week 2 (6-12 Apr)</td><td>38 instruments</td><td><span class="b b-blue">In Progress</span></td><td>Mohammad Rafique</td></tr>
-        <tr style="background:var(--blue-l)"><td class="fw">Mina Abdullah PS 2</td><td>South</td><td><span class="b b-blue">PS</span></td><td>Week 2 (6-12 Apr)</td><td>53 instruments</td><td><span class="b b-blue">In Progress</span></td><td>Naveen Kumar</td></tr>
-        <tr style="background:var(--blue-l)"><td class="fw">Bayan Towers D2</td><td>Middle</td><td><span class="b b-green">Tower</span></td><td>Week 2 (6-12 Apr)</td><td>28 instruments</td><td><span class="b b-blue">In Progress</span></td><td>Bilal Siddiqui</td></tr>
-        <tr style="background:var(--red-l)"><td class="fw">Mina Abdullah Towers D12</td><td>South</td><td><span class="b b-green">Tower</span></td><td>Week 2 (6-12 Apr)</td><td>15 instruments</td><td><span class="b b-red">⚠ Overdue</span></td><td>—</td></tr>
-        <tr><td class="fw">Mutla Low Reservoirs</td><td>North</td><td><span class="b b-blue">PS</span></td><td>Week 3 (13-19 Apr)</td><td>42 instruments</td><td><span class="b b-amber">Upcoming</span></td><td>—</td></tr>
-        <tr><td class="fw">Subhan PS</td><td>Middle</td><td><span class="b b-blue">PS</span></td><td>Week 3 (13-19 Apr)</td><td>87 instruments</td><td><span class="b b-amber">Upcoming</span></td><td>—</td></tr>
-        <tr><td class="fw">Az-Zour 1 PS</td><td>South</td><td><span class="b b-blue">PS</span></td><td>Week 3 (13-19 Apr)</td><td>92 instruments</td><td><span class="b b-amber">Upcoming</span></td><td>—</td></tr>
-      </tbody>
-    </table>
-    <div class="flex between" style="margin-top:.5rem;font-size:.72rem;color:var(--ink3)">
-      <span>Semi-annual cycle · Next full schedule repeats Oct 2026</span>
-      <span>14 of 37 sites scheduled this month</span>
-    </div>
-  </div>
-
-  <!-- Recent Jobs -->
-  <div class="card">
-    <div class="flex between center mb">
-      <h3 style="margin:0">Recent Jobs</h3>
-      <button class="btn btn-white" onclick="show('jobs')">View all 34 jobs →</button>
-    </div>
-    <table>
-      <thead><tr><th>WO #</th><th>Type</th><th>Site</th><th>Dept</th><th>Urgency</th><th>Status</th><th>SLA</th><th>Assigned</th></tr></thead>
-      <tbody>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0418</td><td><span class="b b-amber">Issue</span></td><td>D12 Mina Abdulla Tower</td><td>Instrumentation</td><td><span class="b b-red">Very Urgent</span></td><td><span class="b b-blue">In Progress</span></td><td style="color:var(--red);font-weight:700">2h 14m</td><td>Khalid Al-Otaibi</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0423</td><td><span class="b b-amber">Issue</span></td><td>Doha Pumping Station</td><td>DCS & Computer</td><td><span class="b b-amber">Same Day</span></td><td><span class="b b-gray">Pending Triage</span></td><td>5h 30m</td><td>—</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0419</td><td><span class="b b-blue">PM</span></td><td>D12 Mina Abdulla Tower</td><td>Instrumentation</td><td><span class="b b-blue">Normal</span></td><td><span class="b b-blue">Assigned</span></td><td>—</td><td>Khalid Al-Otaibi</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0420</td><td><span class="b b-blue">PM</span></td><td>D15 Qairawan Towers</td><td>Instrumentation</td><td><span class="b b-blue">Normal</span></td><td><span class="b b-amber">MEW Approval</span></td><td>—</td><td>—</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0421</td><td><span class="b b-amber">Issue</span></td><td>Shuwaikh PS</td><td>Instrumentation</td><td><span class="b b-amber">Same Day</span></td><td><span class="b b-green">Closed</span></td><td>✓ 4h 20m</td><td>Mohammad Rafique</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0414</td><td><span class="b b-amber">Issue</span></td><td>D12 Mina Abdulla Tower</td><td>DCS & Computer</td><td><span class="b b-red">Very Urgent</span></td><td><span class="b b-red">SLA Breached</span></td><td style="color:var(--red);font-weight:700">⚠ +3h</td><td>Bilal Siddiqui</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0422</td><td><span class="b b-blue">PM</span></td><td>Az-Zour 1 PS</td><td>Chemical</td><td><span class="b b-blue">Normal</span></td><td><span class="b b-green">In Progress</span></td><td>—</td><td>Naveen Kumar</td></tr>
-      </tbody>
-    </table>
+  <div class="footer">
+    Prepared by Centrix Plus &middot; April 2026
   </div>
 </div>
 
-<!-- ==================== JOBS ==================== -->
-<div class="page" id="p-jobs">
-  <div class="screen-tabs">
-    <div class="screen-tab on">All Jobs (34)</div>
-    <div class="screen-tab">Issue Requests (22)</div>
-    <div class="screen-tab">Preventive Maintenance (12)</div>
-    <div class="screen-tab">SLA Breached (2)</div>
-  </div>
-
-  <div class="grid g4 mb">
-    <div class="stat blue"><div class="num">34</div><div class="label">Total Active</div></div>
-    <div class="stat green"><div class="num">13</div><div class="label">In Progress</div></div>
-    <div class="stat amber"><div class="num">6</div><div class="label">Pending Approval</div></div>
-    <div class="stat red"><div class="num">2</div><div class="label">SLA Breached</div></div>
-  </div>
-
-  <div class="card">
-    <div class="flex between center mb">
-      <h3 style="margin:0">All Work Orders</h3>
-      <div class="flex gap">
-        <select style="padding:.4rem .6rem;border:1px solid var(--line);border-radius:6px;font-size:.8rem"><option>All Departments</option><option>Instrumentation</option><option>DCS & Computer</option><option>Chemical</option></select>
-        <select style="padding:.4rem .6rem;border:1px solid var(--line);border-radius:6px;font-size:.8rem"><option>All Status</option><option>In Progress</option><option>Pending Approval</option><option>SLA Breached</option></select>
-        <select style="padding:.4rem .6rem;border:1px solid var(--line);border-radius:6px;font-size:.8rem"><option>All Sites</option><option>D12 Mina Abdulla</option><option>D15 Qairawan</option><option>Doha PS</option></select>
-        <input type="text" placeholder="Search WO#, site..." style="padding:.4rem .6rem;border:1px solid var(--line);border-radius:6px;font-size:.8rem;width:160px">
-      </div>
-    </div>
-    <table>
-      <thead><tr><th>WO #</th><th>Type</th><th>Site</th><th>Dept</th><th>Urgency</th><th>Status</th><th>SLA</th><th>Engineer</th><th>Created</th><th></th></tr></thead>
-      <tbody>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0418</td><td><span class="b b-amber">Issue</span></td><td>D12 Mina Abdulla Tower</td><td>Instrumentation</td><td><span class="b b-red">Very Urgent</span></td><td><span class="b b-blue">In Progress</span></td><td style="color:var(--red);font-weight:700">2h 14m</td><td>Khalid Al-Otaibi</td><td>11 Apr 09:42</td><td><button class="btn btn-white">View</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0423</td><td><span class="b b-amber">Issue</span></td><td>Doha Pumping Station</td><td>DCS & Computer</td><td><span class="b b-amber">Same Day</span></td><td><span class="b b-gray">Pending Triage</span></td><td>5h 30m</td><td>—</td><td>11 Apr 10:15</td><td><button class="btn btn-blue">Triage</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0419</td><td><span class="b b-blue">PM</span></td><td>D12 Mina Abdulla Tower</td><td>Instrumentation</td><td><span class="b b-blue">Normal</span></td><td><span class="b b-blue">Assigned</span></td><td>—</td><td>Khalid Al-Otaibi</td><td>10 Apr 00:05</td><td><button class="btn btn-white">View</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0420</td><td><span class="b b-blue">PM</span></td><td>D15 Qairawan Towers</td><td>Instrumentation</td><td><span class="b b-blue">Normal</span></td><td><span class="b b-amber">MEW Approval</span></td><td>—</td><td>—</td><td>10 Apr 00:05</td><td><button class="btn btn-white">View</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0424</td><td><span class="b b-amber">Issue</span></td><td>Shuwaikh FW PS</td><td>Chemical</td><td><span class="b b-blue">Normal</span></td><td><span class="b b-green">In Progress</span></td><td>42h 15m</td><td>Naveen Kumar</td><td>10 Apr 14:30</td><td><button class="btn btn-white">View</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0414</td><td><span class="b b-amber">Issue</span></td><td>D12 Mina Abdulla Tower</td><td>DCS & Computer</td><td><span class="b b-red">Very Urgent</span></td><td><span class="b b-red">SLA Breached</span></td><td style="color:var(--red);font-weight:700">⚠ +3h 10m</td><td>Bilal Siddiqui</td><td>09 Apr 08:15</td><td><button class="btn btn-red">Escalate</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0421</td><td><span class="b b-amber">Issue</span></td><td>Shuwaikh FW PS</td><td>Instrumentation</td><td><span class="b b-amber">Same Day</span></td><td><span class="b b-green">Closed ✓</span></td><td>✓ 4h 20m</td><td>Mohammad Rafique</td><td>09 Apr 11:00</td><td><button class="btn btn-white">View</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0425</td><td><span class="b b-blue">PM</span></td><td>Az-Zour 1 PS</td><td>Chemical</td><td><span class="b b-blue">Normal</span></td><td><span class="b b-green">In Progress</span></td><td>—</td><td>Naveen Kumar</td><td>08 Apr 00:05</td><td><button class="btn btn-white">View</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0426</td><td><span class="b b-amber">Issue</span></td><td>Subiya PS</td><td>Instrumentation</td><td><span class="b b-blue">Normal</span></td><td><span class="b b-blue">Assigned</span></td><td>36h</td><td>Khalid Al-Otaibi</td><td>08 Apr 09:00</td><td><button class="btn btn-white">View</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">WO-2026-0427</td><td><span class="b b-blue">PM</span></td><td>Jahra Towers D8</td><td>Instrumentation</td><td><span class="b b-blue">Normal</span></td><td><span class="b b-green">Closed ✓</span></td><td>—</td><td>Bilal Siddiqui</td><td>07 Apr 00:05</td><td><button class="btn btn-white">View</button></td></tr>
-      </tbody>
-    </table>
-    <div style="text-align:center;padding:.75rem;font-size:.78rem;color:var(--ink3)">Showing 10 of 34 work orders · <a href="#">Load more</a></div>
-  </div>
-</div>
-
-<!-- ==================== INVOICES ==================== -->
-<div class="page" id="p-invoices">
-  <div class="screen-tabs">
-    <div class="screen-tab on">All Invoices</div>
-    <div class="screen-tab">Draft (3)</div>
-    <div class="screen-tab">Pending MEW (4)</div>
-    <div class="screen-tab">Receivable (18)</div>
-    <div class="screen-tab">Rejected (1)</div>
-  </div>
-
-  <div class="grid g5 mb">
-    <div class="stat"><div class="num">28</div><div class="label">Total Invoices</div></div>
-    <div class="stat"><div class="num">3</div><div class="label">Draft</div><div class="sub">1,240 KWD</div></div>
-    <div class="stat amber"><div class="num">4</div><div class="label">Pending MEW</div><div class="sub">3,247 KWD</div></div>
-    <div class="stat green"><div class="num">18</div><div class="label">Receivable</div><div class="sub">14,832 KWD</div></div>
-    <div class="stat red"><div class="num">1</div><div class="label">Rejected</div><div class="sub">664 KWD</div></div>
-  </div>
-
-  <div class="card">
-    <h3>Invoice List</h3>
-    <table>
-      <thead><tr><th>Invoice #</th><th>Work Order</th><th>Site</th><th>Ver.</th><th>Status</th><th>Amount (KWD)</th><th>Date</th><th></th></tr></thead>
-      <tbody>
-        <tr><td class="fw" style="color:var(--blue)">INV-2026-0401</td><td>WO-2026-0427</td><td>D8 Jahra Towers</td><td>v1</td><td><span class="b b-green">Receivable</span></td><td class="fw">851.760</td><td>07 Apr</td><td><button class="btn btn-white">View</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">INV-2026-0400</td><td>WO-2026-0421</td><td>Shuwaikh FW PS</td><td>v1</td><td><span class="b b-green">Receivable</span></td><td class="fw">156.000</td><td>09 Apr</td><td><button class="btn btn-white">View</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">INV-2026-0399</td><td>WO-2026-0425</td><td>Az-Zour 1 PS</td><td>v1</td><td><span class="b b-amber">Pending MEW</span></td><td class="fw">1,247.350</td><td>08 Apr</td><td><button class="btn btn-white">View</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">INV-2026-0398</td><td>WO-2026-0419</td><td>D12 Mina Abdulla</td><td>v1</td><td><span class="b b-blue">Pending Blfgr</span></td><td class="fw">762.100</td><td>10 Apr</td><td><button class="btn btn-blue">Review</button></td></tr>
-        <tr style="background:#fef2f2"><td class="fw" style="color:var(--red)">INV-2026-0397</td><td>WO-2026-0418</td><td>D12 Mina Abdulla</td><td><span class="b b-red">v2</span></td><td><span class="b b-red">Rejected</span></td><td class="fw">664.560</td><td>10 Apr</td><td><button class="btn btn-red">Fix</button></td></tr>
-        <tr><td class="fw" style="color:var(--blue)">INV-2026-0396</td><td>WO-2026-0415</td><td>D15 Qairawan</td><td>v1</td><td><span class="b b-gray">Draft</span></td><td class="fw">487.250</td><td>11 Apr</td><td><button class="btn btn-white">Edit</button></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="grid g2 mb" style="margin-top:1rem">
-    <div class="card">
-      <h3>Rejected Invoice — INV-2026-0397 (v2)</h3>
-      <div style="background:var(--red-l);border-left:3px solid var(--red);padding:.75rem 1rem;border-radius:4px;margin-bottom:.75rem">
-        <div class="fw text-sm" style="color:#991b1b">Rejection reason (Ahmad Al-Harbi, MEW):</div>
-        <div class="text-sm">"BOQ line 3 quantity wrong — only 2 pressure switches serviced, not 4. Please correct."</div>
-      </div>
-      <table>
-        <thead><tr><th>#</th><th>BOQ</th><th>Description</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>3.8</td><td>Testing, Calibration Level Measuring Loop</td><td>2</td><td>31.200</td><td>62.400</td></tr>
-          <tr><td>2</td><td>4.3</td><td>Testing Flow Switch (mercury type)</td><td>2</td><td>66.300</td><td>132.600</td></tr>
-          <tr style="background:#fef2f2"><td>3</td><td>3.12</td><td>Troubleshooting Pressure Switch</td><td style="color:var(--red);font-weight:700">2 ← was 4</td><td>93.600</td><td style="font-weight:700">187.200</td></tr>
-          <tr><td>4</td><td>3.13</td><td>Troubleshooting Level Switch (float)</td><td>4</td><td>70.200</td><td>280.800</td></tr>
-          <tr><td>5</td><td>4.1</td><td>Troubleshooting Flow measuring loop</td><td>1</td><td>1.560</td><td>1.560</td></tr>
-          <tr><td colspan="5" style="text-align:right"><strong>TOTAL</strong></td><td><strong>664.560 KWD</strong></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card">
-      <h3>Monthly Receivables Summary</h3>
-      <table>
-        <thead><tr><th>Month</th><th>Invoices</th><th>Receivable</th><th>Pending</th></tr></thead>
-        <tbody>
-          <tr><td class="fw">Jun 2025</td><td>4</td><td class="fw" style="color:var(--green)">2,840 KWD</td><td>—</td></tr>
-          <tr><td class="fw">Jul 2025</td><td>5</td><td class="fw" style="color:var(--green)">3,127 KWD</td><td>—</td></tr>
-          <tr><td class="fw">Aug 2025</td><td>3</td><td class="fw" style="color:var(--green)">2,455 KWD</td><td>—</td></tr>
-          <tr><td class="fw">Sep 2025</td><td>6</td><td class="fw" style="color:var(--green)">3,563 KWD</td><td>—</td></tr>
-          <tr><td class="fw">Oct 2025</td><td>4</td><td class="fw" style="color:var(--green)">2,847 KWD</td><td>—</td></tr>
-          <tr><td class="fw">Nov 2025</td><td>5</td><td class="fw" style="color:var(--green)">3,210 KWD</td><td>—</td></tr>
-          <tr><td class="fw">Dec 2025</td><td>3</td><td class="fw" style="color:var(--green)">2,190 KWD</td><td>—</td></tr>
-          <tr><td class="fw">Jan 2026</td><td>4</td><td class="fw" style="color:var(--green)">2,980 KWD</td><td>—</td></tr>
-          <tr><td class="fw">Feb 2026</td><td>5</td><td class="fw" style="color:var(--green)">3,415 KWD</td><td>—</td></tr>
-          <tr><td class="fw">Mar 2026</td><td>4</td><td class="fw" style="color:var(--green)">3,037 KWD</td><td>—</td></tr>
-          <tr style="background:var(--amber-l)"><td class="fw">Apr 2026</td><td>6</td><td class="fw" style="color:var(--green)">1,908 KWD</td><td class="fw" style="color:var(--amber)">3,247 KWD</td></tr>
-          <tr style="background:#f1f5f9"><td colspan="2"><strong>YTD Total</strong></td><td class="fw" style="color:var(--green)">31,572 KWD</td><td class="fw" style="color:var(--amber)">3,247 KWD</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== EQUIPMENT ==================== -->
-<div class="page" id="p-equipment">
-  <div class="grid g4 mb">
-    <div class="stat blue"><div class="num">2,547</div><div class="label">Total Equipment</div><div class="sub">across 37 sites</div></div>
-    <div class="stat green"><div class="num">2,468</div><div class="label">Working</div><div class="sub">96.9%</div></div>
-    <div class="stat red"><div class="num">52</div><div class="label">Defective</div></div>
-    <div class="stat amber"><div class="num">27</div><div class="label">Under Repair</div></div>
-  </div>
-  <div class="card">
-    <div class="flex between center mb">
-      <h3 style="margin:0">Equipment Register — D12 Mina Abdullah Tower</h3>
-      <div class="flex gap">
-        <select style="padding:.4rem .6rem;border:1px solid var(--line);border-radius:6px;font-size:.8rem"><option>D12 Mina Abdullah Tower</option><option>D15 Qairawan Towers</option><option>Doha Pumping Station</option><option>Shuwaikh FW PS</option><option>Subiya PS</option></select>
-        <button class="btn btn-blue">+ Add Equipment</button>
-      </div>
-    </div>
-    <table>
-      <thead><tr><th>Tag No.</th><th>Description</th><th>Type</th><th>Location</th><th>Specs</th><th>Status</th><th>Last Serviced</th></tr></thead>
-      <tbody>
-        <tr><td class="fw" style="color:var(--blue)">LTD-1211</td><td>Level Measuring Loop</td><td><span class="b b-blue">Level Transmitter</span></td><td>Tower 1</td><td>DP</td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">LTD-1212</td><td>Level Measuring Loop</td><td><span class="b b-blue">Level Transmitter</span></td><td>Tower 2</td><td>DP</td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">LSD-1211-H</td><td>Level Switch (High)</td><td><span class="b b-blue">Level Switch</span></td><td>Tower 1</td><td>Level</td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">LSD-1211-L</td><td>Level Switch (Low)</td><td><span class="b b-blue">Level Switch</span></td><td>Tower 1</td><td>Level</td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">LSD-1212-H</td><td>Level Switch (High)</td><td><span class="b b-blue">Level Switch</span></td><td>Tower 2</td><td>Level</td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">LSD-1212-L</td><td>Level Switch (Low)</td><td><span class="b b-blue">Level Switch</span></td><td>Tower 2</td><td>Level</td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">FSD-121-1</td><td>Flow Switch</td><td><span class="b b-blue">Flow Switch</span></td><td>Tower 1</td><td></td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">FSD-121-2</td><td>Flow Switch</td><td><span class="b b-blue">Flow Switch</span></td><td>Tower 2</td><td></td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">PSH-12N2</td><td>Pressure Switch High</td><td><span class="b b-blue">Pressure Switch</span></td><td>Outlet Line</td><td>Diaphragm</td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">PSD-1211</td><td>Pressure Switch</td><td><span class="b b-blue">Pressure Switch</span></td><td>Tower 1</td><td>Diaphragm</td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">PSD-1212</td><td>Pressure Switch</td><td><span class="b b-blue">Pressure Switch</span></td><td>Tower 2</td><td>Diaphragm</td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">DPD-121</td><td>DP Switch</td><td><span class="b b-blue">DP Switch</span></td><td>Outlet Line</td><td>Diaphragm</td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">FIT-12N2</td><td>Flow Measuring Loop</td><td><span class="b b-blue">Flowmeter</span></td><td>Outlet Line</td><td>Ultrasonic</td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr><td class="fw" style="color:var(--blue)">LS-1</td><td>Chamber Flood Switch</td><td><span class="b b-blue">Flood Switch</span></td><td>Tower 1</td><td></td><td><span class="b b-green">Working</span></td><td>12 Oct 2025</td></tr>
-        <tr style="background:#fef2f2"><td class="fw" style="color:var(--red)">LS-2</td><td>Chamber Flood Switch</td><td><span class="b b-blue">Flood Switch</span></td><td>Tower 2</td><td></td><td><span class="b b-red">Defective</span></td><td>12 Oct 2025</td></tr>
-      </tbody>
-    </table>
-    <div style="text-align:center;padding:.75rem;font-size:.78rem;color:var(--ink3)">15 of 15 equipment at D12 Mina Abdullah Tower</div>
-  </div>
-</div>
-
-<!-- ==================== SITES ==================== -->
-<div class="page" id="p-sites">
-  <div class="grid g3 mb">
-    <div class="stat blue"><div class="num">37</div><div class="label">Total Sites</div></div>
-    <div class="stat"><div class="num">20</div><div class="label">Pump Stations</div></div>
-    <div class="stat"><div class="num">17</div><div class="label">Water Towers</div></div>
-  </div>
-  <div class="grid g3">
-    <div class="card">
-      <h3>🔵 North Zone</h3>
-      <table>
-        <tbody>
-          <tr><td class="fw">Subiya PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">68 equip</td></tr>
-          <tr><td class="fw">Mutla High Reservoirs</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">45 equip</td></tr>
-          <tr><td class="fw">Mutla Low Reservoirs</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">42 equip</td></tr>
-          <tr><td class="fw">Jahra FW PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">89 equip</td></tr>
-          <tr><td class="fw">Doha PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">393 equip</td></tr>
-          <tr><td class="fw">Jahra Towers D8</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">55 equip</td></tr>
-          <tr><td class="fw">Saad Al Abdullah D14</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">72 equip</td></tr>
-          <tr><td class="fw">New Jahra D20</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">68 equip</td></tr>
-          <tr><td class="fw">Qairawan D15</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">169 equip</td></tr>
-          <tr><td class="fw">Jaber Al Ahmed D22</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">395 equip</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card">
-      <h3>🟢 Middle Zone</h3>
-      <table>
-        <tbody>
-          <tr><td class="fw">Shuwaikh FW PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">52 equip</td></tr>
-          <tr><td class="fw">Hawally PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">38 equip</td></tr>
-          <tr><td class="fw">Subhan PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">87 equip</td></tr>
-          <tr><td class="fw">Ardiya PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">29 equip</td></tr>
-          <tr><td class="fw">West Funaitees 1,2,3</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">95 equip</td></tr>
-          <tr><td class="fw">Ardiya Towers D3</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">34 equip</td></tr>
-          <tr><td class="fw">Bayan D2</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">28 equip</td></tr>
-          <tr><td class="fw">Surra D4</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">65 equip</td></tr>
-          <tr><td class="fw">Adailiya D1</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">31 equip</td></tr>
-          <tr><td class="fw">Subhan D11</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">82 equip</td></tr>
-          <tr><td class="fw">Khaitan D5</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">43 equip</td></tr>
-          <tr><td class="fw">Jaleeb Shuwaikh D16</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">48 equip</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card">
-      <h3>🟠 South Zone</h3>
-      <table>
-        <tbody>
-          <tr><td class="fw">Mina Abdullah PS 1</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">46 equip</td></tr>
-          <tr><td class="fw">Mina Abdullah PS 2</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">53 equip</td></tr>
-          <tr><td class="fw">Az-Zour 1 PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">92 equip</td></tr>
-          <tr><td class="fw">Az-Zour 2 PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">88 equip</td></tr>
-          <tr><td class="fw">East Ahmadi PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">31 equip</td></tr>
-          <tr><td class="fw">Shuaiba PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">35 equip</td></tr>
-          <tr><td class="fw">Wafra FW PS</td><td><span class="b b-blue">PS</span></td><td class="text-sm text-muted">38 equip</td></tr>
-          <tr><td class="fw">Mina Abdullah D12</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">15 equip</td></tr>
-          <tr><td class="fw">Sabah Al Ahmed</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">82 equip</td></tr>
-          <tr><td class="fw">Al Khiran D17</td><td><span class="b b-green">Tower</span></td><td class="text-sm text-muted">25 equip</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== IPAD PREVIEW ==================== -->
-<div class="page" id="p-ipad">
-  <div style="text-align:center;padding:1.5rem 0 .75rem">
-    <h2>iPad Field App</h2>
-    <p class="text-muted">How Site Engineers complete work in the field. Click the tabs below the iPad to navigate.</p>
-  </div>
-
-  <!-- iPad screen selector -->
-  <div class="flex center gap" style="justify-content:center;margin-bottom:1rem">
-    <div class="screen-tab on" onclick="ipad(0,this)">📋 My Jobs</div>
-    <div class="screen-tab" onclick="ipad(1,this)">📝 Work Order</div>
-    <div class="screen-tab" onclick="ipad(2,this)">🔬 Checklist</div>
-    <div class="screen-tab" onclick="ipad(3,this)">📷 Photos</div>
-    <div class="screen-tab" onclick="ipad(4,this)">✍️ Sign & Submit</div>
-  </div>
-
-  <div style="max-width:860px;margin:0 auto;background:#0f172a;border-radius:36px;padding:12px;box-shadow:0 30px 60px rgba(0,0,0,.3)">
-    <div style="background:#f8fafc;border-radius:24px;overflow:hidden;min-height:540px;display:flex;flex-direction:column">
-
-      <!-- iPad top bar -->
-      <div style="background:#fff;padding:.65rem 1.25rem;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
-        <div class="flex center gap">
-          <span class="ipad-back" id="ipad-back" style="color:var(--blue);font-weight:600;font-size:.9rem;cursor:pointer;display:none" onclick="ipad(0,document.querySelector('.screen-tab'))">‹ Back</span>
-          <div>
-            <div class="fw" style="font-size:.9rem" id="ipad-title">My Work Orders</div>
-            <div style="font-size:.7rem;color:var(--ink3)">Khalid Al-Otaibi · Site Engineer · South Zone</div>
-          </div>
-        </div>
-        <div class="flex center gap">
-          <span class="b b-green" style="font-size:.6rem">✓ Synced</span>
-          <span style="font-size:.7rem;color:var(--ink3)">📶</span>
-        </div>
-      </div>
-
-      <!-- iPad content -->
-      <div style="flex:1;overflow-y:auto;padding:1rem 1.25rem">
-
-        <!-- Screen 0: Job Inbox -->
-        <div class="ipad-screen" id="is-0">
-          <div class="tabs" style="margin-bottom:.75rem"><div class="tab on">Today · 3</div><div class="tab">Overdue · 1</div><div class="tab">Upcoming · 5</div></div>
-
-          <div style="background:#fff;border:1px solid #e2e8f0;border-left:4px solid var(--red);border-radius:8px;padding:.85rem;margin-bottom:.6rem;cursor:pointer" onclick="ipad(1,document.querySelectorAll('.screen-tab')[1])">
-            <div class="flex between"><span class="fw text-sm" style="color:var(--blue)">WO-2026-0418</span><span class="b b-red">Very Urgent</span></div>
-            <div class="fw" style="margin:.25rem 0">Mina Abdulla Tower / D12</div>
-            <div class="text-sm text-muted">Instrumentation · Level Transmitter LTD-1211</div>
-            <div class="flex between" style="margin-top:.5rem"><span class="text-sm" style="color:var(--red);font-weight:700">⏱ On-site in 2h 14m</span><span class="text-sm text-muted">📄 Permit WP-2026-11547</span></div>
-          </div>
-
-          <div style="background:#fff;border:1px solid #e2e8f0;border-left:4px solid var(--amber);border-radius:8px;padding:.85rem;margin-bottom:.6rem">
-            <div class="flex between"><span class="fw text-sm" style="color:var(--blue)">WO-2026-0419</span><span class="b b-blue">PM</span></div>
-            <div class="fw" style="margin:.25rem 0">Mina Abdulla Tower / D12</div>
-            <div class="text-sm text-muted">Instrumentation · Monthly PM · 15 instruments</div>
-            <div class="flex between" style="margin-top:.5rem"><span class="text-sm">⏱ Scheduled 14:00</span><span class="text-sm text-muted">📄 Permit WP-2026-11548</span></div>
-          </div>
-
-          <div style="background:#fff;border:1px solid #e2e8f0;border-left:4px solid var(--blue);border-radius:8px;padding:.85rem;margin-bottom:.6rem">
-            <div class="flex between"><span class="fw text-sm" style="color:var(--blue)">WO-2026-0426</span><span class="b b-blue">Normal</span></div>
-            <div class="fw" style="margin:.25rem 0">Subiya Pumping Station</div>
-            <div class="text-sm text-muted">Instrumentation · Flow Transmitter check</div>
-            <div class="flex between" style="margin-top:.5rem"><span class="text-sm">⏱ Due tomorrow</span><span class="text-sm text-muted">⏳ Permit pending</span></div>
-          </div>
-
-          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.5px;color:var(--red);font-weight:700;padding:.5rem 0">⚠ OVERDUE</div>
-          <div style="background:#fef2f2;border:1px solid #fecaca;border-left:4px solid var(--red);border-radius:8px;padding:.85rem">
-            <div class="flex between"><span class="fw text-sm" style="color:var(--red)">WO-2026-0414</span><span class="b b-red">SLA Breached</span></div>
-            <div class="fw" style="margin:.25rem 0">Mina Abdulla Tower / D12</div>
-            <div class="text-sm text-muted">DCS & Computer · Switch failure</div>
-            <div class="flex between" style="margin-top:.5rem"><span class="text-sm" style="color:var(--red);font-weight:700">⚠ Breached +3h 10m</span><span class="text-sm text-muted">📄 WP-2026-11540</span></div>
-          </div>
-        </div>
-
-        <!-- Screen 1: Work Order Detail -->
-        <div class="ipad-screen" id="is-1" style="display:none">
-          <div style="background:var(--red-l);border:1px solid #fecaca;border-radius:8px;padding:.75rem;margin-bottom:.75rem;display:flex;justify-content:space-between;align-items:center">
-            <div><div style="font-size:.7rem;color:var(--ink3)">SLA — on-site by</div><div style="font-size:1.3rem;font-weight:800;color:var(--red)">16:56 (in 2h 14m)</div></div>
-            <button class="btn btn-blue" style="padding:.65rem 1.5rem;font-size:.9rem" onclick="ipad(2,document.querySelectorAll('.screen-tab')[2])">▶ Start Work</button>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:.85rem;margin-bottom:.6rem">
-            <div class="fw" style="font-size:.95rem;margin-bottom:.5rem">WO-2026-0418 · Issue Request <span class="b b-red">Very Urgent</span></div>
-            <div class="grid g2" style="font-size:.78rem;gap:.6rem">
-              <div><div class="text-muted" style="font-size:.65rem;text-transform:uppercase">Site</div><div class="fw">Mina Abdulla Tower / D12</div></div>
-              <div><div class="text-muted" style="font-size:.65rem;text-transform:uppercase">Department</div><div class="fw">Instrumentation & Control</div></div>
-              <div><div class="text-muted" style="font-size:.65rem;text-transform:uppercase">Equipment</div><div class="fw" style="color:var(--blue)">LTD-1211 — Level Transmitter (DP)</div></div>
-              <div><div class="text-muted" style="font-size:.65rem;text-transform:uppercase">Last Serviced</div><div>12 Oct 2025 (reading: 62.10 mA)</div></div>
-            </div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:.85rem;margin-bottom:.6rem">
-            <div class="fw text-sm" style="margin-bottom:.35rem">Work Permit</div>
-            <div class="grid g2" style="font-size:.78rem;gap:.4rem">
-              <div><span class="text-muted">Permit No:</span> <strong>WP-2026-11547</strong></div>
-              <div><span class="text-muted">Valid until:</span> <strong>12 Apr 2026 18:00</strong></div>
-              <div><span class="text-muted">Issued by:</span> MEW Shift Eng, Mina Abdulla</div>
-              <div><span class="text-muted">Duration:</span> 4h expected</div>
-            </div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:.85rem;margin-bottom:.6rem">
-            <div class="fw text-sm" style="margin-bottom:.35rem">Problem Description</div>
-            <div class="text-sm">Level transmitter LTD-1211 reading fluctuating between 58 and 72%. Needs calibration check and possible cable inspection.</div>
-            <div class="text-sm text-muted" style="margin-top:.35rem">Reported by: Ahmad Al-Harbi (MEW) · 11 Apr 09:42</div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:.85rem">
-            <div class="fw text-sm" style="margin-bottom:.35rem">Photos from MEW (3)</div>
-            <div class="flex gap" style="gap:.4rem">
-              <div style="width:70px;height:70px;background:var(--blue-l);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.2rem">📷</div>
-              <div style="width:70px;height:70px;background:var(--blue-l);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.2rem">📷</div>
-              <div style="width:70px;height:70px;background:var(--blue-l);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.2rem">📷</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Screen 2: Checklist / Calibration -->
-        <div class="ipad-screen" id="is-2" style="display:none">
-          <div style="background:var(--blue-l);border-left:3px solid var(--blue);padding:.6rem .85rem;border-radius:4px;margin-bottom:.75rem;font-size:.75rem;color:var(--blue-d)">
-            💡 Last reading (12 Oct 2025): Local <strong>62.40%</strong> · mA <strong>13.98</strong> · all calibration points passed.
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:.85rem;margin-bottom:.6rem">
-            <div class="fw text-sm" style="margin-bottom:.5rem">1 · Initial Service</div>
-            <div class="flex gap" style="font-size:.82rem">
-              <label class="flex center gap" style="gap:.35rem"><input type="checkbox" checked style="width:16px;height:16px"> Visual Inspection</label>
-              <label class="flex center gap" style="gap:.35rem"><input type="checkbox" checked style="width:16px;height:16px"> Cleaning</label>
-            </div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:.85rem;margin-bottom:.6rem">
-            <div class="fw text-sm" style="margin-bottom:.5rem">2 · Calibration Report (5-point)</div>
-            <table style="font-size:.72rem">
-              <thead><tr><th style="background:var(--blue-l);color:var(--blue-d);text-align:center">%</th><th style="background:var(--blue-l);color:var(--blue-d);text-align:center">Test Input</th><th style="background:var(--blue-l);color:var(--blue-d);text-align:center">Standard (mA)</th><th style="background:var(--blue-l);color:var(--blue-d);text-align:center">Actual (mA)</th><th style="background:var(--blue-l);color:var(--blue-d);text-align:center">% Error</th><th style="background:var(--blue-l);color:var(--blue-d);text-align:center">After Cal</th></tr></thead>
-              <tbody>
-                <tr><td style="text-align:center" class="fw">0</td><td style="text-align:center"><input value="0.2" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center"><input value="4" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center"><input value="4.01" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center;background:#f1f5f9;font-weight:700;color:var(--green)">0.25</td><td style="text-align:center;background:#f1f5f9;font-weight:700">4.00</td></tr>
-                <tr><td style="text-align:center" class="fw">25</td><td style="text-align:center"><input value="0.45" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center"><input value="8" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center"><input value="8.02" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center;background:#f1f5f9;font-weight:700;color:var(--green)">0.25</td><td style="text-align:center;background:#f1f5f9;font-weight:700">8.00</td></tr>
-                <tr><td style="text-align:center" class="fw">50</td><td style="text-align:center"><input value="0.7" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center"><input value="12" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center"><input value="12.01" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center;background:#f1f5f9;font-weight:700;color:var(--green)">0.08</td><td style="text-align:center;background:#f1f5f9;font-weight:700">12.00</td></tr>
-                <tr><td style="text-align:center" class="fw">75</td><td style="text-align:center"><input value="0.95" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center"><input value="16" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center"><input value="16.01" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center;background:#f1f5f9;font-weight:700;color:var(--green)">0.06</td><td style="text-align:center;background:#f1f5f9;font-weight:700">16.00</td></tr>
-                <tr><td style="text-align:center" class="fw">100</td><td style="text-align:center"><input value="1.2" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center"><input value="20" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center"><input value="20.01" style="width:50px;border:1px solid var(--line);border-radius:3px;padding:2px 4px;text-align:center;font-size:.75rem"></td><td style="text-align:center;background:#f1f5f9;font-weight:700;color:var(--green)">0.05</td><td style="text-align:center;background:#f1f5f9;font-weight:700">20.00</td></tr>
-              </tbody>
-            </table>
-            <div style="font-size:.65rem;color:var(--green);margin-top:.35rem;font-weight:600">✓ All values within tolerance (±0.5%)</div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:.85rem;margin-bottom:.6rem">
-            <div class="fw text-sm" style="margin-bottom:.5rem">3 · Present Value</div>
-            <div class="grid g4" style="gap:.5rem">
-              <div><div style="font-size:.6rem;color:var(--ink3);text-transform:uppercase;margin-bottom:2px">Local (%)</div><input value="88.23" style="width:100%;padding:4px 6px;border:1px solid var(--line);border-radius:4px;font-size:.8rem"></div>
-              <div><div style="font-size:.6rem;color:var(--ink3);text-transform:uppercase;margin-bottom:2px">Manual (%)</div><input value="87.23" style="width:100%;padding:4px 6px;border:1px solid var(--line);border-radius:4px;font-size:.8rem"></div>
-              <div><div style="font-size:.6rem;color:var(--ink3);text-transform:uppercase;margin-bottom:2px">mA</div><input value="18.12" style="width:100%;padding:4px 6px;border:1px solid var(--line);border-radius:4px;font-size:.8rem"></div>
-              <div><div style="font-size:.6rem;color:var(--ink3);text-transform:uppercase;margin-bottom:2px">Working?</div><select style="width:100%;padding:4px 6px;border:1px solid var(--line);border-radius:4px;font-size:.8rem"><option>✅ Yes</option><option>❌ No</option></select></div>
-            </div>
-          </div>
-
-          <button class="btn btn-blue" style="width:100%;justify-content:center;padding:.6rem" onclick="ipad(3,document.querySelectorAll('.screen-tab')[3])">Save & Continue to Photos →</button>
-        </div>
-
-        <!-- Screen 3: Photos -->
-        <div class="ipad-screen" id="is-3" style="display:none">
-          <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:.85rem;margin-bottom:.6rem">
-            <div class="fw text-sm" style="margin-bottom:.5rem">Equipment Photos — LTD-1211</div>
-            <div class="text-sm text-muted" style="margin-bottom:.5rem">Tap to take photo. Minimum 2 required (before + after).</div>
-            <div class="grid g5" style="gap:.4rem">
-              <div style="aspect-ratio:1;background:var(--green-l);border:2px solid var(--green);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.6rem;color:var(--green);font-weight:600"><span style="font-size:1.5rem">📷</span>Before ✓</div>
-              <div style="aspect-ratio:1;background:var(--green-l);border:2px solid var(--green);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.6rem;color:var(--green);font-weight:600"><span style="font-size:1.5rem">📷</span>During ✓</div>
-              <div style="aspect-ratio:1;background:var(--green-l);border:2px solid var(--green);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.6rem;color:var(--green);font-weight:600"><span style="font-size:1.5rem">📷</span>After ✓</div>
-              <div style="aspect-ratio:1;background:var(--blue-l);border:2px solid var(--blue);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.6rem;color:var(--blue);font-weight:600"><span style="font-size:1.5rem">📷</span>Tag label</div>
-              <div style="aspect-ratio:1;background:#f1f5f9;border:2px dashed var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--ink3);cursor:pointer">+</div>
-            </div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:.85rem;margin-bottom:.6rem">
-            <div class="fw text-sm" style="margin-bottom:.5rem">Notes (optional)</div>
-            <textarea rows="2" placeholder="Any observations..." style="width:100%;border:1px solid var(--line);border-radius:6px;padding:.5rem;font-family:inherit;font-size:.8rem">Transmitter calibration completed successfully. Reading stable within tolerance.</textarea>
-          </div>
-
-          <div style="background:var(--green-l);border:1px solid #bbf7d0;border-radius:8px;padding:.75rem;margin-bottom:.6rem">
-            <div class="fw text-sm" style="color:#065f46;margin-bottom:.25rem">✅ Checklist Complete</div>
-            <div class="text-sm text-muted">1 equipment · 5-point calibration · 4 photos · All fields filled</div>
-            <div class="progress-bar" style="margin-top:.5rem"><div class="fill" style="width:100%;background:var(--green)"></div></div>
-          </div>
-
-          <button class="btn btn-green" style="width:100%;justify-content:center;padding:.6rem;font-size:.9rem" onclick="ipad(4,document.querySelectorAll('.screen-tab')[4])">✅ Ready for Signatures →</button>
-        </div>
-
-        <!-- Screen 4: Signatures & Submit -->
-        <div class="ipad-screen" id="is-4" style="display:none">
-          <div style="background:var(--green-l);border:1px solid #bbf7d0;border-radius:8px;padding:.65rem .85rem;margin-bottom:.75rem;font-size:.78rem;color:#065f46">
-            ✅ <strong>Work Summary:</strong> 1 equipment serviced · 5-point calibration done · 4 photos · Max error 0.25% (within tolerance)
-          </div>
-
-          <div class="grid g2" style="gap:.75rem;margin-bottom:.75rem">
-            <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:.85rem">
-              <div class="fw text-sm" style="margin-bottom:.5rem">Belfinger Site Engineer</div>
-              <div style="width:100%;height:90px;border:2px solid var(--green);border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:.5rem">
-                <span style="font-family:'Brush Script MT',cursive;font-size:1.8rem;color:var(--blue-d);transform:rotate(-3deg)">K. Al-Otaibi</span>
-              </div>
-              <div style="font-size:.7rem;color:var(--ink3)"><strong>Name:</strong> Khalid Al-Otaibi<br><strong>Date:</strong> 11 Apr 2026 15:18<br><strong>📍</strong> 29.15°N, 48.13°E (on-site ✓)</div>
-            </div>
-
-            <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:.85rem">
-              <div class="fw text-sm" style="margin-bottom:.5rem">MEW Engineer (Witness)</div>
-              <div style="width:100%;height:90px;border:2px solid var(--green);border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:.5rem">
-                <span style="font-family:'Brush Script MT',cursive;font-size:1.8rem;color:var(--blue-d);transform:rotate(-2deg)">S. Anwar</span>
-              </div>
-              <div style="font-size:.7rem;color:var(--ink3)"><strong>Name:</strong> Salim Anwar (MEW)<br><strong>Date:</strong> 11 Apr 2026 15:19<br><strong>📍</strong> 29.15°N, 48.13°E (on-site ✓)</div>
-            </div>
-          </div>
-
-          <button class="btn btn-green" style="width:100%;justify-content:center;padding:.75rem;font-size:1rem">✅ Submit Report to Supervisor</button>
-          <div style="text-align:center;font-size:.7rem;color:var(--ink3);margin-top:.5rem">Report goes to Fadi Mansour (Supervisor) for review. If billable, he drafts invoice from BOQ.</div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div style="text-align:center;margin-top:1rem;font-size:.75rem;color:var(--ink3)">
-    💡 The iPad app works <strong>offline</strong> — in basements, pump stations, and mechanical rooms with no signal. Data syncs automatically when connectivity returns.
-  </div>
-</div>
-
-</div><!-- /body -->
-</div><!-- /shell -->
-
-<script>
-function show(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('show'));
-  document.getElementById('p-' + page).classList.add('show');
-  document.querySelectorAll('.side nav a').forEach(a => a.classList.remove('on'));
-  event.target.closest('a').classList.add('on');
-  const titles = {dashboard:'Dashboard',jobs:'All Jobs',invoices:'Invoices',equipment:'Equipment Register',sites:'Sites (37)',ipad:'iPad Field App'};
-  document.getElementById('page-title').textContent = titles[page] || page;
-  if(page==='ipad') ipad(0, document.querySelector('.screen-tab'));
-}
-function ipad(n, el) {
-  document.querySelectorAll('.ipad-screen').forEach(s => s.style.display='none');
-  document.getElementById('is-'+n).style.display='block';
-  document.querySelectorAll('.screen-tab').forEach(t => t.classList.remove('on'));
-  if(el) el.classList.add('on');
-  var titles = ['My Work Orders','WO-2026-0418 · Work Order','LTD-1211 · Calibration Checklist','Photos · LTD-1211','Signatures & Submit'];
-  document.getElementById('ipad-title').textContent = titles[n];
-  document.getElementById('ipad-back').style.display = n > 0 ? 'inline' : 'none';
-}
-</script>
 </body>
 </html>

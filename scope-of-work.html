@@ -1,0 +1,1354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scope of Work — Belfinger Maintenance System</title>
+<style>
+  :root {
+    --brand: #1e40af;
+    --brand-dark: #1e3a8a;
+    --brand-light: #dbeafe;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --danger: #dc2626;
+    --ink: #0f172a;
+    --ink-2: #334155;
+    --ink-3: #64748b;
+    --line: #e2e8f0;
+    --bg: #f8fafc;
+    --surface: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    color: var(--ink);
+    background: #e2e8f0;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--brand); text-decoration: none; }
+
+  /* ---------- Page (A4) ---------- */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: white;
+    margin: 20px auto;
+    padding: 20mm 18mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    position: relative;
+    overflow: hidden;
+  }
+  .page-footer {
+    position: absolute;
+    bottom: 10mm; left: 18mm; right: 18mm;
+    font-size: 0.7rem;
+    color: var(--ink-3);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--line);
+    padding-top: 6px;
+  }
+
+  /* ---------- Cover ---------- */
+  .cover {
+    background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%);
+    color: white;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .cover-inner {
+    padding: 30mm 18mm 18mm;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .cover .brand {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.15rem;
+  }
+  .cover .brand-sub { font-size: 0.9rem; color: #93c5fd; margin-bottom: auto; }
+  .cover h1 {
+    font-size: 3rem;
+    line-height: 1.1;
+    font-weight: 800;
+    margin: 0 0 1rem;
+    max-width: 90%;
+    letter-spacing: -1px;
+  }
+  .cover .tag {
+    font-size: 1.1rem;
+    color: #cbd5e1;
+    max-width: 80%;
+    margin-bottom: 3rem;
+  }
+  .cover-meta {
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    font-size: 0.85rem;
+  }
+  .cover-meta .label {
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-size: 0.68rem;
+    color: #93c5fd;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+  .cover-meta .val { color: white; font-weight: 500; }
+  .cover-foot {
+    padding: 10mm 18mm;
+    background: rgba(0,0,0,0.25);
+    font-size: 0.75rem;
+    color: #cbd5e1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cover-foot .seal {
+    padding: 0.4rem 0.9rem;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #dbeafe;
+  }
+
+  /* ---------- Headings ---------- */
+  h1, h2, h3, h4 { color: var(--ink); font-weight: 700; letter-spacing: -0.3px; }
+  h2 {
+    font-size: 1.6rem;
+    padding: 0 0 0.75rem 3.25rem;
+    margin: 0 0 1.5rem;
+    border-bottom: 3px solid var(--brand);
+    position: relative;
+    min-height: 2.5rem;
+  }
+  h2::before {
+    content: attr(data-n);
+    position: absolute;
+    left: 0;
+    top: 0.1rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--brand-light);
+    line-height: 1;
+  }
+  h3 {
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0.75rem;
+    color: var(--brand-dark);
+  }
+  h4 {
+    font-size: 0.95rem;
+    margin: 1rem 0 0.5rem;
+    color: var(--ink-2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  p { margin: 0 0 0.85rem; color: var(--ink-2); }
+
+  /* ---------- Callouts / hero stats ---------- */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin: 1rem 0 1.5rem;
+  }
+  .stat-box {
+    background: var(--brand-light);
+    border-left: 4px solid var(--brand);
+    padding: 0.85rem;
+    border-radius: 4px;
+  }
+  .stat-box .v { font-size: 1.6rem; font-weight: 800; color: var(--brand-dark); line-height: 1; }
+  .stat-box .l { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.4px; color: var(--ink-2); margin-top: 0.35rem; font-weight: 600; }
+
+  /* ---------- Boxes ---------- */
+  .callout {
+    background: linear-gradient(135deg, var(--brand-light), #eff6ff);
+    border-left: 4px solid var(--brand);
+    padding: 1rem 1.25rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+  }
+  .callout.warning { background: #fffbeb; border-left-color: var(--accent); }
+  .callout.success { background: #f0fdf4; border-left-color: var(--success); }
+  .callout.danger { background: #fef2f2; border-left-color: var(--danger); }
+
+  /* ---------- 2-col scope ---------- */
+  .scope-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .scope-col {
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+  .scope-col.in { background: #f0fdf4; border-color: #bbf7d0; }
+  .scope-col.out { background: #fef2f2; border-color: #fecaca; }
+  .scope-col h3 { margin-top: 0; }
+  .scope-col.in h3 { color: #065f46; }
+  .scope-col.out h3 { color: #991b1b; }
+  .scope-col ul { margin: 0.5rem 0 0; padding-left: 1.1rem; font-size: 0.82rem; }
+  .scope-col li { margin-bottom: 0.35rem; color: var(--ink-2); }
+
+  /* ---------- Feature grid ---------- */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+  .feature {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .feature .icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    background: var(--brand-light);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .feature .name { font-size: 0.85rem; font-weight: 700; color: var(--ink); }
+  .feature .desc { font-size: 0.72rem; color: var(--ink-3); line-height: 1.45; }
+
+  /* ---------- Architecture diagram ---------- */
+  .arch {
+    background: linear-gradient(180deg, #f8fafc, #fff);
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin: 1rem 0;
+  }
+  .arch-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+  }
+  .arch-box {
+    background: var(--surface);
+    border: 2px solid var(--brand);
+    padding: 0.6rem 0.5rem;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--brand-dark);
+    position: relative;
+  }
+  .arch-box.secondary {
+    border-color: var(--accent);
+    color: #92400e;
+    background: #fffbeb;
+  }
+  .arch-box.primary {
+    background: var(--brand);
+    color: white;
+  }
+  .arch-box.support {
+    border-color: #94a3b8;
+    border-style: dashed;
+    color: var(--ink-2);
+  }
+  .arch-arrow {
+    text-align: center;
+    color: var(--brand);
+    font-size: 1.2rem;
+    margin: -2px 0;
+  }
+  .arch-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink-3);
+    text-align: center;
+    margin-top: 0.8rem;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+  }
+
+  /* ---------- Stack grid ---------- */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .stack {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    background: var(--surface);
+  }
+  .stack h4 {
+    margin: 0 0 0.4rem;
+    color: var(--brand);
+    font-size: 0.75rem;
+    letter-spacing: 0.4px;
+  }
+  .stack-pills { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.4rem; }
+  .pill {
+    display: inline-block;
+    background: var(--brand-light);
+    color: var(--brand-dark);
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+
+  /* ---------- Timeline (gantt-like) ---------- */
+  .timeline {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+  }
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 50px;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    font-size: 0.78rem;
+  }
+  .timeline-label { font-weight: 600; color: var(--ink); }
+  .timeline-bar-wrap {
+    position: relative;
+    height: 18px;
+    background: #f1f5f9;
+    border-radius: 4px;
+  }
+  .timeline-bar {
+    position: absolute;
+    top: 0; bottom: 0;
+    background: linear-gradient(90deg, var(--brand), #3b82f6);
+    border-radius: 4px;
+  }
+  .timeline-bar.accent { background: linear-gradient(90deg, var(--accent), #fbbf24); }
+  .timeline-bar.success { background: linear-gradient(90deg, var(--success), #34d399); }
+  .timeline-weeks { font-size: 0.7rem; color: var(--ink-3); text-align: right; font-weight: 600; }
+  .timeline-header {
+    display: grid;
+    grid-template-columns: 180px 1fr 50px;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
+    border-bottom: 1px solid var(--line);
+    font-weight: 600;
+  }
+  .timeline-axis {
+    display: grid;
+    grid-template-columns: repeat(26, 1fr);
+    position: relative;
+  }
+  .timeline-axis span {
+    font-size: 0.55rem;
+    color: var(--ink-3);
+    text-align: center;
+    border-left: 1px solid #f1f5f9;
+    padding: 0.1rem 0;
+  }
+
+  /* ---------- Role matrix ---------- */
+  .role-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    margin-top: 0.75rem;
+  }
+  .role-table th {
+    background: var(--brand);
+    color: white;
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .role-table td {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .role-table tr:nth-child(even) td { background: #f8fafc; }
+  .role-table .org {
+    font-weight: 700;
+    background: #f1f5f9 !important;
+    color: var(--brand-dark);
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.4px;
+  }
+
+  /* ---------- Deliverables list ---------- */
+  .deliver-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+  .deliver {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.7rem 0.85rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 0.8rem;
+  }
+  .deliver .num {
+    background: var(--brand);
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .deliver .text { color: var(--ink-2); line-height: 1.4; }
+  .deliver .text strong { color: var(--ink); display: block; font-size: 0.85rem; margin-bottom: 0.15rem; }
+
+  /* ---------- Pricing cards ---------- */
+  .price-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .price-card {
+    border: 2px solid var(--line);
+    border-radius: 8px;
+    padding: 1.1rem 1rem;
+    text-align: center;
+    background: var(--surface);
+  }
+  .price-card.featured {
+    border-color: var(--brand);
+    background: linear-gradient(180deg, #eff6ff, white);
+    position: relative;
+  }
+  .price-card.featured::before {
+    content: 'Most common';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--brand);
+    color: white;
+    padding: 0.15rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 700;
+  }
+  .price-card h4 {
+    font-size: 0.95rem;
+    margin: 0 0 0.5rem;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ink);
+  }
+  .price-card p { font-size: 0.75rem; color: var(--ink-3); margin: 0; }
+
+  /* ---------- Signature block ---------- */
+  .sig-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .sig {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1.25rem;
+  }
+  .sig .who {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--brand);
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .sig .line {
+    margin-bottom: 1rem;
+    font-size: 0.78rem;
+  }
+  .sig .line-label {
+    color: var(--ink-3);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 0.25rem;
+  }
+  .sig .line-fill {
+    height: 1px;
+    background: var(--ink-2);
+    margin-top: 1.5rem;
+  }
+
+  /* ---------- Print ---------- */
+  @media print {
+    body { background: white; }
+    .page {
+      margin: 0;
+      box-shadow: none;
+      page-break-after: always;
+      min-height: auto;
+    }
+    .page:last-child { page-break-after: auto; }
+    .toolbar { display: none !important; }
+  }
+
+  /* ---------- Toolbar (screen only) ---------- */
+  .toolbar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 999px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    padding: 0.5rem;
+    display: flex;
+    gap: 0.35rem;
+    z-index: 100;
+  }
+  .toolbar button {
+    background: var(--brand);
+    color: white;
+    border: none;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .toolbar button:hover { background: var(--brand-dark); }
+  .toolbar a {
+    color: var(--ink-2);
+    padding: 0.55rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  ul.clean { list-style: none; padding: 0; margin: 0.5rem 0; }
+  ul.clean li {
+    padding: 0.4rem 0 0.4rem 1.6rem;
+    position: relative;
+    font-size: 0.82rem;
+    color: var(--ink-2);
+  }
+  ul.clean li::before {
+    content: '✓';
+    position: absolute;
+    left: 0.2rem;
+    color: var(--success);
+    font-weight: 700;
+  }
+  ul.clean.dot li::before { content: '•'; color: var(--brand); font-size: 1.2rem; top: 0.15rem; }
+
+  .q-list { list-style: none; padding: 0; margin: 0.5rem 0; counter-reset: q; }
+  .q-list li {
+    padding: 0.75rem 0.85rem 0.75rem 2.5rem;
+    position: relative;
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    counter-increment: q;
+  }
+  .q-list li::before {
+    content: counter(q);
+    position: absolute;
+    left: 0.75rem;
+    top: 0.7rem;
+    width: 22px; height: 22px;
+    background: var(--brand);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .inline-tag {
+    display: inline-block;
+    background: var(--ink);
+    color: white;
+    padding: 0.1rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a href="../../prototype/index.html">← Prototype</a>
+  <button onclick="window.print()">🖨 Print / Save as PDF</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 1 - COVER -->
+<!-- ============================================================ -->
+<div class="page cover">
+  <div class="cover-inner">
+    <div class="brand">Belfinger MMS</div>
+    <div class="brand-sub">Maintenance Management System</div>
+
+    <h1>Scope of Work</h1>
+    <div class="tag">
+      A digital maintenance management platform for Belfinger's operation
+      and maintenance of the MEW Water Sector across the State of Kuwait —
+      replacing paper-based workflows with an auditable web and iPad system.
+    </div>
+
+    <div class="cover-meta">
+      <div>
+        <div class="label">Prepared for</div>
+        <div class="val">Belfinger Engineering &amp; Technologies GmbH</div>
+      </div>
+      <div>
+        <div class="label">End customer</div>
+        <div class="val">Ministry of Electricity &amp; Water (MEW), Kuwait</div>
+      </div>
+      <div>
+        <div class="label">Contract reference</div>
+        <div class="val">MEW / MC / 6132 / 2024 / 2025</div>
+      </div>
+      <div>
+        <div class="label">Document date</div>
+        <div class="val">11 April 2026 · v1.0</div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-foot">
+    <span>Operation &amp; Maintenance of Water Sector</span>
+    <span class="seal">Draft for Client Review</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2 - EXECUTIVE SUMMARY -->
+<!-- ============================================================ -->
+<div class="page">
+  <h2 data-n="01">Executive Summary</h2>
+
+  <p>
+    Belfinger operates and maintains the Instrumentation and Control Systems (DCS)
+    across all MEW Water Sector sites in the State of Kuwait under contract
+    <span class="inline-tag">MEW/MC/6132/2024/2025</span>. Today, maintenance work is
+    coordinated on paper forms (Maintenance / Defect Sheets, Equipment Lists,
+    Routine Maintenance Reports), routed by phone and WhatsApp, and reconciled
+    manually at invoicing time.
+  </p>
+
+  <h3>The problems this creates</h3>
+  <div class="stat-row">
+    <div class="stat-box">
+      <div class="v">1 in 8</div>
+      <div class="l">Forms lost or incomplete</div>
+    </div>
+    <div class="stat-box">
+      <div class="v">~40h</div>
+      <div class="l">Avg. invoice dispute cycle</div>
+    </div>
+    <div class="stat-box">
+      <div class="v">0</div>
+      <div class="l">SLA visibility for urgent jobs</div>
+    </div>
+    <div class="stat-box">
+      <div class="v">~3×</div>
+      <div class="l">Manual reconciliation effort</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>This document proposes a web + iPad-based Maintenance Management System</strong>
+    that replaces the paper workflow end-to-end, preserving the exact roles, signatures,
+    and approval stages already in use today — while delivering measurable improvements
+    in response time, invoice accuracy, and audit confidence.
+  </div>
+
+  <h3>Expected outcomes</h3>
+  <ul class="clean">
+    <li><strong>Zero lost reports</strong> — all checklists, photos, signatures captured digitally on the iPad</li>
+    <li><strong>Faster SLA response</strong> — automated routing, real-time alerts, and escalation when urgent jobs stall</li>
+    <li><strong>Fewer invoice disputes</strong> — photo evidence + audit trail on every line item</li>
+    <li><strong>Single source of truth</strong> for all maintenance history, equipment status, and outstanding invoices</li>
+    <li><strong>Bilingual operation</strong> (EN / AR) — matches the existing MEW forms</li>
+    <li><strong>Offline-capable field work</strong> — engineers in basements and pump stations lose no data</li>
+  </ul>
+
+  <h3>What the client gets</h3>
+  <div class="feature-grid" style="grid-template-columns: repeat(4, 1fr);">
+    <div class="feature"><div class="icon">🌐</div><div class="name">Web console</div><div class="desc">For MEW, Belfinger office, subcontractors</div></div>
+    <div class="feature"><div class="icon">📱</div><div class="name">iPad field app</div><div class="desc">Offline-first PWA for site engineers</div></div>
+    <div class="feature"><div class="icon">📅</div><div class="name">Auto PM scheduler</div><div class="desc">Nightly, holiday-aware</div></div>
+    <div class="feature"><div class="icon">💰</div><div class="name">Invoice engine</div><div class="desc">BOQ-driven with versioning</div></div>
+  </div>
+
+  <div class="page-footer">
+    <span>Scope of Work · Belfinger MMS · v1.0</span>
+    <span>Page 1 of 10</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3 - STAKEHOLDERS -->
+<!-- ============================================================ -->
+<div class="page">
+  <h2 data-n="02">Stakeholders &amp; Users</h2>
+
+  <p>Three organisations share the platform. Each has its own user base, its own scope,
+  and its own view of the data. The system is multi-tenant by design — users only see
+  the work orders, sites, and equipment they are authorised to see.</p>
+
+  <div class="arch">
+    <div class="arch-label">Organisations</div>
+    <div class="arch-row">
+      <div class="arch-box primary">MEW<br/><small style="font-weight: 400; font-size: 0.65rem;">Client (20–40 users)</small></div>
+      <div class="arch-box primary">Belfinger<br/><small style="font-weight: 400; font-size: 0.65rem;">Main contractor (30–50)</small></div>
+      <div class="arch-box secondary">Subcontractors<br/><small style="font-weight: 400; font-size: 0.65rem;">20–60 per dept</small></div>
+    </div>
+  </div>
+
+  <h3>Role hierarchy</h3>
+  <table class="role-table">
+    <thead>
+      <tr>
+        <th style="width: 130px;">Organisation</th>
+        <th style="width: 170px;">Role</th>
+        <th>Key permissions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="org" rowspan="2">MEW</td>
+          <td><strong>Requester</strong></td>
+          <td>Raise Issue Requests; view status of all their sites</td></tr>
+      <tr><td><strong>Approver</strong></td>
+          <td>Approve PM requests; approve final invoices (→ receivable)</td></tr>
+
+      <tr><td class="org" rowspan="4">Belfinger</td>
+          <td><strong>Manager</strong></td>
+          <td>Triage incoming requests; approve invoices; SLA escalation</td></tr>
+      <tr><td><strong>Supervisor</strong></td>
+          <td>Assign engineers; review reports; draft invoices from BOQ</td></tr>
+      <tr><td><strong>Site Engineer</strong></td>
+          <td>Execute work on iPad; fill checklists + photos + signatures</td></tr>
+      <tr><td><strong>Admin</strong></td>
+          <td>Users, BOQ, sites, zones, subcontractor onboarding</td></tr>
+
+      <tr><td class="org" rowspan="3">Subcontractor</td>
+          <td><strong>Manager</strong></td>
+          <td>Accept / decline WOs routed to their department</td></tr>
+      <tr><td><strong>Supervisor</strong></td>
+          <td>Assign their engineers; review reports; draft invoices</td></tr>
+      <tr><td><strong>Site Engineer</strong></td>
+          <td>Execute work on iPad; same tooling as Belfinger engineers</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout" style="margin-top: 1.25rem;">
+    <strong>Key insight:</strong> the internal chain (Manager → Supervisor → Site Engineer)
+    is <em>identical</em> inside Belfinger and inside every subcontractor. This means
+    <strong>one role model, one workflow engine</strong> — filtered by organisation and
+    department. Subcontractors plug in on day one with no custom work.
+  </div>
+
+  <div class="page-footer">
+    <span>Scope of Work · Belfinger MMS · v1.0</span>
+    <span>Page 2 of 10</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4 - SCOPE IN / OUT -->
+<!-- ============================================================ -->
+<div class="page">
+  <h2 data-n="03">Scope — In &amp; Out</h2>
+
+  <p>This is what we will build in <strong>Phase 1</strong>. Items listed as out-of-scope
+  can be revisited in a future phase, priced separately.</p>
+
+  <div class="scope-grid">
+    <div class="scope-col in">
+      <h3>✅ In Scope — Phase 1</h3>
+
+      <h4 style="color: #065f46;">Work Management</h4>
+      <ul>
+        <li>Two job types: PM (scheduled) + Issue Request (corrective)</li>
+        <li>Full approval chain: MEW → Belfinger → Contractor → Engineer</li>
+        <li>"Choose-who-to-send-back" rejection &amp; rework logic</li>
+        <li>SLA tracking with automated escalation</li>
+      </ul>
+
+      <h4 style="color: #065f46;">Asset Register</h4>
+      <ul>
+        <li>Per-site equipment with Tag Numbers (e.g. LTD-1211)</li>
+        <li>Site → Sub-location hierarchy (D1–D12, Shuwaikh, Doha…)</li>
+        <li>Equipment types linked to checklist templates</li>
+        <li>Working / Defective / Under Repair status</li>
+      </ul>
+
+      <h4 style="color: #065f46;">Checklists &amp; Reports</h4>
+      <ul>
+        <li>Typed checklists per equipment type</li>
+        <li>Calibration matrix with auto % error (0/25/50/75/100%)</li>
+        <li>Photos tagged to specific equipment</li>
+        <li>Dual digital signatures (Belfinger + MEW)</li>
+        <li>Free-form work reports for non-checklist jobs</li>
+      </ul>
+
+      <h4 style="color: #065f46;">Work Permits</h4>
+      <ul>
+        <li>First-class work-permit field on every WO</li>
+        <li>No-permit-no-work enforcement</li>
+      </ul>
+
+      <h4 style="color: #065f46;">Invoicing</h4>
+      <ul>
+        <li>BOQ master catalog (MEW pre-approved)</li>
+        <li>Unit price snapshotting</li>
+        <li>Versioned invoices with rework history</li>
+        <li>Auto-routing through approval chain</li>
+      </ul>
+
+      <h4 style="color: #065f46;">iPad Field App</h4>
+      <ul>
+        <li>Offline-first PWA (basements, pump stations)</li>
+        <li>QR / barcode tag scanning</li>
+        <li>Previous-reading prefill</li>
+        <li>Mandatory-field gate before submission</li>
+      </ul>
+
+      <h4 style="color: #065f46;">Platform</h4>
+      <ul>
+        <li>Automated PM scheduler (nightly, KW-holiday aware)</li>
+        <li>Email + in-app + SMS notifications</li>
+        <li>Bilingual EN / AR with RTL support</li>
+        <li>Append-only audit log for compliance</li>
+      </ul>
+    </div>
+
+    <div class="scope-col out">
+      <h3>❌ Out of Scope — Phase 1</h3>
+      <p style="font-size: 0.78rem; margin-top: 0.5rem;">
+        These items may be added in a future phase if required. They are excluded
+        from the Phase 1 timeline and commercials.
+      </p>
+
+      <ul>
+        <li>
+          <strong>MEW finance / GL integration.</strong>
+          Invoices are exported as PDF for manual handover. Direct integration
+          can be added in Phase 2 if MEW's finance system provides an API.
+        </li>
+        <li>
+          <strong>Subcontractor → Belfinger pricing.</strong>
+          Handled offline in v1. Only the MEW-approved BOQ is in the system.
+        </li>
+        <li>
+          <strong>Predictive maintenance &amp; analytics.</strong>
+          Requires historical data first. Best revisited after 6+ months of operation.
+        </li>
+        <li>
+          <strong>Native iOS / Android apps.</strong>
+          The PWA covers iPad and Android tablet without App Store review.
+        </li>
+        <li>
+          <strong>Real-time DCS / SCADA telemetry.</strong>
+          Possible in Phase 2 once MEW's DCS APIs are documented.
+        </li>
+        <li>
+          <strong>Parts / inventory management.</strong>
+          Phase 1 captures "spare installed" as a text field; full parts module
+          (stock levels, PO, re-order points) is a future phase.
+        </li>
+        <li>
+          <strong>Financial accounting (GL, AR, AP).</strong>
+          Use Belfinger's existing accounting system.
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Scope of Work · Belfinger MMS · v1.0</span>
+    <span>Page 3 of 10</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5 - KEY FEATURES -->
+<!-- ============================================================ -->
+<div class="page">
+  <h2 data-n="04">Key Features</h2>
+
+  <p>A total of <strong>113 features</strong> across <strong>20 modules</strong>. The
+  highlights below capture what the client and users will experience most directly.
+  A separate <em>Functional Requirements</em> document lists every feature for sign-off.</p>
+
+  <div class="feature-grid">
+    <div class="feature"><div class="icon">📝</div><div class="name">Digital Defect Sheet</div><div class="desc">Replaces MEW's paper form with identical fields + auto-routing</div></div>
+    <div class="feature"><div class="icon">🔧</div><div class="name">Equipment Register</div><div class="desc">Tag-level asset tracking with last serviced + history</div></div>
+    <div class="feature"><div class="icon">📊</div><div class="name">Dynamic Checklists</div><div class="desc">Calibration math computed automatically (5-point)</div></div>
+    <div class="feature"><div class="icon">✍️</div><div class="name">Dual Signatures</div><div class="desc">Belfinger + MEW signatures captured on iPad with GPS</div></div>
+    <div class="feature"><div class="icon">📷</div><div class="name">Tagged Photos</div><div class="desc">Evidence linked to specific equipment, not just the WO</div></div>
+    <div class="feature"><div class="icon">📅</div><div class="name">PM Scheduler</div><div class="desc">Nightly cron · KW holidays · grace window · no duplicates</div></div>
+    <div class="feature"><div class="icon">🔀</div><div class="name">Smart Routing</div><div class="desc">Auto-sends WO to the right subcontractor by department</div></div>
+    <div class="feature"><div class="icon">📶</div><div class="name">Offline iPad App</div><div class="desc">Works in basements &amp; pump stations; background sync</div></div>
+    <div class="feature"><div class="icon">⏱️</div><div class="name">SLA Tracking</div><div class="desc">Very Urgent / Same Day / Normal; 75% warnings; escalation</div></div>
+    <div class="feature"><div class="icon">↩️</div><div class="name">Invoice Versioning</div><div class="desc">MEW rejections preserve full history + reason</div></div>
+    <div class="feature"><div class="icon">🌐</div><div class="name">Bilingual UI</div><div class="desc">English + Arabic with RTL; user-toggleable</div></div>
+    <div class="feature"><div class="icon">🏢</div><div class="name">Multi-tenant</div><div class="desc">One platform · three orgs · row-level scoping</div></div>
+    <div class="feature"><div class="icon">🛡️</div><div class="name">Audit Log</div><div class="desc">Append-only; tamper-evident; exportable as PDF</div></div>
+    <div class="feature"><div class="icon">📈</div><div class="name">Role Dashboards</div><div class="desc">Tailored per role with KPIs and attention queue</div></div>
+    <div class="feature"><div class="icon">📥</div><div class="name">CSV Import/Export</div><div class="desc">Equipment, BOQ, users · bulk ops for initial load</div></div>
+  </div>
+
+  <div class="callout success" style="margin-top: 1.25rem;">
+    <strong>All 113 features are listed in the Functional Requirements document</strong>
+    with a tick-box for client sign-off (Agreed / Change / Not needed / Discuss).
+    This SoW covers the <em>what</em> and <em>why</em>; the Functional Requirements
+    covers the <em>exact list</em>.
+  </div>
+
+  <div class="page-footer">
+    <span>Scope of Work · Belfinger MMS · v1.0</span>
+    <span>Page 4 of 10</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6 - ARCHITECTURE -->
+<!-- ============================================================ -->
+<div class="page">
+  <h2 data-n="05">System Architecture</h2>
+
+  <p>The system is a standard modern web architecture: a web &amp; iPad front-end
+  served to users, a backend API with workflow logic, a PostgreSQL database, and
+  object storage for photos and signatures. Designed to run in the cloud
+  <em>or</em> on-premise.</p>
+
+  <div class="arch">
+    <div class="arch-label">User Layer</div>
+    <div class="arch-row">
+      <div class="arch-box">MEW Users<br/><small style="font-weight: 400; font-size: 0.65rem;">Web browser</small></div>
+      <div class="arch-box">Belfinger Office<br/><small style="font-weight: 400; font-size: 0.65rem;">Web browser</small></div>
+      <div class="arch-box">Subcontractors<br/><small style="font-weight: 400; font-size: 0.65rem;">Web browser</small></div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-box secondary" style="grid-column: 1 / 3;">Site Engineers · iPad PWA (offline)</div>
+      <div class="arch-box support">Email · SMS</div>
+    </div>
+
+    <div class="arch-arrow">↕</div>
+
+    <div class="arch-label">Application Layer</div>
+    <div class="arch-row">
+      <div class="arch-box primary" style="grid-column: 1 / 4;">
+        NestJS API · Workflow Engine · PM Scheduler · Invoice Engine · Auth &amp; RBAC
+      </div>
+    </div>
+
+    <div class="arch-arrow">↕</div>
+
+    <div class="arch-label">Data Layer</div>
+    <div class="arch-row">
+      <div class="arch-box">PostgreSQL<br/><small style="font-weight: 400; font-size: 0.65rem;">All structured data</small></div>
+      <div class="arch-box">Redis · BullMQ<br/><small style="font-weight: 400; font-size: 0.65rem;">Jobs &amp; queues</small></div>
+      <div class="arch-box">S3 / MinIO<br/><small style="font-weight: 400; font-size: 0.65rem;">Photos, signatures</small></div>
+    </div>
+
+    <div class="arch-arrow">↕</div>
+
+    <div class="arch-label">Hosting (Choose One)</div>
+    <div class="arch-row">
+      <div class="arch-box support">☁️ AWS Bahrain (me-south-1)<br/><small style="font-weight: 400; font-size: 0.65rem;">Fastest to deploy</small></div>
+      <div class="arch-box support" style="grid-column: 2 / 4;">🏢 On-Prem / Kuwait Government Cloud<br/><small style="font-weight: 400; font-size: 0.65rem;">Same stack in Docker / k3s</small></div>
+    </div>
+  </div>
+
+  <h3>Technology Stack</h3>
+  <div class="stack-grid">
+    <div class="stack">
+      <h4>BACKEND</h4>
+      <div>Node.js + NestJS with TypeScript, Prisma ORM</div>
+      <div class="stack-pills">
+        <span class="pill">NestJS</span>
+        <span class="pill">PostgreSQL</span>
+        <span class="pill">Redis</span>
+        <span class="pill">Prisma</span>
+        <span class="pill">BullMQ</span>
+      </div>
+    </div>
+    <div class="stack">
+      <h4>WEB CONSOLE</h4>
+      <div>Next.js App Router with Tailwind + shadcn/ui</div>
+      <div class="stack-pills">
+        <span class="pill">Next.js 15</span>
+        <span class="pill">TypeScript</span>
+        <span class="pill">Tailwind</span>
+        <span class="pill">next-intl</span>
+      </div>
+    </div>
+    <div class="stack">
+      <h4>iPAD PWA</h4>
+      <div>Offline-first PWA with local persistence</div>
+      <div class="stack-pills">
+        <span class="pill">Workbox</span>
+        <span class="pill">Dexie (IndexedDB)</span>
+        <span class="pill">Signature Canvas</span>
+        <span class="pill">html5-qrcode</span>
+      </div>
+    </div>
+    <div class="stack">
+      <h4>AUTH &amp; OBSERVABILITY</h4>
+      <div>NextAuth with TOTP + Sentry + Postgres audit</div>
+      <div class="stack-pills">
+        <span class="pill">NextAuth</span>
+        <span class="pill">TOTP 2FA</span>
+        <span class="pill">Sentry</span>
+        <span class="pill">Audit Log</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Scope of Work · Belfinger MMS · v1.0</span>
+    <span>Page 5 of 10</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 7 - TIMELINE -->
+<!-- ============================================================ -->
+<div class="page">
+  <h2 data-n="06">Timeline</h2>
+
+  <p><strong>Total: ~26 weeks (6 months)</strong> — assuming parallel tracks on backend,
+  web, and iPad; a single full-stack developer + one QA engineer. Can be compressed with
+  additional developers; each extra senior developer saves ~4–6 weeks.</p>
+
+  <div class="timeline">
+    <div class="timeline-header">
+      <div>Phase</div>
+      <div class="timeline-axis">
+        <span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span><span>W13</span>
+        <span>W14</span><span>W15</span><span>W16</span><span>W17</span><span>W18</span><span>W19</span><span>W20</span><span>W21</span><span>W22</span><span>W23</span><span>W24</span><span>W25</span><span>W26</span>
+      </div>
+      <div>Weeks</div>
+    </div>
+
+    <div class="timeline-row">
+      <div class="timeline-label">0. This SoW + Prototype</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar accent" style="left: 0%; width: 3.8%;"></div></div>
+      <div class="timeline-weeks">1w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">1. Requirements finalise</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar accent" style="left: 3.8%; width: 3.8%;"></div></div>
+      <div class="timeline-weeks">1w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">2. Detailed plan + DB</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar accent" style="left: 7.7%; width: 3.8%;"></div></div>
+      <div class="timeline-weeks">1w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">3. Backend foundation</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar" style="left: 11.5%; width: 11.5%;"></div></div>
+      <div class="timeline-weeks">3w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">4. Workflow engine</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar" style="left: 23.1%; width: 11.5%;"></div></div>
+      <div class="timeline-weeks">3w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">5. Web console</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar" style="left: 34.6%; width: 11.5%;"></div></div>
+      <div class="timeline-weeks">3w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">6. iPad PWA (offline)</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar" style="left: 46.2%; width: 11.5%;"></div></div>
+      <div class="timeline-weeks">3w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">7. Scheduler + Notifications</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar" style="left: 57.7%; width: 3.8%;"></div></div>
+      <div class="timeline-weeks">1w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">8. Invoice engine + BOQ</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar" style="left: 61.5%; width: 7.7%;"></div></div>
+      <div class="timeline-weeks">2w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">9. End-to-end testing</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar success" style="left: 69.2%; width: 7.7%;"></div></div>
+      <div class="timeline-weeks">2w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">10. UAT (MEW + sub)</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar success" style="left: 76.9%; width: 7.7%;"></div></div>
+      <div class="timeline-weeks">2w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">11. Migration + Go-live + Training</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar success" style="left: 84.6%; width: 3.8%;"></div></div>
+      <div class="timeline-weeks">1w</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-label">12. Post-launch support</div>
+      <div class="timeline-bar-wrap"><div class="timeline-bar success" style="left: 88.5%; width: 11.5%;"></div></div>
+      <div class="timeline-weeks">4w</div>
+    </div>
+  </div>
+
+  <div class="stat-row" style="margin-top: 1.25rem;">
+    <div class="stat-box"><div class="v">26 wks</div><div class="l">Total duration</div></div>
+    <div class="stat-box"><div class="v">12</div><div class="l">Phases</div></div>
+    <div class="stat-box"><div class="v">2</div><div class="l">Team members</div></div>
+    <div class="stat-box"><div class="v">4 wks</div><div class="l">Post-launch warranty</div></div>
+  </div>
+
+  <div class="callout warning">
+    <strong>Acceleration option:</strong> adding a second full-stack developer reduces total
+    duration to ~18 weeks. Adding a dedicated iPad/PWA specialist reduces it further to ~16 weeks.
+    These options can be priced together with the commercial proposal.
+  </div>
+
+  <div class="page-footer">
+    <span>Scope of Work · Belfinger MMS · v1.0</span>
+    <span>Page 6 of 10</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 8 - DELIVERABLES -->
+<!-- ============================================================ -->
+<div class="page">
+  <h2 data-n="07">Deliverables</h2>
+
+  <p>Everything listed below is included in the fixed scope. All deliverables are
+  handed over at the end of their respective phase, with documentation.</p>
+
+  <div class="deliver-grid">
+    <div class="deliver"><div class="num">1</div><div class="text"><strong>Scope of Work</strong>This document. Approved before kick-off.</div></div>
+    <div class="deliver"><div class="num">2</div><div class="text"><strong>Functional Requirements</strong>113 features with sign-off checkboxes.</div></div>
+    <div class="deliver"><div class="num">3</div><div class="text"><strong>Clickable HTML Prototype</strong>12+ screens, iPad + web. (Done ✓)</div></div>
+    <div class="deliver"><div class="num">4</div><div class="text"><strong>Final Design Document</strong>Data model, workflows, state machines.</div></div>
+    <div class="deliver"><div class="num">5</div><div class="text"><strong>Source Code Repository</strong>Private Git with full history.</div></div>
+    <div class="deliver"><div class="num">6</div><div class="text"><strong>Backend API</strong>NestJS + PostgreSQL; staging + prod.</div></div>
+    <div class="deliver"><div class="num">7</div><div class="text"><strong>Web Management Console</strong>Next.js; deployed and SSL-ready.</div></div>
+    <div class="deliver"><div class="num">8</div><div class="text"><strong>iPad Field App (PWA)</strong>Installable to home screen; offline.</div></div>
+    <div class="deliver"><div class="num">9</div><div class="text"><strong>PM Scheduler Subsystem</strong>Runs nightly; monitored; alerting.</div></div>
+    <div class="deliver"><div class="num">10</div><div class="text"><strong>Data Migration Scripts</strong>For initial load from existing sources.</div></div>
+    <div class="deliver"><div class="num">11</div><div class="text"><strong>Admin &amp; User Documentation</strong>PDF manuals + in-app help.</div></div>
+    <div class="deliver"><div class="num">12</div><div class="text"><strong>Training</strong>2 sessions (admin + end-user); on-site or remote.</div></div>
+    <div class="deliver" style="grid-column: 1 / 3;"><div class="num">13</div><div class="text"><strong>90-Day Post-Launch Warranty</strong>All bug fixes at no additional cost. Enhancement requests are billed separately.</div></div>
+  </div>
+
+  <h3 style="margin-top: 2rem;">Commercial Options</h3>
+  <p>Final pricing will be proposed separately after client review of this SoW, the
+  Functional Requirements, and the prototype. Three commercial models are on the table:</p>
+
+  <div class="price-grid">
+    <div class="price-card">
+      <h4>Fixed Price</h4>
+      <p>Single lump sum for Phases 1–11 based on the scope above. Best when scope is firm and well understood.</p>
+    </div>
+    <div class="price-card featured">
+      <h4>Hybrid</h4>
+      <p>Fixed-price for Phases 1–8; Time &amp; Materials for UAT + go-live + post-launch hardening. Most common for projects of this scale.</p>
+    </div>
+    <div class="price-card">
+      <h4>Time + Materials</h4>
+      <p>Weekly billing per person, capped at an agreed maximum. Best when scope may evolve during implementation.</p>
+    </div>
+  </div>
+
+  <p style="font-size: 0.78rem; color: var(--ink-3); margin-top: 0.75rem;">
+    Hosting (AWS / on-prem), third-party services (SMS, email), and SSL certificates
+    are billed separately at cost with full transparency.
+  </p>
+
+  <div class="page-footer">
+    <span>Scope of Work · Belfinger MMS · v1.0</span>
+    <span>Page 7 of 10</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 9 - ASSUMPTIONS & OPEN QUESTIONS -->
+<!-- ============================================================ -->
+<div class="page">
+  <h2 data-n="08">Assumptions</h2>
+
+  <p>The scope, timeline, and commercials in this document assume the following.
+  If any assumption proves incorrect, timeline and / or cost may need to be revisited.</p>
+
+  <ul class="clean dot">
+    <li><strong>Belfinger provides</strong> the BOQ master catalog, list of sites and sub-locations, list of departments, PM cadences, equipment types and checklist templates.</li>
+    <li><strong>MEW provides</strong> the list of MEW users (Requesters, Approvers) and confirms whether Requester and Approver are separate roles.</li>
+    <li><strong>Kuwait public holidays</strong> for the scheduler are provided by Belfinger admin.</li>
+    <li><strong>iPads are provided by Belfinger</strong> for site engineers. No App Store distribution required — the system runs on iPad Safari / Chrome as a PWA.</li>
+    <li><strong>Subcontractor onboarding</strong> is coordinated by Belfinger — one named point of contact per subcontractor to provide their users, departments, and go-live schedule.</li>
+    <li><strong>Data residency decision</strong> (cloud vs on-prem) is made by MEW before the start of Phase 3. Both paths are supported by the architecture.</li>
+    <li><strong>Existing paper records</strong> from 2024–2025 are archival only; not migrated into the new system in Phase 1.</li>
+    <li><strong>Email + SMS providers</strong> are agreed with Belfinger IT before Phase 7. Local KW provider preferred for SMS.</li>
+  </ul>
+
+  <h2 data-n="09" style="margin-top: 2rem;">Open Questions</h2>
+
+  <p>These need to be resolved before Phase 2 (Detailed Planning) begins:</p>
+
+  <ol class="q-list">
+    <li><strong>MEW Separation of Duties</strong> — is Requester and Approver one combined role, or two separate user types?</li>
+    <li><strong>Belfinger Manager cardinality</strong> — one person or multiple (round-robin / first-to-act / all-must-approve)?</li>
+    <li><strong>Attachments beyond photos</strong> — do we need PDFs on WOs (MEW's original defect report), signed forms, delivery notes for parts?</li>
+    <li><strong>SLA targets</strong> — Belfinger's numeric commitments per urgency per department (currently placeholder values).</li>
+    <li><strong>Kuwait public holidays</strong> — official list for calendar year 2026–2027.</li>
+    <li><strong>SMS provider</strong> — which KW carrier / gateway does Belfinger prefer?</li>
+    <li><strong>Hosting decision</strong> — cloud (AWS Bahrain) vs on-prem (Kuwait). Data residency requirements from MEW.</li>
+    <li><strong>Role gap check</strong> — is there an accountant / auditor / read-only viewer role we haven't captured?</li>
+  </ol>
+
+  <div class="page-footer">
+    <span>Scope of Work · Belfinger MMS · v1.0</span>
+    <span>Page 8 of 10</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 10 - NEXT STEPS -->
+<!-- ============================================================ -->
+<div class="page">
+  <h2 data-n="10">Next Steps</h2>
+
+  <p>This document, together with the accompanying <strong>Functional Requirements</strong>
+  and <strong>Clickable Prototype</strong>, forms the package for client review. After
+  approval we move directly into detailed planning and build.</p>
+
+  <div class="feature-grid" style="grid-template-columns: repeat(2, 1fr); margin-top: 1rem;">
+    <div class="feature" style="flex-direction: row; align-items: center; gap: 0.75rem;">
+      <div class="icon">1</div>
+      <div>
+        <div class="name">Review this SoW</div>
+        <div class="desc">Client reviews this document + the Functional Requirements + the clickable prototype.</div>
+      </div>
+    </div>
+    <div class="feature" style="flex-direction: row; align-items: center; gap: 0.75rem;">
+      <div class="icon">2</div>
+      <div>
+        <div class="name">Mark features</div>
+        <div class="desc">Go through the 113-feature list and mark Agreed / Change / Not needed / Discuss.</div>
+      </div>
+    </div>
+    <div class="feature" style="flex-direction: row; align-items: center; gap: 0.75rem;">
+      <div class="icon">3</div>
+      <div>
+        <div class="name">Resolve open questions</div>
+        <div class="desc">Working session to close the 8 open questions on the previous page.</div>
+      </div>
+    </div>
+    <div class="feature" style="flex-direction: row; align-items: center; gap: 0.75rem;">
+      <div class="icon">4</div>
+      <div>
+        <div class="name">Sign SoW &amp; agree commercials</div>
+        <div class="desc">Sign this SoW with final pricing model (fixed / T&amp;M / hybrid).</div>
+      </div>
+    </div>
+    <div class="feature" style="flex-direction: row; align-items: center; gap: 0.75rem;">
+      <div class="icon">5</div>
+      <div>
+        <div class="name">Kick off Phase 1</div>
+        <div class="desc">Requirements finalisation → detailed planning → build starts Week 3.</div>
+      </div>
+    </div>
+    <div class="feature" style="flex-direction: row; align-items: center; gap: 0.75rem;">
+      <div class="icon">6</div>
+      <div>
+        <div class="name">Weekly progress review</div>
+        <div class="desc">Short Friday demo + progress update every week from Week 4 onward.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2 data-n="11" style="margin-top: 2rem;">Acceptance</h2>
+
+  <p>By signing below, the parties confirm that they have reviewed the scope,
+  timeline, deliverables, and assumptions in this Scope of Work and agree to
+  proceed on the basis described.</p>
+
+  <div class="sig-block">
+    <div class="sig">
+      <div class="who">For Belfinger Engineering &amp; Technologies GmbH</div>
+      <div class="line"><div class="line-label">Name</div><div class="line-fill"></div></div>
+      <div class="line"><div class="line-label">Title</div><div class="line-fill"></div></div>
+      <div class="line"><div class="line-label">Date</div><div class="line-fill"></div></div>
+      <div class="line"><div class="line-label">Signature</div><div class="line-fill"></div></div>
+    </div>
+
+    <div class="sig">
+      <div class="who">For the Implementation Team</div>
+      <div class="line"><div class="line-label">Name</div><div class="line-fill"></div></div>
+      <div class="line"><div class="line-label">Title</div><div class="line-fill"></div></div>
+      <div class="line"><div class="line-label">Date</div><div class="line-fill"></div></div>
+      <div class="line"><div class="line-label">Signature</div><div class="line-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Scope of Work · Belfinger MMS · v1.0</span>
+    <span>Page 9 of 10 · End of document</span>
+  </div>
+</div>
+
+</body>
+</html>
