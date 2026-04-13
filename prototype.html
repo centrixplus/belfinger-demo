@@ -161,7 +161,7 @@ tr:hover td{background:#f8fafc}
       <a href="#" onclick="show('sites')">🏢 Sites (37)</a>
     </div>
     <div class="group">
-      <div class="group-label">Field App</div>
+      <div class="group-label">iPad View</div>
       <a href="#" onclick="show('ipad')">📱 iPad Preview</a>
     </div>
   </nav>
@@ -855,8 +855,8 @@ tr:hover td{background:#f8fafc}
 <!-- ==================== IPAD PREVIEW ==================== -->
 <div class="page" id="p-ipad">
   <div style="text-align:center;padding:1.5rem 0 .75rem">
-    <h2>iPad Field App</h2>
-    <p class="text-muted">How Site Engineers complete work in the field. Click the tabs below the iPad to navigate.</p>
+    <h2>iPad Web View</h2>
+    <p class="text-muted">How Site Engineers complete work in the field — they open the website on their iPad in Safari. Click the tabs to navigate.</p>
   </div>
 
   <!-- iPad screen selector -->
@@ -1082,7 +1082,7 @@ function show(page) {
   document.getElementById('p-' + page).classList.add('show');
   document.querySelectorAll('.side nav a').forEach(a => a.classList.remove('on'));
   event.target.closest('a').classList.add('on');
-  const titles = {dashboard:'Dashboard',workflow:'Approval Workflow',jobs:'All Jobs',invoices:'Invoices',equipment:'Equipment Register',sites:'Sites (37)',ipad:'iPad Field App'};
+  const titles = {dashboard:'Dashboard',workflow:'Approval Workflow',jobs:'All Jobs',invoices:'Invoices',equipment:'Equipment Register',sites:'Sites (37)',ipad:'iPad Web View'};
   document.getElementById('page-title').textContent = titles[page] || page;
   if(page==='ipad') ipad(0, document.querySelector('.screen-tab'));
 }
