@@ -5,183 +5,264 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Belfinger Maintenance Management System — Project Package</title>
 <style>
-  :root {
-    --brand: #1e40af;
-    --brand-dark: #1e3a8a;
-    --accent: #f59e0b;
-    --ink: #0f172a;
-    --ink-2: #475569;
-    --ink-3: #94a3b8;
-    --line: #e2e8f0;
-    --bg: #f1f5f9;
-    --surface: #ffffff;
-  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
-    background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+    background: #f8fafc;
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
     -webkit-font-smoothing: antialiased;
+    color: #0f172a;
   }
-  .container {
-    max-width: 720px;
-    width: 100%;
-  }
-  .header {
+
+  /* Header */
+  .hero {
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 3rem 2rem 2.5rem;
     text-align: center;
-    color: white;
-    margin-bottom: 2.5rem;
   }
-  .header .brand {
-    font-size: 1.1rem;
+  .hero .brand {
+    font-size: 0.8rem;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    color: #93c5fd;
-    margin-bottom: 0.5rem;
+    color: #1e40af;
+    margin-bottom: 0.6rem;
   }
-  .header h1 {
-    font-size: 2.2rem;
+  .hero h1 {
+    font-size: 2rem;
     font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 0.75rem;
+    line-height: 1.2;
+    color: #0f172a;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.5px;
   }
-  .header p {
-    font-size: 1rem;
-    color: #cbd5e1;
-    max-width: 520px;
-    margin: 0 auto;
+  .hero p {
+    font-size: 0.95rem;
+    color: #64748b;
+    max-width: 540px;
+    margin: 0 auto 1rem;
     line-height: 1.6;
   }
-  .header .contract {
+  .hero .contract {
     display: inline-block;
-    margin-top: 1rem;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.15);
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
-    padding: 0.5rem 1.25rem;
-    font-size: 0.85rem;
-    color: #e2e8f0;
+    padding: 0.4rem 1rem;
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+
+  /* Main content */
+  .main {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+  }
+
+  .section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #94a3b8;
+    margin-bottom: 0.75rem;
+    padding-left: 0.25rem;
   }
 
   .cards {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+    margin-bottom: 2rem;
   }
+  .cards.single {
+    grid-template-columns: 1fr;
+  }
+
   .card {
     background: white;
-    border-radius: 16px;
-    padding: 1.75rem 2rem;
+    border-radius: 12px;
+    padding: 1.35rem 1.5rem;
     display: flex;
-    align-items: center;
-    gap: 1.5rem;
+    align-items: flex-start;
+    gap: 1rem;
     text-decoration: none;
-    color: var(--ink);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    transition: transform 0.2s, box-shadow 0.2s;
-    border: 2px solid transparent;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
   .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    border-color: var(--brand);
+    border-color: #1e40af;
+    box-shadow: 0 4px 16px rgba(30,64,175,0.08);
   }
   .card .icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+  }
+  .card .icon.blue { background: #dbeafe; }
+  .card .icon.amber { background: #fef3c7; }
+  .card .icon.green { background: #d1fae5; }
+  .card .icon.red { background: #fee2e2; }
+  .card .body { flex: 1; min-width: 0; }
+  .card .title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card .title .tag {
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .card .title .tag.blue { background: #dbeafe; color: #1e40af; }
+  .card .title .tag.green { background: #d1fae5; color: #065f46; }
+  .card .title .tag.amber { background: #fef3c7; color: #92400e; }
+  .card .desc {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.5;
+  }
+
+  /* Price highlight card */
+  .price-card {
+    background: white;
+    border-radius: 12px;
+    border: 2px solid #1e40af;
+    padding: 1.35rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    text-decoration: none;
+    color: #0f172a;
+    transition: box-shadow 0.2s;
+    margin-bottom: 2rem;
+  }
+  .price-card:hover {
+    box-shadow: 0 4px 20px rgba(30,64,175,0.12);
+  }
+  .price-card .icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: #1e40af;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
     flex-shrink: 0;
   }
-  .card .icon.blue { background: #dbeafe; color: var(--brand); }
-  .card .icon.amber { background: #fef3c7; color: #b45309; }
-  .card .icon.green { background: #d1fae5; color: #059669; }
-  .card .body { flex: 1; }
-  .card .title {
-    font-size: 1.15rem;
+  .price-card .body { flex: 1; }
+  .price-card .title {
+    font-size: 1rem;
     font-weight: 700;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.2rem;
   }
-  .card .desc {
-    font-size: 0.9rem;
-    color: var(--ink-2);
-    line-height: 1.5;
+  .price-card .desc {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.45;
   }
-  .card .badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.25rem 0.65rem;
-    border-radius: 6px;
-    background: var(--bg);
-    color: var(--ink-3);
+  .price-card .amount {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #1e40af;
     white-space: nowrap;
+  }
+  .price-card .amount small {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 600;
   }
 
   .footer {
     text-align: center;
-    margin-top: 2.5rem;
-    color: rgba(255,255,255,0.4);
-    font-size: 0.8rem;
+    padding: 1.5rem;
+    color: #94a3b8;
+    font-size: 0.78rem;
+    border-top: 1px solid #e2e8f0;
   }
 
-  @media (max-width: 600px) {
-    body { padding: 1rem; }
-    .header h1 { font-size: 1.6rem; }
-    .card { padding: 1.25rem; gap: 1rem; }
-    .card .icon { width: 44px; height: 44px; font-size: 1.2rem; }
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 1.5rem; }
+    .cards { grid-template-columns: 1fr; }
+    .price-card { flex-direction: column; text-align: center; }
+    .price-card .amount { margin-top: 0.5rem; }
   }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="header">
-    <div class="brand">Belfinger Engineering & Technologies</div>
-    <h1>Maintenance Management System</h1>
-    <p>Complete project package for the digital transformation of MEW Water Sector maintenance operations across 37 sites.</p>
-    <div class="contract">Contract MEW/MC/6132/2024/2025</div>
-  </div>
+<div class="hero">
+  <div class="brand">Belfinger Engineering & Technologies</div>
+  <h1>Maintenance Management System</h1>
+  <p>Complete project package for the digital transformation of MEW Water Sector maintenance operations across 37 sites.</p>
+  <div class="contract">Contract MEW/MC/6132/2024/2025</div>
+</div>
 
+<div class="main">
+
+  <!-- Price Card -->
+  <div class="section-label">Commercial Proposal</div>
+  <a class="price-card" href="commercial-proposal.html">
+    <div class="icon">&#128176;</div>
+    <div class="body">
+      <div class="title">Commercial Proposal & Pricing</div>
+      <div class="desc">Phase breakdown, payment milestones, delivery timeline (20 weeks), support options, what's included &amp; excluded, and acceptance signatures.</div>
+    </div>
+    <div class="amount">7,500 <small>KWD</small></div>
+  </a>
+
+  <!-- Documents -->
+  <div class="section-label">Project Documents</div>
   <div class="cards">
     <a class="card" href="scope-of-work.html">
       <div class="icon blue">&#128196;</div>
       <div class="body">
-        <div class="title">Scope of Work</div>
-        <div class="desc">Full project scope — stakeholders, features overview, architecture, timeline (26 weeks), deliverables, commercial options, and acceptance.</div>
+        <div class="title">Scope of Work <span class="tag blue">10 pages</span></div>
+        <div class="desc">Stakeholders, features overview, architecture, timeline, deliverables, and acceptance criteria.</div>
       </div>
-      <div class="badge">10 pages</div>
     </a>
-
     <a class="card" href="functional-requirements.html">
       <div class="icon amber">&#9745;</div>
       <div class="body">
-        <div class="title">Functional Requirements</div>
-        <div class="desc">113 features across 20 modules with approval checkboxes — Agreed, Change, Not Needed, or Discuss for each feature.</div>
+        <div class="title">Functional Requirements <span class="tag amber">113 features</span></div>
+        <div class="desc">20 modules with approval checkboxes — Agreed, Change, Not Needed, or Discuss.</div>
       </div>
-      <div class="badge">113 features</div>
     </a>
+  </div>
 
+  <!-- Interactive -->
+  <div class="section-label">Live Demo</div>
+  <div class="cards single">
     <a class="card" href="prototype.html">
       <div class="icon green">&#128187;</div>
       <div class="body">
-        <div class="title">Interactive Prototype</div>
-        <div class="desc">Live demo — Dashboard with KPIs & charts, job tracking by department, invoice pipeline, equipment register, and iPad field app preview.</div>
+        <div class="title">Interactive Prototype <span class="tag green">Interactive</span></div>
+        <div class="desc">Dashboard with KPIs &amp; charts, approval workflow, job tracking, invoice pipeline, equipment register, sites map, and iPad field app preview.</div>
       </div>
-      <div class="badge">Interactive</div>
     </a>
   </div>
 
-  <div class="footer">
-    Prepared by Centrix Plus &middot; April 2026
-  </div>
+</div>
+
+<div class="footer">
+  Prepared by Centrix Plus &middot; April 2026
 </div>
 
 </body>
