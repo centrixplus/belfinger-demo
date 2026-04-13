@@ -524,13 +524,26 @@
   }
 
   /* ---------- Print ---------- */
+  @page {
+    size: A4;
+    margin: 0;
+  }
   @media print {
-    body { background: white; }
+    body { background: white; margin: 0; padding: 0; }
     .page {
       margin: 0;
       box-shadow: none;
       page-break-after: always;
+      page-break-inside: avoid;
       min-height: auto;
+      height: 297mm;
+      width: 210mm;
+      overflow: hidden;
+      padding: 20mm 18mm 22mm;
+    }
+    .page.cover {
+      padding: 0;
+      height: 297mm;
     }
     .page:last-child { page-break-after: auto; }
     .toolbar { display: none !important; }
