@@ -70,6 +70,31 @@ tr:hover td{background:#f8fafc}
 .bar-fill{height:100%;border-radius:4px;transition:.3s}
 .bar-val{font-weight:700;color:var(--ink);font-size:.78rem}
 
+/* Workflow */
+.wf-track{display:flex;align-items:flex-start;gap:0;position:relative;padding:1rem 0 .5rem}
+.wf-step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1}
+.wf-step .circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;border:3px solid var(--line);background:var(--white);position:relative;z-index:2;transition:.3s}
+.wf-step .circle.mew{border-color:#7c3aed;background:#f5f3ff;color:#7c3aed}
+.wf-step .circle.mgr{border-color:var(--blue);background:var(--blue-l);color:var(--blue)}
+.wf-step .circle.sup{border-color:var(--amber);background:var(--amber-l);color:#92400e}
+.wf-step .circle.eng{border-color:var(--green);background:var(--green-l);color:#065f46}
+.wf-step .circle.done{border-color:var(--green);background:var(--green);color:#fff}
+.wf-step .circle.active{box-shadow:0 0 0 4px rgba(30,64,175,.2);transform:scale(1.1)}
+.wf-step .who{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-top:.5rem;color:var(--ink3)}
+.wf-step .what{font-size:.72rem;color:var(--ink2);margin-top:.15rem;max-width:110px;line-height:1.35}
+.wf-arrow{position:absolute;top:23px;left:0;right:0;height:3px;background:var(--line);z-index:0}
+.wf-arrow .fill{height:100%;background:var(--green);transition:width .5s;border-radius:2px}
+.wf-return{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.5rem;padding:.5rem .75rem;background:#fef2f2;border:1px dashed var(--red);border-radius:8px;font-size:.72rem;color:#991b1b}
+.wf-live{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.65rem;margin-top:1rem}
+.wf-live .wf-job{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:.75rem;font-size:.78rem;border-left:4px solid var(--blue)}
+.wf-live .wf-job.at-mew{border-left-color:#7c3aed}
+.wf-live .wf-job.at-mgr{border-left-color:var(--blue)}
+.wf-live .wf-job.at-sup{border-left-color:var(--amber)}
+.wf-live .wf-job.at-eng{border-left-color:var(--green)}
+.wf-live .wf-job .wo{font-weight:700;color:var(--blue);margin-bottom:.2rem}
+.wf-live .wf-job .site{color:var(--ink3);font-size:.7rem}
+.wf-live .wf-job .step-badge{display:inline-block;margin-top:.35rem;font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:99px;text-transform:uppercase;letter-spacing:.3px}
+
 /* Donut */
 .donut-wrap{display:flex;align-items:center;gap:1.5rem}
 .donut{width:120px;height:120px;border-radius:50%;position:relative;flex-shrink:0}
@@ -126,6 +151,7 @@ tr:hover td{background:#f8fafc}
     </div>
     <div class="group">
       <div class="group-label">Work Management</div>
+      <a href="#" onclick="show('workflow')">🔄 Approval Workflow</a>
       <a href="#" onclick="show('jobs')">📋 All Jobs <span class="badge">34</span></a>
       <a href="#" onclick="show('invoices')">💰 Invoices <span class="badge warn">6</span></a>
     </div>
@@ -163,6 +189,60 @@ tr:hover td{background:#f8fafc}
     <div class="stat red"><div class="num">2</div><div class="label">SLA Breached</div><div class="sub">Escalated today</div></div>
     <div class="stat green"><div class="num">47</div><div class="label">Closed This Month</div><div class="sub">94% within SLA</div></div>
     <div class="stat green"><div class="num">14,832</div><div class="label">Receivable (KWD)</div><div class="sub">MEW-approved</div></div>
+  </div>
+
+  <!-- Approval Workflow Summary -->
+  <div class="card mb">
+    <div class="flex between center mb">
+      <h3 style="margin:0">Approval Workflow — How a Job Moves</h3>
+      <button class="btn btn-white" onclick="show('workflow')">View full workflow →</button>
+    </div>
+    <div style="position:relative">
+      <div class="wf-arrow"><div class="fill" style="width:100%"></div></div>
+      <div class="wf-track">
+        <div class="wf-step">
+          <div class="circle mew">📩</div>
+          <div class="who" style="color:#7c3aed">MEW</div>
+          <div class="what">Creates Request</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle mgr">👔</div>
+          <div class="who" style="color:var(--blue)">Manager</div>
+          <div class="what">Reviews & Assigns</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle sup">👷</div>
+          <div class="who" style="color:#92400e">Supervisor</div>
+          <div class="what">Assigns Engineer</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle eng">🔧</div>
+          <div class="who" style="color:#065f46">Site Engineer</div>
+          <div class="what">Does Work on iPad</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle sup">📋</div>
+          <div class="who" style="color:#92400e">Supervisor</div>
+          <div class="what">Reviews & Creates Invoice</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle mgr">✅</div>
+          <div class="who" style="color:var(--blue)">Manager</div>
+          <div class="what">Approves Invoice</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle mew">📤</div>
+          <div class="who" style="color:#7c3aed">MEW</div>
+          <div class="what">Final Approval</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle done">💰</div>
+          <div class="who" style="color:var(--green)">Done</div>
+          <div class="what">Receivable</div>
+        </div>
+      </div>
+    </div>
+    <div class="wf-return">⟲ At any step, the reviewer can <strong style="margin:0 4px">reject &amp; send back</strong> to the previous step with comments</div>
   </div>
 
   <div class="grid g2 mb">
@@ -331,6 +411,221 @@ tr:hover td{background:#f8fafc}
       </tbody>
     </table>
   </div>
+</div>
+
+<!-- ==================== APPROVAL WORKFLOW ==================== -->
+<div class="page" id="p-workflow">
+
+  <!-- Issue Request Flow -->
+  <div class="card mb">
+    <h3>Issue Request Flow — MEW Reports a Problem</h3>
+    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:1rem">When MEW discovers a fault (e.g. broken sensor, leaking valve), the request goes through this approval cycle before invoicing.</p>
+
+    <div style="position:relative">
+      <div class="wf-arrow"><div class="fill" style="width:100%"></div></div>
+      <div class="wf-track">
+        <div class="wf-step">
+          <div class="circle mew" style="width:56px;height:56px;font-size:1.4rem">📩</div>
+          <div class="who" style="color:#7c3aed">Step 1 · MEW</div>
+          <div class="what"><strong>Creates Issue Request</strong><br/>Selects site, department, urgency, and describes the problem</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle mgr" style="width:56px;height:56px;font-size:1.4rem">👔</div>
+          <div class="who" style="color:var(--blue)">Step 2 · Belfinger Manager</div>
+          <div class="what"><strong>Reviews & Assigns</strong><br/>Sets priority, selects supervisor, sets SLA deadline</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle sup" style="width:56px;height:56px;font-size:1.4rem">👷</div>
+          <div class="who" style="color:#92400e">Step 3 · Supervisor</div>
+          <div class="what"><strong>Assigns to Engineer</strong><br/>Picks the right site engineer based on location & skills</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle eng" style="width:56px;height:56px;font-size:1.4rem">🔧</div>
+          <div class="who" style="color:#065f46">Step 4 · Site Engineer</div>
+          <div class="what"><strong>Does the Work</strong><br/>Opens on iPad, fills checklist, takes photos, gets signatures</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- After work is done -->
+  <div class="card mb">
+    <h3>After Work is Completed — Invoice & Approval</h3>
+    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:1rem">Once the site engineer submits the completed work, the invoice cycle begins.</p>
+
+    <div style="position:relative">
+      <div class="wf-arrow"><div class="fill" style="width:100%"></div></div>
+      <div class="wf-track">
+        <div class="wf-step">
+          <div class="circle eng" style="width:56px;height:56px;font-size:1.4rem">✅</div>
+          <div class="who" style="color:#065f46">Step 5 · Site Engineer</div>
+          <div class="what"><strong>Submits Completed Work</strong><br/>Work report, checklist, photos & dual signatures uploaded</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle sup" style="width:56px;height:56px;font-size:1.4rem">📋</div>
+          <div class="who" style="color:#92400e">Step 6 · Supervisor</div>
+          <div class="what"><strong>Reviews & Creates BOQ Invoice</strong><br/>Checks work quality, selects BOQ items, calculates cost</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle mgr" style="width:56px;height:56px;font-size:1.4rem">✅</div>
+          <div class="who" style="color:var(--blue)">Step 7 · Belfinger Manager</div>
+          <div class="what"><strong>Approves Invoice</strong><br/>Final internal review, approves and sends to MEW</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle mew" style="width:56px;height:56px;font-size:1.4rem">📤</div>
+          <div class="who" style="color:#7c3aed">Step 8 · MEW</div>
+          <div class="what"><strong>Final Approval</strong><br/>MEW reviews invoice & attached work report, approves payment</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:1rem">
+      <div style="display:inline-flex;align-items:center;gap:.6rem;background:var(--green-l);border:2px solid var(--green);border-radius:12px;padding:.75rem 1.5rem;font-size:.9rem;font-weight:700;color:#065f46">💰 Invoice becomes Receivable — Payment processed</div>
+    </div>
+  </div>
+
+  <!-- Rejection / Send Back -->
+  <div class="card mb">
+    <h3>Rejection & Rework — "Send Back To"</h3>
+    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:.75rem">At any approval step, the reviewer can reject and send the work back. The system shows who you can send back to:</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem">
+      <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:1rem;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">👔</div>
+        <div style="font-weight:700;font-size:.85rem;color:#991b1b;margin-bottom:.3rem">Manager Rejects Invoice</div>
+        <div style="font-size:.75rem;color:var(--ink2)">Can send back to:</div>
+        <div style="margin-top:.4rem;display:flex;flex-direction:column;gap:.3rem">
+          <span class="b b-amber">← Supervisor</span>
+        </div>
+        <div style="font-size:.7rem;color:var(--ink3);margin-top:.4rem">"Fix BOQ line items"</div>
+      </div>
+      <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:1rem;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">👷</div>
+        <div style="font-weight:700;font-size:.85rem;color:#991b1b;margin-bottom:.3rem">Supervisor Rejects Work</div>
+        <div style="font-size:.75rem;color:var(--ink2)">Can send back to:</div>
+        <div style="margin-top:.4rem;display:flex;flex-direction:column;gap:.3rem">
+          <span class="b b-green" style="background:#d1fae5;color:#065f46">← Site Engineer</span>
+        </div>
+        <div style="font-size:.7rem;color:var(--ink3);margin-top:.4rem">"Need more photos"</div>
+      </div>
+      <div style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:10px;padding:1rem;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">📩</div>
+        <div style="font-weight:700;font-size:.85rem;color:#5b21b6;margin-bottom:.3rem">MEW Rejects Invoice</div>
+        <div style="font-size:.75rem;color:var(--ink2)">Can send back to:</div>
+        <div style="margin-top:.4rem;display:flex;flex-direction:column;gap:.3rem">
+          <span class="b b-blue">← Belfinger Manager</span>
+        </div>
+        <div style="font-size:.7rem;color:var(--ink3);margin-top:.4rem">"Missing work permit"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PM Flow (shorter) -->
+  <div class="card mb">
+    <h3>Preventive Maintenance (PM) Flow</h3>
+    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:1rem">PM jobs are auto-generated by the system on schedule. They skip MEW request — the cycle starts at the Supervisor.</p>
+
+    <div style="position:relative">
+      <div class="wf-arrow"><div class="fill" style="width:100%"></div></div>
+      <div class="wf-track">
+        <div class="wf-step">
+          <div class="circle" style="border-color:var(--ink3);background:#f1f5f9;width:56px;height:56px;font-size:1.4rem">⏰</div>
+          <div class="who">Auto</div>
+          <div class="what"><strong>System Creates PM</strong><br/>Nightly cron generates work orders per schedule</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle sup" style="width:56px;height:56px;font-size:1.4rem">👷</div>
+          <div class="who" style="color:#92400e">Supervisor</div>
+          <div class="what"><strong>Assigns Engineer</strong><br/>Routes to available engineer for that site</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle eng" style="width:56px;height:56px;font-size:1.4rem">🔧</div>
+          <div class="who" style="color:#065f46">Site Engineer</div>
+          <div class="what"><strong>Does PM Work</strong><br/>Checklist, calibration, photos, signatures</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle sup" style="width:56px;height:56px;font-size:1.4rem">📋</div>
+          <div class="who" style="color:#92400e">Supervisor</div>
+          <div class="what"><strong>Creates Invoice</strong><br/>BOQ items for completed PM work</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle mgr" style="width:56px;height:56px;font-size:1.4rem">✅</div>
+          <div class="who" style="color:var(--blue)">Manager</div>
+          <div class="what"><strong>Approves</strong><br/>Final sign-off and send to MEW</div>
+        </div>
+        <div class="wf-step">
+          <div class="circle mew" style="width:56px;height:56px;font-size:1.4rem">📤</div>
+          <div class="who" style="color:#7c3aed">MEW</div>
+          <div class="what"><strong>Approves</strong><br/>Confirms PM was completed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Tracker -->
+  <div class="card">
+    <h3>Live Tracker — Where Are Current Jobs?</h3>
+    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:.75rem">Real-time view of active jobs and their position in the approval cycle.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.75rem">
+      <div style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:.65rem;text-align:center">
+        <div style="font-size:1.5rem;font-weight:800;color:#7c3aed">3</div>
+        <div style="font-size:.65rem;color:#7c3aed;font-weight:700;text-transform:uppercase">Awaiting MEW</div>
+      </div>
+      <div style="background:var(--blue-l);border:1px solid #93c5fd;border-radius:8px;padding:.65rem;text-align:center">
+        <div style="font-size:1.5rem;font-weight:800;color:var(--blue)">6</div>
+        <div style="font-size:.65rem;color:var(--blue);font-weight:700;text-transform:uppercase">With Manager</div>
+      </div>
+      <div style="background:var(--amber-l);border:1px solid #fcd34d;border-radius:8px;padding:.65rem;text-align:center">
+        <div style="font-size:1.5rem;font-weight:800;color:#92400e">8</div>
+        <div style="font-size:.65rem;color:#92400e;font-weight:700;text-transform:uppercase">With Supervisor</div>
+      </div>
+      <div style="background:var(--green-l);border:1px solid #6ee7b7;border-radius:8px;padding:.65rem;text-align:center">
+        <div style="font-size:1.5rem;font-weight:800;color:#065f46">13</div>
+        <div style="font-size:.65rem;color:#065f46;font-weight:700;text-transform:uppercase">With Engineer</div>
+      </div>
+    </div>
+
+    <div class="wf-live">
+      <div class="wf-job at-eng">
+        <div class="wo">WO-2026-0418</div>
+        <div>D12 Mina Abdullah Tower · Instrumentation</div>
+        <div class="site">Khalid Al-Otaibi doing work on iPad</div>
+        <div class="step-badge" style="background:var(--green-l);color:#065f46">Step 4 · Engineer Working</div>
+      </div>
+      <div class="wf-job at-sup">
+        <div class="wo">WO-2026-0419</div>
+        <div>Subiya PS · DCS & Computer</div>
+        <div class="site">Supervisor creating BOQ invoice</div>
+        <div class="step-badge" style="background:var(--amber-l);color:#92400e">Step 6 · Invoice Draft</div>
+      </div>
+      <div class="wf-job at-mgr">
+        <div class="wo">WO-2026-0420</div>
+        <div>Qairawan Towers · Instrumentation</div>
+        <div class="site">Waiting for manager approval</div>
+        <div class="step-badge" style="background:var(--blue-l);color:var(--blue)">Step 7 · Manager Review</div>
+      </div>
+      <div class="wf-job at-mew">
+        <div class="wo">WO-2026-0415</div>
+        <div>Shuwaikh PS · Chemical</div>
+        <div class="site">Invoice sent to MEW for final approval</div>
+        <div class="step-badge" style="background:#f5f3ff;color:#7c3aed">Step 8 · MEW Approval</div>
+      </div>
+      <div class="wf-job at-eng">
+        <div class="wo">WO-2026-0422</div>
+        <div>Az-Zour 1 PS · Chemical</div>
+        <div class="site">Naveen Kumar on site now</div>
+        <div class="step-badge" style="background:var(--green-l);color:#065f46">Step 4 · Engineer Working</div>
+      </div>
+      <div class="wf-job" style="border-left-color:var(--red)">
+        <div class="wo" style="color:var(--red)">WO-2026-0414</div>
+        <div>D12 Mina Abdullah · DCS</div>
+        <div class="site" style="color:var(--red)">⚠ Rejected by supervisor — needs rework</div>
+        <div class="step-badge" style="background:var(--red-l);color:#991b1b">Rejected · Sent back to Engineer</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ==================== JOBS ==================== -->
@@ -787,7 +1082,7 @@ function show(page) {
   document.getElementById('p-' + page).classList.add('show');
   document.querySelectorAll('.side nav a').forEach(a => a.classList.remove('on'));
   event.target.closest('a').classList.add('on');
-  const titles = {dashboard:'Dashboard',jobs:'All Jobs',invoices:'Invoices',equipment:'Equipment Register',sites:'Sites (37)',ipad:'iPad Field App'};
+  const titles = {dashboard:'Dashboard',workflow:'Approval Workflow',jobs:'All Jobs',invoices:'Invoices',equipment:'Equipment Register',sites:'Sites (37)',ipad:'iPad Field App'};
   document.getElementById('page-title').textContent = titles[page] || page;
   if(page==='ipad') ipad(0, document.querySelector('.screen-tab'));
 }
