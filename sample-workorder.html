@@ -106,27 +106,146 @@ td{padding:.55rem .65rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
   </div>
 </div>
 
-<!-- STEP 0: MEW REQUEST -->
+<!-- STEP 0: MEW REQUEST FORM -->
 <div class="panel show" id="s0">
-  <div class="card">
-    <h3><span class="b b-purple">Step 1</span> MEW Creates Issue Request</h3>
-    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:1rem">MEW discovered a faulty flow transmitter during routine inspection and submitted a request through the system.</p>
-    <div class="detail-grid" style="margin-bottom:1rem">
-      <div class="detail-item"><div class="label">Request Date</div><div class="val">14 April 2026, 08:15 AM</div></div>
-      <div class="detail-item"><div class="label">Requested By</div><div class="val">Eng. Abdullah Al-Mutairi (MEW)</div></div>
-      <div class="detail-item"><div class="label">Urgency</div><div class="val" style="color:var(--red)">Very Urgent</div></div>
-      <div class="detail-item"><div class="label">Site</div><div class="val">Doha Pumping Station</div></div>
-      <div class="detail-item"><div class="label">Department</div><div class="val">I&amp;C (Instrumentation &amp; Control)</div></div>
-      <div class="detail-item"><div class="label">SLA Deadline</div><div class="val" style="color:var(--red)">Response: 4 hrs &middot; Resolution: 24 hrs</div></div>
+
+  <!-- The form MEW fills in -->
+  <div class="card" style="border:2px solid var(--purple);border-top:4px solid var(--purple)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <h3 style="margin:0"><span class="b b-purple">Step 1</span> New Issue Request &mdash; Maintenance / Defect Sheet</h3>
+      <span style="font-size:.7rem;color:var(--ink3)">Form filled by MEW Representative</span>
     </div>
-    <h3>Equipment Details</h3>
-    <table>
-      <thead><tr><th>Tag No.</th><th>Category</th><th>Sub Category</th><th>Tech Spec</th><th>Location</th><th>Status</th></tr></thead>
-      <tbody><tr><td style="font-weight:700;color:var(--blue)">FIT-34</td><td>Flow</td><td>Flow Transmitter</td><td>Electromagnetic</td><td>Outlet Line 34</td><td><span class="b b-red">Not Working</span></td></tr></tbody>
-    </table>
-    <div style="margin-top:1rem;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:.85rem">
-      <div style="font-weight:700;font-size:.82rem;color:#991b1b;margin-bottom:.3rem">Problem Description (by MEW)</div>
-      <div style="font-size:.82rem;color:var(--ink2)">"Flow transmitter FIT-34 on Outlet Line 34 is showing erratic readings and intermittent signal loss since yesterday morning. The DCS is receiving 0% reading even though the pump is running. This is affecting our flow monitoring for the entire outlet line. Please inspect and repair urgently."</div>
+    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:1.25rem">This is the digital version of the paper-based Maintenance/Defect Sheet. MEW fills in this form when they discover a fault.</p>
+
+    <!-- Request Info -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Request Information</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.65rem;margin-bottom:1.25rem">
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Request Date *</div>
+        <div style="background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem">14 April 2026, 08:15 AM</div>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Requested By *</div>
+        <div style="background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem">Eng. Abdullah Al-Mutairi</div>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Request Type *</div>
+        <div style="background:var(--amber-l);border:1px solid #fcd34d;border-radius:6px;padding:.5rem .75rem;font-size:.85rem;font-weight:600;color:#92400e">Issue Request (Defect)</div>
+      </div>
+    </div>
+
+    <!-- Site & Department -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Site &amp; Department</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.65rem;margin-bottom:1.25rem">
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Zone *</div>
+        <div style="background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem;display:flex;justify-content:space-between;align-items:center">Middle Zone <span style="color:var(--ink3);font-size:.75rem">&darr;</span></div>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Site *</div>
+        <div style="background:var(--blue-l);border:1px solid #93c5fd;border-radius:6px;padding:.5rem .75rem;font-size:.85rem;font-weight:600;color:var(--blue);display:flex;justify-content:space-between;align-items:center">Doha Pumping Station <span style="color:var(--blue);font-size:.75rem">&darr;</span></div>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Department *</div>
+        <div style="background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem;display:flex;justify-content:space-between;align-items:center">I&amp;C (Instrumentation) <span style="color:var(--ink3);font-size:.75rem">&darr;</span></div>
+      </div>
+    </div>
+
+    <!-- Equipment Selection -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Equipment Selection</div>
+    <p style="font-size:.78rem;color:var(--ink3);margin-bottom:.5rem">Select the faulty equipment from the register. The system auto-fills details from the equipment database.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:.65rem">
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Category *</div>
+        <div style="background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem;display:flex;justify-content:space-between;align-items:center">Flow <span style="color:var(--ink3);font-size:.75rem">&darr;</span></div>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Tag Number *</div>
+        <div style="background:var(--blue-l);border:1px solid #93c5fd;border-radius:6px;padding:.5rem .75rem;font-size:.85rem;font-weight:700;color:var(--blue);display:flex;justify-content:space-between;align-items:center">FIT-34 <span style="color:var(--blue);font-size:.75rem">&darr;</span></div>
+      </div>
+    </div>
+
+    <!-- Auto-filled equipment details -->
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:.75rem 1rem;margin-bottom:1.25rem">
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;color:#0369a1;margin-bottom:.4rem">Auto-filled from Equipment Register</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:.5rem;font-size:.8rem">
+        <div><span style="color:var(--ink3);font-size:.65rem;display:block">Sub Category</span><strong>Flow Transmitter</strong></div>
+        <div><span style="color:var(--ink3);font-size:.65rem;display:block">Tech Spec</span><strong>Electromagnetic</strong></div>
+        <div><span style="color:var(--ink3);font-size:.65rem;display:block">Location</span><strong>Outlet Line</strong></div>
+        <div><span style="color:var(--ink3);font-size:.65rem;display:block">Location No.</span><strong>34</strong></div>
+        <div><span style="color:var(--ink3);font-size:.65rem;display:block">Current Status</span><strong style="color:var(--green)">Working</strong></div>
+      </div>
+    </div>
+
+    <!-- Urgency -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Urgency &amp; Priority</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.5rem;margin-bottom:1.25rem">
+      <div style="border:2px solid var(--red);background:var(--red-l);border-radius:8px;padding:.6rem;text-align:center;cursor:pointer">
+        <div style="font-weight:800;color:#991b1b;font-size:.85rem">Very Urgent</div>
+        <div style="font-size:.65rem;color:#991b1b">Response: 4h &middot; Fix: 24h</div>
+      </div>
+      <div style="border:1px solid var(--line);border-radius:8px;padding:.6rem;text-align:center;opacity:.5">
+        <div style="font-weight:700;color:var(--ink2);font-size:.85rem">Same Day</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Response: 8h &middot; Fix: 24h</div>
+      </div>
+      <div style="border:1px solid var(--line);border-radius:8px;padding:.6rem;text-align:center;opacity:.5">
+        <div style="font-weight:700;color:var(--ink2);font-size:.85rem">Normal</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Response: 48h &middot; Fix: 7d</div>
+      </div>
+      <div style="border:1px solid var(--line);border-radius:8px;padding:.6rem;text-align:center;opacity:.5">
+        <div style="font-weight:700;color:var(--ink2);font-size:.85rem">Low</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Response: 72h &middot; Fix: 14d</div>
+      </div>
+    </div>
+
+    <!-- Problem Description -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Problem Description</div>
+    <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:.75rem 1rem;font-size:.85rem;color:var(--ink2);line-height:1.65;min-height:80px;margin-bottom:1.25rem">Flow transmitter FIT-34 on Outlet Line 34 is showing erratic readings and intermittent signal loss since yesterday morning. The DCS is receiving 0% reading even though the pump is running. This is affecting our flow monitoring for the entire outlet line. Please inspect and repair urgently.</div>
+
+    <!-- Photo upload -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Photo Evidence (Optional)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:1.25rem">
+      <div style="background:#f8fafc;border:2px dashed var(--line);border-radius:8px;padding:1.25rem;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:.25rem">&#128247;</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--blue)">DCS_Screen_0pct.jpg</div>
+        <div style="font-size:.65rem;color:var(--ink3)">DCS showing 0% reading</div>
+      </div>
+      <div style="background:#f8fafc;border:2px dashed var(--line);border-radius:8px;padding:1.25rem;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:.25rem">&#128247;</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--blue)">FIT34_cable_damage.jpg</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Visible cable damage</div>
+      </div>
+      <div style="background:#f8fafc;border:2px dashed var(--line);border-radius:8px;padding:1.25rem;text-align:center;opacity:.4">
+        <div style="font-size:1.5rem;margin-bottom:.25rem">&#43;</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--ink3)">Add Photo</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Tap to upload</div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--line)">
+      <div style="font-size:.75rem;color:var(--ink3)">All fields marked * are required</div>
+      <div style="display:flex;gap:.5rem">
+        <div style="padding:.6rem 1.25rem;border:1px solid var(--line);border-radius:8px;font-size:.85rem;font-weight:600;color:var(--ink3);cursor:pointer">Save Draft</div>
+        <div onclick="go(1)" style="padding:.6rem 1.5rem;background:var(--purple);color:#fff;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Submit Request &rarr;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What happens after submit -->
+  <div class="card" style="background:var(--purple-l);border-color:#ddd6fe">
+    <div style="display:flex;align-items:flex-start;gap:1rem">
+      <div style="font-size:1.5rem">&#9432;</div>
+      <div>
+        <div style="font-weight:700;font-size:.9rem;color:var(--purple);margin-bottom:.25rem">What happens when MEW clicks "Submit Request"?</div>
+        <div style="font-size:.82rem;color:var(--ink2);line-height:1.6">
+          1. The system creates Work Order <strong>WO-2026-0487</strong> and starts the SLA clock<br/>
+          2. Equipment status for <strong>FIT-34</strong> is automatically changed to <strong style="color:var(--red)">Not Working</strong><br/>
+          3. Belfinger Manager receives an <strong>instant notification</strong> (in-app + email)<br/>
+          4. The request enters the approval workflow &mdash; click <strong>"Manager Review"</strong> above to see the next step
+        </div>
+      </div>
     </div>
   </div>
 </div>
