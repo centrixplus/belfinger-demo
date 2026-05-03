@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Quotation Q-2026-0042 — Belfinger CMMS</title>
+<style>
+  :root {
+    --primary: #714B67;
+    --primary-d: #5a3a52;
+    --primary-l: #f0eaee;
+    --accent: #00A09D;
+    --ink: #212529;
+    --ink-2: #495057;
+    --ink-3: #6c757d;
+    --line: #dee2e6;
+    --bg: #f8f9fa;
+    --white: #fff;
+    --green: #28a745;
+    --green-l: #d4edda;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Page */
+  .page {
+    max-width: 210mm;
+    margin: 20px auto;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 25mm 22mm 22mm;
+    position: relative;
+    min-height: 297mm;
+  }
+
+  /* Header */
+  .quote-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .company {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .company .logo {
+    width: 56px;
+    height: 56px;
+    background: var(--primary);
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.6rem;
+  }
+  .company .info .name { font-size: 1.15rem; font-weight: 700; color: var(--ink); }
+  .company .info .meta { font-size: 0.78rem; color: var(--ink-3); margin-top: 2px; }
+  .quote-title { text-align: right; }
+  .quote-title h1 {
+    font-size: 2.2rem;
+    color: var(--primary);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.25rem;
+  }
+  .quote-title .num {
+    font-size: 0.95rem;
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+  .quote-title .date {
+    font-size: 0.78rem;
+    color: var(--ink-3);
+    margin-top: 0.35rem;
+  }
+
+  /* Customer block */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .info-block {
+    background: var(--bg);
+    border-left: 3px solid var(--primary);
+    padding: 0.85rem 1.1rem;
+    border-radius: 0 6px 6px 0;
+  }
+  .info-block .label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink-3);
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .info-block .name {
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.15rem;
+  }
+  .info-block .detail {
+    font-size: 0.8rem;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+
+  /* Status */
+  .status-bar {
+    background: var(--green-l);
+    border: 1px solid var(--green);
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+  }
+  .status-bar .pill {
+    background: var(--green);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .status-bar .meta {
+    color: var(--ink-2);
+    font-size: 0.78rem;
+  }
+
+  /* Table - Odoo style */
+  table.lines {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    font-size: 0.83rem;
+  }
+  table.lines thead {
+    background: var(--primary);
+    color: white;
+  }
+  table.lines th {
+    text-align: left;
+    padding: 0.7rem 0.85rem;
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  table.lines th.num { text-align: right; }
+  table.lines th.center { text-align: center; }
+  table.lines td {
+    padding: 0.75rem 0.85rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table.lines td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.lines td.center { text-align: center; }
+  table.lines tr.section td {
+    background: var(--primary-l);
+    font-weight: 700;
+    color: var(--primary-d);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    padding: 0.5rem 0.85rem;
+  }
+  table.lines td .item-name {
+    font-weight: 600;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  table.lines td .item-desc {
+    font-size: 0.75rem;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+
+  /* Totals */
+  .totals {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+  }
+  .totals-table {
+    min-width: 320px;
+    font-size: 0.88rem;
+  }
+  .totals-table .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.45rem 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .totals-table .row.total {
+    background: var(--primary);
+    color: white;
+    font-weight: 800;
+    font-size: 1.05rem;
+    border-radius: 6px;
+    border: none;
+    padding: 0.7rem 1rem;
+    margin-top: 0.4rem;
+  }
+  .totals-table .row .label { color: var(--ink-2); }
+  .totals-table .row.total .label { color: white; }
+  .totals-table .row .val { font-weight: 700; }
+
+  /* Notes */
+  .notes-block {
+    background: #fff8e1;
+    border-left: 3px solid #f59e0b;
+    padding: 0.9rem 1.1rem;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.25rem;
+    font-size: 0.82rem;
+    color: var(--ink-2);
+  }
+  .notes-block strong { color: #92400e; }
+
+  /* Terms */
+  .terms-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+  }
+  .term {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.8rem;
+  }
+  .term .t-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--ink-3);
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+  .term .t-val {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* Signature */
+  .sig-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--line);
+  }
+  .sig {
+    text-align: center;
+  }
+  .sig .who {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .sig .name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+  }
+  .sig .line {
+    border-top: 1px solid var(--ink);
+    padding-top: 0.4rem;
+    margin-top: 2.5rem;
+    font-size: 0.7rem;
+    color: var(--ink-3);
+  }
+
+  /* Footer */
+  .quote-footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--ink-3);
+  }
+
+  /* Toolbar */
+  .toolbar {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: white;
+    border-radius: 99px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    padding: 0.4rem;
+    display: flex;
+    gap: 0.3rem;
+    z-index: 100;
+  }
+  .toolbar a, .toolbar button {
+    padding: 0.5rem 1rem;
+    border-radius: 99px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    font-family: inherit;
+  }
+  .toolbar button { background: var(--primary); color: white; }
+  .toolbar a { color: var(--ink-2); background: transparent; }
+
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { background: white; }
+    .toolbar { display: none !important; }
+    .page { margin: 0; box-shadow: none; min-height: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a href="index.html">&larr; Back</a>
+  <button onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="quote-header">
+    <div class="company">
+      <div class="logo">C+</div>
+      <div class="info">
+        <div class="name">Centrix Plus</div>
+        <div class="meta">Software Development &amp; IT Solutions<br/>Kuwait &middot; info@centrixplus.com</div>
+      </div>
+    </div>
+    <div class="quote-title">
+      <h1>QUOTATION</h1>
+      <div class="num">Q-2026-0042</div>
+      <div class="date">Issued: 03 May 2026 &middot; Valid until: 31 May 2026</div>
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div class="status-bar">
+    <div>
+      <span class="pill">Awaiting Confirmation</span>
+      <span style="margin-left:0.5rem;font-size:0.82rem;color:var(--ink-2)">Customer review pending</span>
+    </div>
+    <div class="meta">Currency: KWD &middot; Payment: Milestone-based</div>
+  </div>
+
+  <!-- Customer + Project -->
+  <div class="info-grid">
+    <div class="info-block">
+      <div class="label">Customer</div>
+      <div class="name">Belfinger Engineering &amp; Technologies GmbH</div>
+      <div class="detail">
+        Attn: Mr. Maged<br/>
+        Kuwait &mdash; Water Sector Operations<br/>
+        Contract: MEW/MC/6132/2024/2025
+      </div>
+    </div>
+    <div class="info-block">
+      <div class="label">Project</div>
+      <div class="name">Maintenance Management System (CMMS)</div>
+      <div class="detail">
+        Complete digital transformation<br/>
+        37 sites &middot; 1,500+ equipment &middot; 300+ BOQ items<br/>
+        Web-based, accessible 24/7 from any device
+      </div>
+    </div>
+  </div>
+
+  <!-- Quotation Lines -->
+  <table class="lines">
+    <thead>
+      <tr>
+        <th style="width:42px" class="center">#</th>
+        <th>Description</th>
+        <th class="center" style="width:60px">Qty</th>
+        <th class="num" style="width:90px">Unit Price</th>
+        <th class="num" style="width:100px">Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- Phase 1 -->
+      <tr class="section"><td colspan="5">Phase 1 &mdash; System Build &amp; Data Configuration (12 weeks)</td></tr>
+      <tr>
+        <td class="center">1</td>
+        <td>
+          <span class="item-name">Approval Workflow Engine &amp; Work Order System</span>
+          <span class="item-desc">7-step approval cycle, Issue Requests + PM scheduling, SLA tracking, role-based permissions, full request-to-payment workflow with rejection &amp; rework support</span>
+        </td>
+        <td class="center">1</td>
+        <td class="num">1,500.000</td>
+        <td class="num">1,500.000</td>
+      </tr>
+      <tr>
+        <td class="center">2</td>
+        <td>
+          <span class="item-name">BOQ Catalog Setup &amp; Data Entry</span>
+          <span class="item-desc">300+ BOQ items entered across 7 pricing tables, categorized by department, with unit prices, versioning, and CSV import/export support</span>
+        </td>
+        <td class="center">1</td>
+        <td class="num">800.000</td>
+        <td class="num">800.000</td>
+      </tr>
+      <tr>
+        <td class="center">3</td>
+        <td>
+          <span class="item-name">Equipment Register &mdash; 37 Sites</span>
+          <span class="item-desc">Complete asset inventory across 20 pump stations and 17 water towers: tag numbers, categories, technical specs, maintenance history, status tracking</span>
+        </td>
+        <td class="center">1</td>
+        <td class="num">1,200.000</td>
+        <td class="num">1,200.000</td>
+      </tr>
+      <tr>
+        <td class="center">4</td>
+        <td>
+          <span class="item-name">Dashboard, Invoicing &amp; Receivables Tracking</span>
+          <span class="item-desc">Real-time KPIs, charts, BOQ-driven invoice drafting, multi-level approval chain, monthly receivables tracking, rejection with line-item comments</span>
+        </td>
+        <td class="center">1</td>
+        <td class="num">700.000</td>
+        <td class="num">700.000</td>
+      </tr>
+      <tr>
+        <td class="center">5</td>
+        <td>
+          <span class="item-name">Server Setup, Security &amp; Notifications</span>
+          <span class="item-desc">Production server configuration, SSL encryption, automated backups, in-app + email notifications for all workflow events</span>
+        </td>
+        <td class="center">1</td>
+        <td class="num">300.000</td>
+        <td class="num">300.000</td>
+      </tr>
+
+      <!-- Phase 2 -->
+      <tr class="section"><td colspan="5">Phase 2 &mdash; Advanced Features &amp; Go-Live (8 weeks)</td></tr>
+      <tr>
+        <td class="center">6</td>
+        <td>
+          <span class="item-name">Equipment Checklists &amp; Calibration</span>
+          <span class="item-desc">Per-equipment-type inspection checklists, calibration matrices with auto-calculated % error (0/25/50/75/100%), photo evidence with annotation</span>
+        </td>
+        <td class="center">1</td>
+        <td class="num">800.000</td>
+        <td class="num">800.000</td>
+      </tr>
+      <tr>
+        <td class="center">7</td>
+        <td>
+          <span class="item-name">Digital Signatures &amp; Audit Trail</span>
+          <span class="item-desc">Dual digital signatures (Belfinger + MEW) with GPS coordinates and timestamps, tamper-evident activity log for full MEW audit traceability</span>
+        </td>
+        <td class="center">1</td>
+        <td class="num">500.000</td>
+        <td class="num">500.000</td>
+      </tr>
+      <tr>
+        <td class="center">8</td>
+        <td>
+          <span class="item-name">Bilingual EN/AR with RTL Support</span>
+          <span class="item-desc">Full Arabic UI with right-to-left layout, all content fields support bilingual entry, Arabic PDF report generation</span>
+        </td>
+        <td class="center">1</td>
+        <td class="num">600.000</td>
+        <td class="num">600.000</td>
+      </tr>
+      <tr>
+        <td class="center">9</td>
+        <td>
+          <span class="item-name">Historical Data Migration &amp; Reports</span>
+          <span class="item-desc">Import all existing records from Excel files (equipment, maintenance tables, BOQ, executed invoices), advanced PDF reports matching MEW format</span>
+        </td>
+        <td class="center">1</td>
+        <td class="num">700.000</td>
+        <td class="num">700.000</td>
+      </tr>
+      <tr>
+        <td class="center">10</td>
+        <td>
+          <span class="item-name">Training, Documentation &amp; Go-Live Support</span>
+          <span class="item-desc">On-site training for all user roles, admin guide, user manual, go-live support, 3-month warranty for bug fixes</span>
+        </td>
+        <td class="center">1</td>
+        <td class="num">400.000</td>
+        <td class="num">400.000</td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <!-- Totals -->
+  <div class="totals">
+    <div class="totals-table">
+      <div class="row"><span class="label">Subtotal (10 items)</span><span class="val">7,500.000 KWD</span></div>
+      <div class="row"><span class="label">Discount</span><span class="val">0.000 KWD</span></div>
+      <div class="row"><span class="label">VAT</span><span class="val">Not Applicable</span></div>
+      <div class="row total"><span class="label">Total</span><span class="val">7,500.000 KWD</span></div>
+    </div>
+  </div>
+
+  <!-- Optional support -->
+  <div class="notes-block">
+    <strong>Optional &mdash; Ongoing Support After 3-Month Warranty:</strong> Monthly Support &amp; Maintenance available at <strong>200 KWD/month</strong> (server monitoring, security patches, bug fixes, up to 8 hours of minor enhancements per month). Additional development beyond included hours: <strong>25 KWD/hour</strong>. These are billed separately and do not form part of the project total above.
+  </div>
+
+  <!-- Terms -->
+  <div class="terms-grid">
+    <div class="term"><div class="t-label">Project Duration</div><div class="t-val">22 weeks from contract signing</div></div>
+    <div class="term"><div class="t-label">Payment Currency</div><div class="t-val">Kuwaiti Dinar (KWD)</div></div>
+    <div class="term"><div class="t-label">Payment Schedule</div><div class="t-val">Milestone-based (30 / 30 / 30 / 10)</div></div>
+    <div class="term"><div class="t-label">Warranty Period</div><div class="t-val">3 months from final acceptance</div></div>
+    <div class="term"><div class="t-label">Source Code Ownership</div><div class="t-val">Transferred to Customer on final payment</div></div>
+    <div class="term"><div class="t-label">Quotation Validity</div><div class="t-val">28 days from issue date</div></div>
+  </div>
+
+  <!-- Payment milestones -->
+  <table class="lines" style="font-size:0.78rem">
+    <thead>
+      <tr>
+        <th style="width:55px" class="center">M#</th>
+        <th>Milestone</th>
+        <th class="center" style="width:75px">When</th>
+        <th class="num" style="width:55px">%</th>
+        <th class="num" style="width:100px">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="center" style="font-weight:700;color:var(--primary)">M1</td><td>Contract signing &amp; project kickoff</td><td class="center">Week 0</td><td class="num">30%</td><td class="num">2,250.000</td></tr>
+      <tr><td class="center" style="font-weight:700;color:var(--primary)">M2</td><td>Phase 1 delivery &amp; client acceptance</td><td class="center">Week 12</td><td class="num">30%</td><td class="num">2,250.000</td></tr>
+      <tr><td class="center" style="font-weight:700;color:var(--primary)">M3</td><td>Phase 2 delivery &amp; client acceptance</td><td class="center">Week 20</td><td class="num">30%</td><td class="num">2,250.000</td></tr>
+      <tr><td class="center" style="font-weight:700;color:var(--primary)">M4</td><td>Final sign-off, training &amp; warranty start</td><td class="center">Week 22</td><td class="num">10%</td><td class="num">750.000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Signature -->
+  <div class="sig-block">
+    <div class="sig">
+      <div class="who">For Customer (Belfinger)</div>
+      <div class="name">Mr. Maged</div>
+      <div class="line">Authorized Signature &amp; Date</div>
+    </div>
+    <div class="sig">
+      <div class="who">For Centrix Plus</div>
+      <div class="name">Burhan</div>
+      <div class="line">Authorized Signature &amp; Date</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="quote-footer">
+    Centrix Plus &middot; Kuwait &middot; This quotation is confidential and intended only for the named customer.<br/>
+    For questions, please contact: info@centrixplus.com
+  </div>
+
+</div>
+
+</body>
+</html>
