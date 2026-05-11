@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Sample Work Order — Belfinger CMMS</title>
+<title>Sample Work Order — Bilfinger CMMS</title>
 <style>
 :root{--blue:#1e40af;--blue-d:#1e3a8a;--blue-l:#dbeafe;--green:#10b981;--green-l:#d1fae5;--red:#dc2626;--red-l:#fee2e2;--amber:#f59e0b;--amber-l:#fef3c7;--purple:#7c3aed;--purple-l:#f5f3ff;--ink:#0f172a;--ink2:#334155;--ink3:#64748b;--line:#e2e8f0;--bg:#f1f5f9;--white:#fff}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -86,7 +86,7 @@ td{padding:.55rem .65rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
 <div class="topbar">
   <div class="brand">
     <img id="logo-bilfinger-top" alt="Bilfinger"/>
-    <span>Belfinger CMMS &mdash; Sample Work Order</span>
+    <span>Bilfinger CMMS &mdash; Sample Work Order</span>
   </div>
   <a href="prototype.html">&larr; Back to Prototype</a>
 </div>
@@ -259,7 +259,7 @@ td{padding:.55rem .65rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
         <div style="font-size:.82rem;color:var(--ink2);line-height:1.6">
           1. The system creates Work Order <strong>WO-2026-0487</strong> and starts the SLA clock<br/>
           2. Equipment status for <strong>FIT-34</strong> is automatically changed to <strong style="color:var(--red)">Not Working</strong><br/>
-          3. Belfinger Manager receives an <strong>instant notification</strong> (in-app + email)<br/>
+          3. Bilfinger Manager receives an <strong>instant notification</strong> (in-app + email)<br/>
           4. The request enters the approval workflow &mdash; click <strong>"Manager Review"</strong> above to see the next step
         </div>
       </div>
@@ -270,10 +270,10 @@ td{padding:.55rem .65rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
 <!-- STEP 1: MANAGER REVIEW -->
 <div class="panel" id="s1">
   <div class="card">
-    <h3><span class="b b-blue">Step 2</span> Belfinger Manager Reviews &amp; Assigns</h3>
+    <h3><span class="b b-blue">Step 2</span> Bilfinger Manager Reviews &amp; Assigns</h3>
     <div class="timeline" style="margin-top:1rem">
       <div class="tl-item"><div class="tl-dot purple">A</div><div class="tl-who">Eng. Abdullah Al-Mutairi <span class="b b-purple" style="font-size:.55rem">MEW</span></div><div class="tl-action">Created Issue Request WO-2026-0487</div><div class="tl-time">14 Apr 2026 &middot; 08:15 AM</div></div>
-      <div class="tl-item"><div class="tl-dot blue">T</div><div class="tl-who">Thomas Weber <span class="b b-blue" style="font-size:.55rem">Belfinger Manager</span></div><div class="tl-action">Reviewed request &middot; Confirmed urgency: <strong style="color:var(--red)">Very Urgent</strong> &middot; Assigned to supervisor</div><div class="tl-time">14 Apr 2026 &middot; 08:42 AM (27 min response time)</div><div class="tl-comment">"Confirmed &mdash; FIT-34 is critical for outlet flow monitoring. Assign to Khalid's team immediately. SLA clock is running."</div></div>
+      <div class="tl-item"><div class="tl-dot blue">T</div><div class="tl-who">Thomas Weber <span class="b b-blue" style="font-size:.55rem">Bilfinger Manager</span></div><div class="tl-action">Reviewed request &middot; Confirmed urgency: <strong style="color:var(--red)">Very Urgent</strong> &middot; Assigned to supervisor</div><div class="tl-time">14 Apr 2026 &middot; 08:42 AM (27 min response time)</div><div class="tl-comment">"Confirmed &mdash; FIT-34 is critical for outlet flow monitoring. Assign to Khalid's team immediately. SLA clock is running."</div></div>
     </div>
     <!-- Assign form -->
     <div style="margin-top:1.25rem;padding-top:1rem;border-top:2px solid var(--blue-l)">
@@ -446,7 +446,7 @@ td{padding:.55rem .65rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
     </div>
     <div class="timeline">
       <div class="tl-item"><div class="tl-dot amber">K</div><div class="tl-who">Khalid Al-Otaibi <span class="b b-amber" style="font-size:.55rem">Supervisor</span></div><div class="tl-action">Submitted invoice INV-2026-0487 for manager approval</div><div class="tl-time">14 Apr 2026 &middot; 01:18 PM</div></div>
-      <div class="tl-item"><div class="tl-dot blue">T</div><div class="tl-who">Thomas Weber <span class="b b-blue" style="font-size:.55rem">Belfinger Manager</span></div><div class="tl-action"><strong style="color:var(--green)">Approved</strong> &mdash; Forwarded to MEW for final approval</div><div class="tl-time">14 Apr 2026 &middot; 02:05 PM</div><div class="tl-comment">"Invoice verified. Work quality confirmed. Sending to MEW for payment approval."</div></div>
+      <div class="tl-item"><div class="tl-dot blue">T</div><div class="tl-who">Thomas Weber <span class="b b-blue" style="font-size:.55rem">Bilfinger Manager</span></div><div class="tl-action"><strong style="color:var(--green)">Approved</strong> &mdash; Forwarded to MEW for final approval</div><div class="tl-time">14 Apr 2026 &middot; 02:05 PM</div><div class="tl-comment">"Invoice verified. Work quality confirmed. Sending to MEW for payment approval."</div></div>
     </div>
     <div class="act-bar">
       <button class="act-btn reject" onclick="alert('Invoice sent back to Supervisor with comments')">Reject Invoice &amp; Send Back to Supervisor</button>
