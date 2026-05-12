@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bilfinger CMMS — Live Demo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: { 50:'#eff6ff', 100:'#dbeafe', 500:'#1e40af', 600:'#1e3a8a', 700:'#1d3275' },
+          danger: { 50:'#fef2f2', 100:'#fee2e2', 500:'#dc2626', 700:'#991b1b' },
+          warn: { 50:'#fffbeb', 100:'#fef3c7', 500:'#f59e0b', 700:'#92400e' },
+          success: { 50:'#f0fdf4', 100:'#d1fae5', 500:'#10b981', 700:'#065f46' },
+          purple: { 50:'#f5f3ff', 100:'#ede9fe', 500:'#7c3aed', 700:'#5b21b6' },
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* Hide scrollbar in sidebar for cleaner look */
+  .sidebar::-webkit-scrollbar { width: 0; }
+  /* Smooth transitions */
+  [data-page] { display: none; }
+  [data-page].active { display: block; animation: fade .2s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  /* Workflow circles */
+  .wf-step { position: relative; }
+  .wf-step::after {
+    content:''; position:absolute; top:24px; left:calc(50% + 28px); right:calc(-50% + 28px); height:2px; background:#e5e7eb; z-index:0;
+  }
+  .wf-step:last-child::after { display:none; }
+  .wf-step.done::after { background:#10b981; }
+  /* Print */
+  @media print {
+    .no-print { display: none !important; }
+    main { padding: 0 !important; }
+  }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased">
+
+<div class="flex min-h-screen">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar w-56 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 no-print">
+    <div class="px-4 py-3 border-b border-slate-800">
+      <div class="text-white font-bold text-sm">Bilfinger CMMS</div>
+      <div class="text-[10px] text-slate-500 uppercase tracking-wider">Demo Preview</div>
+    </div>
+    <nav class="flex-1 py-2 text-sm">
+      <div class="px-4 py-1 text-[10px] uppercase tracking-wider text-slate-500 font-bold">Overview</div>
+      <a href="#" data-nav="dashboard" class="nav-link flex items-center gap-2 px-4 py-2 hover:bg-slate-800 hover:text-white border-l-2 border-transparent">
+        <span>📊</span> Dashboard
+      </a>
+
+      <div class="px-4 py-1 mt-2 text-[10px] uppercase tracking-wider text-slate-500 font-bold">Operations</div>
+      <a href="#" data-nav="workflow" class="nav-link flex items-center gap-2 px-4 py-2 hover:bg-slate-800 hover:text-white border-l-2 border-transparent">
+        <span>🔄</span> Approval Workflow
+      </a>
+      <a href="#" data-nav="workorder" class="nav-link flex items-center gap-2 px-4 py-2 hover:bg-slate-800 hover:text-white border-l-2 border-transparent">
+        <span>📋</span> Sample Work Order
+      </a>
+      <a href="#" data-nav="stores" class="nav-link flex items-center gap-2 px-4 py-2 hover:bg-slate-800 hover:text-white border-l-2 border-transparent">
+        <span>📦</span> Stores &amp; Inventory
+        <span class="ml-auto bg-red-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">3</span>
+      </a>
+    </nav>
+    <div class="p-3 text-[10px] text-slate-500 border-t border-slate-800">
+      <div>Logged in as</div>
+      <div class="text-slate-300 font-semibold">Thomas Weber</div>
+      <div>Bilfinger Manager</div>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main class="flex-1 min-w-0">
+
+    <!-- Top Bar -->
+    <header class="bg-white border-b border-slate-200 px-6 h-12 flex items-center justify-between no-print">
+      <h1 id="page-title" class="text-base font-bold text-slate-900">Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-slate-500">Bilfinger Nuclear &amp; Energy Transition GmbH</span>
+        <div class="w-8 h-8 rounded-full bg-brand-500 text-white flex items-center justify-center text-xs font-bold">TW</div>
+      </div>
+    </header>
+
+    <div class="p-6 space-y-6">
+
+      <!-- ===================== DASHBOARD ===================== -->
+      <section data-page="dashboard" class="active space-y-5">
+
+        <!-- KPI Row 1 -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div class="bg-white border border-slate-200 border-l-4 border-l-brand-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-brand-500">34</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">Active Jobs</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">12 PM · 22 Issue</div>
+          </div>
+          <div class="bg-white border border-slate-200 border-l-4 border-l-warn-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-warn-500">6</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">Pending Approval</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Needs action</div>
+          </div>
+          <div class="bg-white border border-slate-200 border-l-4 border-l-danger-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-danger-500">2</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">SLA Breached</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Escalated today</div>
+          </div>
+          <div class="bg-white border border-slate-200 border-l-4 border-l-success-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-success-500">47</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">Closed This Month</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">94% within SLA</div>
+          </div>
+          <div class="bg-white border border-slate-200 border-l-4 border-l-success-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-success-500">14,832</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">Receivable (KWD)</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">MEW-approved</div>
+          </div>
+        </div>
+
+        <!-- KPI Row 2 - Operational -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <a href="#" onclick="showPage('stores'); return false" class="bg-white border border-slate-200 border-l-4 border-l-danger-500 rounded-lg p-4 hover:shadow-md transition cursor-pointer">
+            <div class="text-2xl font-extrabold text-danger-500">3</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">Low Stock Alerts</div>
+            <div class="text-[11px] text-danger-500 mt-0.5 font-semibold">⚠ Reorder needed →</div>
+          </a>
+          <div class="bg-white border border-slate-200 border-l-4 border-l-brand-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-brand-500">23</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">Active Work Permits</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">5 pending sign-off</div>
+          </div>
+          <div class="bg-white border border-slate-200 border-l-4 border-l-brand-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-brand-500">1,547</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">QR Codes Active</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">3,284 scans/month</div>
+          </div>
+          <div class="bg-white border border-slate-200 border-l-4 border-l-success-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-success-500">40</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">Sites Online</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">5 administrations</div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="bg-white border border-slate-200 rounded-lg p-5">
+            <h3 class="text-sm font-bold mb-3">Jobs by Department</h3>
+            <canvas id="chart-dept" height="160"></canvas>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-lg p-5">
+            <h3 class="text-sm font-bold mb-3">Invoice Pipeline (KWD)</h3>
+            <canvas id="chart-invoice" height="160"></canvas>
+          </div>
+        </div>
+
+        <!-- Monthly receivables -->
+        <div class="bg-white border border-slate-200 rounded-lg p-5">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-bold">Monthly Receivables — 12 Month Trend</h3>
+            <div class="flex gap-4 text-xs">
+              <span class="flex items-center gap-1"><div class="w-2 h-2 bg-success-500 rounded-sm"></div>Received</span>
+              <span class="flex items-center gap-1"><div class="w-2 h-2 bg-warn-500 rounded-sm"></div>Pending</span>
+            </div>
+          </div>
+          <canvas id="chart-receivables" height="80"></canvas>
+          <div class="flex justify-between mt-3 text-xs text-slate-500">
+            <span>YTD: <strong class="text-slate-900">32,911 KWD</strong></span>
+            <span>Avg/month: <strong class="text-slate-900">2,993 KWD</strong></span>
+          </div>
+        </div>
+
+        <!-- Recent jobs -->
+        <div class="bg-white border border-slate-200 rounded-lg p-5">
+          <h3 class="text-sm font-bold mb-3">Recent Jobs</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
+                <tr>
+                  <th class="text-left p-2 font-semibold">WO #</th>
+                  <th class="text-left p-2 font-semibold">Type</th>
+                  <th class="text-left p-2 font-semibold">Site</th>
+                  <th class="text-left p-2 font-semibold">Department</th>
+                  <th class="text-left p-2 font-semibold">Urgency</th>
+                  <th class="text-left p-2 font-semibold">Status</th>
+                  <th class="text-left p-2 font-semibold">SLA</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr><td class="p-2 font-semibold text-brand-500">WO-2026-0487</td><td class="p-2"><span class="bg-warn-100 text-warn-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Issue</span></td><td class="p-2">Doha PS</td><td class="p-2">I&amp;C</td><td class="p-2"><span class="bg-danger-100 text-danger-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Very Urgent</span></td><td class="p-2"><span class="bg-success-100 text-success-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Complete</span></td><td class="p-2 text-success-700 font-semibold">✓ 25h 15m</td></tr>
+                <tr><td class="p-2 font-semibold text-brand-500">WO-2026-0418</td><td class="p-2"><span class="bg-warn-100 text-warn-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Issue</span></td><td class="p-2">D12 Mina Abdullah</td><td class="p-2">I&amp;C</td><td class="p-2"><span class="bg-danger-100 text-danger-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Very Urgent</span></td><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">In Progress</span></td><td class="p-2 text-danger-500 font-semibold">2h 14m</td></tr>
+                <tr><td class="p-2 font-semibold text-brand-500">WO-2026-0419</td><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">PM</span></td><td class="p-2">D12 Mina Abdullah</td><td class="p-2">I&amp;C</td><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Normal</span></td><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Assigned</span></td><td class="p-2 text-slate-400">—</td></tr>
+                <tr><td class="p-2 font-semibold text-brand-500">WO-2026-0420</td><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">PM</span></td><td class="p-2">Qairawan Towers</td><td class="p-2">I&amp;C</td><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Normal</span></td><td class="p-2"><span class="bg-warn-100 text-warn-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">MEW Approval</span></td><td class="p-2 text-slate-400">—</td></tr>
+                <tr><td class="p-2 font-semibold text-brand-500">WO-2026-0414</td><td class="p-2"><span class="bg-warn-100 text-warn-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Issue</span></td><td class="p-2">D12 Mina Abdullah</td><td class="p-2">DCS</td><td class="p-2"><span class="bg-danger-100 text-danger-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Very Urgent</span></td><td class="p-2"><span class="bg-danger-100 text-danger-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">SLA Breached</span></td><td class="p-2 text-danger-500 font-semibold">⚠ +3h</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== APPROVAL WORKFLOW ===================== -->
+      <section data-page="workflow" class="space-y-5">
+
+        <div class="bg-white border border-slate-200 rounded-lg p-6">
+          <h2 class="text-lg font-bold mb-2">7-Step Approval Workflow</h2>
+          <p class="text-sm text-slate-500 mb-6">Complete request-to-payment cycle. Each step requires action before the work order moves forward. Rejection at any step sends it back to the previous role.</p>
+
+          <!-- Workflow steps -->
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
+            <div class="wf-step done text-center">
+              <div class="w-12 h-12 mx-auto bg-purple-100 border-2 border-purple-500 rounded-full flex items-center justify-center text-xl relative z-10">📩</div>
+              <div class="text-[10px] uppercase tracking-wide font-bold text-purple-700 mt-2">Step 1 · MEW</div>
+              <div class="text-xs text-slate-600 mt-1 leading-tight">Creates Issue Request</div>
+            </div>
+            <div class="wf-step done text-center">
+              <div class="w-12 h-12 mx-auto bg-brand-100 border-2 border-brand-500 rounded-full flex items-center justify-center text-xl relative z-10">👔</div>
+              <div class="text-[10px] uppercase tracking-wide font-bold text-brand-500 mt-2">Step 2 · Manager</div>
+              <div class="text-xs text-slate-600 mt-1 leading-tight">Reviews &amp; Assigns</div>
+            </div>
+            <div class="wf-step done text-center">
+              <div class="w-12 h-12 mx-auto bg-warn-100 border-2 border-warn-500 rounded-full flex items-center justify-center text-xl relative z-10">👷</div>
+              <div class="text-[10px] uppercase tracking-wide font-bold text-warn-700 mt-2">Step 3 · Supervisor</div>
+              <div class="text-xs text-slate-600 mt-1 leading-tight">Assigns Engineer</div>
+            </div>
+            <div class="wf-step done text-center">
+              <div class="w-12 h-12 mx-auto bg-success-100 border-2 border-success-500 rounded-full flex items-center justify-center text-xl relative z-10">🔧</div>
+              <div class="text-[10px] uppercase tracking-wide font-bold text-success-700 mt-2">Step 4 · Engineer</div>
+              <div class="text-xs text-slate-600 mt-1 leading-tight">Does Work + Signs</div>
+            </div>
+            <div class="wf-step done text-center">
+              <div class="w-12 h-12 mx-auto bg-warn-100 border-2 border-warn-500 rounded-full flex items-center justify-center text-xl relative z-10">📋</div>
+              <div class="text-[10px] uppercase tracking-wide font-bold text-warn-700 mt-2">Step 5 · Supervisor</div>
+              <div class="text-xs text-slate-600 mt-1 leading-tight">Creates BOQ Invoice</div>
+            </div>
+            <div class="wf-step text-center">
+              <div class="w-12 h-12 mx-auto bg-brand-100 border-2 border-brand-500 rounded-full flex items-center justify-center text-xl relative z-10 ring-4 ring-brand-100">✅</div>
+              <div class="text-[10px] uppercase tracking-wide font-bold text-brand-500 mt-2">Step 6 · Manager</div>
+              <div class="text-xs text-slate-600 mt-1 leading-tight">Approves Invoice</div>
+            </div>
+            <div class="wf-step text-center">
+              <div class="w-12 h-12 mx-auto bg-purple-100 border-2 border-purple-500 rounded-full flex items-center justify-center text-xl relative z-10">📤</div>
+              <div class="text-[10px] uppercase tracking-wide font-bold text-purple-700 mt-2">Step 7 · MEW</div>
+              <div class="text-xs text-slate-600 mt-1 leading-tight">Final Approval &amp; Payment</div>
+            </div>
+          </div>
+
+          <div class="bg-danger-50 border border-danger-200 rounded-lg p-3 text-sm text-slate-700">
+            <strong class="text-danger-700">⟲ Rejection Cycle:</strong> At any step, the reviewer can reject and send back to the previous role with comments. The work order returns to that role with feedback for rework before re-submission.
+          </div>
+        </div>
+
+        <!-- Live tracker -->
+        <div class="bg-white border border-slate-200 rounded-lg p-6">
+          <h3 class="text-base font-bold mb-4">Live Tracker — Where Are Active Jobs?</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-3 text-center">
+              <div class="text-2xl font-extrabold text-purple-700">3</div>
+              <div class="text-[10px] uppercase tracking-wide font-bold text-purple-700 mt-1">Awaiting MEW</div>
+            </div>
+            <div class="bg-brand-50 border border-brand-100 rounded-lg p-3 text-center">
+              <div class="text-2xl font-extrabold text-brand-500">6</div>
+              <div class="text-[10px] uppercase tracking-wide font-bold text-brand-500 mt-1">With Manager</div>
+            </div>
+            <div class="bg-warn-50 border border-warn-200 rounded-lg p-3 text-center">
+              <div class="text-2xl font-extrabold text-warn-700">8</div>
+              <div class="text-[10px] uppercase tracking-wide font-bold text-warn-700 mt-1">With Supervisor</div>
+            </div>
+            <div class="bg-success-50 border border-success-200 rounded-lg p-3 text-center">
+              <div class="text-2xl font-extrabold text-success-700">13</div>
+              <div class="text-[10px] uppercase tracking-wide font-bold text-success-700 mt-1">With Engineer</div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex items-start gap-3 p-3 bg-success-50 border-l-4 border-success-500 rounded">
+              <div class="text-success-700 font-bold text-sm">WO-2026-0418</div>
+              <div class="flex-1 text-sm text-slate-600">D12 Mina Abdullah · Instrumentation — Khalid Al-Otaibi on iPad now</div>
+              <span class="bg-success-100 text-success-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Step 4 · Engineer</span>
+            </div>
+            <div class="flex items-start gap-3 p-3 bg-warn-50 border-l-4 border-warn-500 rounded">
+              <div class="text-warn-700 font-bold text-sm">WO-2026-0419</div>
+              <div class="flex-1 text-sm text-slate-600">Subiya PS · DCS — Supervisor creating BOQ invoice</div>
+              <span class="bg-warn-100 text-warn-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Step 5 · Invoice Draft</span>
+            </div>
+            <div class="flex items-start gap-3 p-3 bg-brand-50 border-l-4 border-brand-500 rounded">
+              <div class="text-brand-500 font-bold text-sm">WO-2026-0420</div>
+              <div class="flex-1 text-sm text-slate-600">Qairawan Towers · Instrumentation — Waiting for manager approval</div>
+              <span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Step 6 · Manager Review</span>
+            </div>
+            <div class="flex items-start gap-3 p-3 bg-purple-50 border-l-4 border-purple-500 rounded">
+              <div class="text-purple-700 font-bold text-sm">WO-2026-0415</div>
+              <div class="flex-1 text-sm text-slate-600">Shuwaikh PS · Chemical — Invoice sent to MEW for final approval</div>
+              <span class="bg-purple-100 text-purple-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Step 7 · MEW Approval</span>
+            </div>
+            <div class="flex items-start gap-3 p-3 bg-danger-50 border-l-4 border-danger-500 rounded">
+              <div class="text-danger-500 font-bold text-sm">WO-2026-0414</div>
+              <div class="flex-1 text-sm text-slate-600">D12 Mina Abdullah · DCS — ⚠ Rejected by supervisor — needs rework</div>
+              <span class="bg-danger-100 text-danger-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Rejected · Back to Engineer</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== STORES & INVENTORY ===================== -->
+      <section data-page="stores" class="space-y-5">
+
+        <!-- KPIs -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="bg-white border border-slate-200 border-l-4 border-l-brand-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-brand-500">847</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">Total Stock Items</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Across 40 sites</div>
+          </div>
+          <div class="bg-white border border-slate-200 border-l-4 border-l-danger-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-danger-500">3</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">Below Setpoint</div>
+            <div class="text-[11px] text-danger-500 mt-0.5 font-semibold">⚠ Reorder needed</div>
+          </div>
+          <div class="bg-white border border-slate-200 border-l-4 border-l-warn-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-warn-500">12</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">Open POs</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">4,287 KWD pending</div>
+          </div>
+          <div class="bg-white border border-slate-200 border-l-4 border-l-success-500 rounded-lg p-4">
+            <div class="text-2xl font-extrabold text-success-500">42,180</div>
+            <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mt-1">Stock Value (KWD)</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Current valuation</div>
+          </div>
+        </div>
+
+        <!-- Low Stock Alerts -->
+        <div class="bg-white border border-slate-200 border-l-4 border-l-danger-500 rounded-lg p-5">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-base font-bold text-danger-700">⚠ Low Stock Alerts — Action Required</h3>
+            <span class="bg-danger-100 text-danger-700 text-xs font-bold px-2 py-1 rounded-full">3 Items Below Setpoint</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
+                <tr>
+                  <th class="text-left p-2 font-semibold">Item</th>
+                  <th class="text-left p-2 font-semibold">Part No.</th>
+                  <th class="text-left p-2 font-semibold">Site</th>
+                  <th class="text-left p-2 font-semibold">Current</th>
+                  <th class="text-left p-2 font-semibold">Setpoint</th>
+                  <th class="text-left p-2 font-semibold">Supplier</th>
+                  <th class="text-left p-2 font-semibold">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr class="bg-danger-50">
+                  <td class="p-2 font-semibold">Pressure Transmitter (Diaphragm)</td>
+                  <td class="p-2 font-semibold text-brand-500">PT-DIA-M20</td>
+                  <td class="p-2">Doha PS</td>
+                  <td class="p-2 text-danger-500 font-bold">2</td>
+                  <td class="p-2">5</td>
+                  <td class="p-2 text-xs">Endress+Hauser KW</td>
+                  <td class="p-2"><button class="bg-danger-500 text-white text-xs font-semibold px-3 py-1 rounded hover:bg-danger-700">Create PO</button></td>
+                </tr>
+                <tr class="bg-danger-50">
+                  <td class="p-2 font-semibold">Cable Gland M20 (SS316)</td>
+                  <td class="p-2 font-semibold text-brand-500">CG-M20-SS</td>
+                  <td class="p-2">Shuwaikh PS</td>
+                  <td class="p-2 text-danger-500 font-bold">1</td>
+                  <td class="p-2">10</td>
+                  <td class="p-2 text-xs">Hawke International</td>
+                  <td class="p-2"><button class="bg-danger-500 text-white text-xs font-semibold px-3 py-1 rounded hover:bg-danger-700">Create PO</button></td>
+                </tr>
+                <tr class="bg-warn-50">
+                  <td class="p-2 font-semibold">Signal Cable 2C-Shielded</td>
+                  <td class="p-2 font-semibold text-brand-500">SC-2C-SH</td>
+                  <td class="p-2">Mina Abdullah PS</td>
+                  <td class="p-2 text-warn-700 font-bold">8m</td>
+                  <td class="p-2">25m</td>
+                  <td class="p-2 text-xs">Lapp Kuwait</td>
+                  <td class="p-2"><button class="bg-warn-500 text-white text-xs font-semibold px-3 py-1 rounded hover:bg-warn-700">Create PO</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Charts row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="bg-white border border-slate-200 rounded-lg p-5">
+            <h3 class="text-sm font-bold mb-3">Stock by Category</h3>
+            <canvas id="chart-stock-cat" height="160"></canvas>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-lg p-5">
+            <h3 class="text-sm font-bold mb-3">Stock Movement — Last 30 Days</h3>
+            <canvas id="chart-stock-move" height="160"></canvas>
+          </div>
+        </div>
+
+        <!-- Inventory list -->
+        <div class="bg-white border border-slate-200 rounded-lg p-5">
+          <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+            <h3 class="text-base font-bold">Inventory Master List</h3>
+            <div class="flex gap-2">
+              <input type="text" placeholder="🔍 Search..." class="text-sm border border-slate-200 rounded px-3 py-1.5 w-48"/>
+              <button class="bg-brand-500 text-white text-xs font-semibold px-3 py-1.5 rounded hover:bg-brand-700">+ Add Item</button>
+              <button class="bg-white border border-slate-200 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded hover:bg-slate-50">📥 Import CSV</button>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
+                <tr>
+                  <th class="text-left p-2 font-semibold">Part No.</th>
+                  <th class="text-left p-2 font-semibold">Description</th>
+                  <th class="text-left p-2 font-semibold">Category</th>
+                  <th class="text-left p-2 font-semibold">Unit</th>
+                  <th class="text-left p-2 font-semibold">Qty</th>
+                  <th class="text-left p-2 font-semibold">Setpoint</th>
+                  <th class="text-left p-2 font-semibold">Price</th>
+                  <th class="text-left p-2 font-semibold">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr><td class="p-2 font-semibold text-brand-500">PT-DIA-M20</td><td class="p-2">Pressure Transmitter (Diaphragm)</td><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">I&amp;C</span></td><td class="p-2">EA</td><td class="p-2 text-danger-500 font-bold">2</td><td class="p-2">5</td><td class="p-2">185.000</td><td class="p-2"><span class="bg-danger-100 text-danger-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">⚠ Below SP</span></td></tr>
+                <tr><td class="p-2 font-semibold text-brand-500">CG-M20-SS</td><td class="p-2">Cable Gland M20 SS316</td><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">I&amp;C</span></td><td class="p-2">EA</td><td class="p-2 text-danger-500 font-bold">1</td><td class="p-2">10</td><td class="p-2">12.000</td><td class="p-2"><span class="bg-danger-100 text-danger-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">⚠ Below SP</span></td></tr>
+                <tr><td class="p-2 font-semibold text-brand-500">FIT-EM-DN50</td><td class="p-2">Flow Transmitter Electromagnetic</td><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">I&amp;C</span></td><td class="p-2">EA</td><td class="p-2">8</td><td class="p-2">3</td><td class="p-2">520.000</td><td class="p-2"><span class="bg-success-100 text-success-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">In Stock</span></td></tr>
+                <tr><td class="p-2 font-semibold text-brand-500">LIT-ULT-30</td><td class="p-2">Level Transmitter Ultrasonic</td><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">I&amp;C</span></td><td class="p-2">EA</td><td class="p-2">12</td><td class="p-2">5</td><td class="p-2">680.000</td><td class="p-2"><span class="bg-success-100 text-success-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">In Stock</span></td></tr>
+                <tr><td class="p-2 font-semibold text-brand-500">TIT-RTD-100</td><td class="p-2">Temperature Sensor RTD PT100</td><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">I&amp;C</span></td><td class="p-2">EA</td><td class="p-2">15</td><td class="p-2">5</td><td class="p-2">95.000</td><td class="p-2"><span class="bg-success-100 text-success-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">In Stock</span></td></tr>
+                <tr><td class="p-2 font-semibold text-brand-500">MCB-3P-32A</td><td class="p-2">MCB 3-Pole 32A</td><td class="p-2"><span class="bg-warn-100 text-warn-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Electrical</span></td><td class="p-2">EA</td><td class="p-2">24</td><td class="p-2">10</td><td class="p-2">32.500</td><td class="p-2"><span class="bg-success-100 text-success-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">In Stock</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="flex justify-between mt-3 text-xs text-slate-500">
+            <span>Showing 6 of 847 items</span>
+            <span>Total value: <strong class="text-slate-900">42,180 KWD</strong></span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===================== SAMPLE WORK ORDER ===================== -->
+      <section data-page="workorder" class="space-y-5">
+
+        <!-- WO Header -->
+        <div class="bg-gradient-to-br from-slate-900 to-brand-600 text-white rounded-lg p-6">
+          <div class="flex items-start justify-between flex-wrap gap-4">
+            <div>
+              <div class="text-3xl font-extrabold tracking-tight">WO-2026-0487</div>
+              <div class="inline-block bg-warn-500/20 text-warn-100 border border-warn-500/30 text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full mt-2">Issue Request</div>
+              <div class="mt-3 text-sm">Flow Transmitter FIT-34 — Not Working</div>
+              <div class="text-xs text-slate-300">Doha Pumping Station · Outlet Line 34 · I&amp;C Department</div>
+            </div>
+            <div class="text-right text-xs">
+              <div class="text-slate-300">Status</div>
+              <div class="bg-success-500 text-white inline-block px-3 py-1 rounded-full font-bold mt-1">✓ Complete · 132.500 KWD</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step tabs -->
+        <div class="bg-white border border-slate-200 rounded-lg overflow-hidden">
+          <div class="flex overflow-x-auto border-b border-slate-200 text-xs font-bold">
+            <button onclick="wo(0)" data-wo="0" class="wo-tab flex-1 min-w-[100px] px-3 py-3 text-center border-b-2 border-brand-500 bg-brand-50 text-brand-500">① MEW Request</button>
+            <button onclick="wo(1)" data-wo="1" class="wo-tab flex-1 min-w-[100px] px-3 py-3 text-center border-b-2 border-transparent text-slate-500 hover:bg-slate-50">② Manager</button>
+            <button onclick="wo(2)" data-wo="2" class="wo-tab flex-1 min-w-[100px] px-3 py-3 text-center border-b-2 border-transparent text-slate-500 hover:bg-slate-50">③ Supervisor</button>
+            <button onclick="wo(3)" data-wo="3" class="wo-tab flex-1 min-w-[100px] px-3 py-3 text-center border-b-2 border-transparent text-slate-500 hover:bg-slate-50">④ Engineer</button>
+            <button onclick="wo(4)" data-wo="4" class="wo-tab flex-1 min-w-[100px] px-3 py-3 text-center border-b-2 border-transparent text-slate-500 hover:bg-slate-50">⑤ Checklist</button>
+            <button onclick="wo(5)" data-wo="5" class="wo-tab flex-1 min-w-[100px] px-3 py-3 text-center border-b-2 border-transparent text-slate-500 hover:bg-slate-50">⑥ Invoice</button>
+            <button onclick="wo(6)" data-wo="6" class="wo-tab flex-1 min-w-[100px] px-3 py-3 text-center border-b-2 border-transparent text-slate-500 hover:bg-slate-50">⑦ MEW Final</button>
+          </div>
+
+          <!-- Step 0: MEW Request -->
+          <div data-wo-panel="0" class="wo-panel p-6 space-y-4">
+            <h3 class="text-base font-bold">Step 1 — MEW Creates Issue Request</h3>
+            <p class="text-sm text-slate-600">This is the digital form MEW fills in to request maintenance (replaces the paper Maintenance/Defect Sheet).</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+              <div class="bg-slate-50 rounded p-3"><div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold">Request Date</div><div class="font-semibold mt-1">14 April 2026, 08:15 AM</div></div>
+              <div class="bg-slate-50 rounded p-3"><div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold">Requested By</div><div class="font-semibold mt-1">Eng. Abdullah Al-Mutairi (MEW)</div></div>
+              <div class="bg-danger-50 border border-danger-200 rounded p-3"><div class="text-[10px] uppercase tracking-wide text-danger-700 font-bold">Urgency</div><div class="font-semibold mt-1 text-danger-500">Very Urgent · 4h response</div></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+              <div class="bg-slate-50 rounded p-3"><div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold">Zone</div><div class="font-semibold mt-1">Middle Zone</div></div>
+              <div class="bg-brand-50 border border-brand-100 rounded p-3"><div class="text-[10px] uppercase tracking-wide text-brand-500 font-bold">Site</div><div class="font-semibold mt-1 text-brand-500">Doha Pumping Station</div></div>
+              <div class="bg-slate-50 rounded p-3"><div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold">Department</div><div class="font-semibold mt-1">I&amp;C (Instrumentation)</div></div>
+            </div>
+
+            <h4 class="text-sm font-bold mt-4">Equipment Selected (from Register)</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
+                  <tr><th class="text-left p-2 font-semibold">Tag No.</th><th class="text-left p-2 font-semibold">Category</th><th class="text-left p-2 font-semibold">Sub Category</th><th class="text-left p-2 font-semibold">Tech Spec</th><th class="text-left p-2 font-semibold">Location</th><th class="text-left p-2 font-semibold">Status</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="p-2 font-bold text-brand-500">FIT-34</td><td class="p-2">Flow</td><td class="p-2">Flow Transmitter</td><td class="p-2">Electromagnetic</td><td class="p-2">Outlet Line 34</td><td class="p-2"><span class="bg-danger-100 text-danger-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Not Working</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="bg-danger-50 border border-danger-200 rounded-lg p-4">
+              <div class="text-xs font-bold text-danger-700 uppercase mb-1">Problem Description</div>
+              <p class="text-sm text-slate-700 leading-relaxed">"Flow transmitter FIT-34 on Outlet Line 34 is showing erratic readings and intermittent signal loss since yesterday morning. The DCS is receiving 0% reading even though the pump is running. This is affecting our flow monitoring for the entire outlet line. Please inspect and repair urgently."</p>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+              <span class="text-xs text-slate-500">All required fields completed</span>
+              <button onclick="wo(1)" class="bg-purple-500 text-white text-sm font-bold px-5 py-2 rounded hover:bg-purple-700">Submit Request →</button>
+            </div>
+          </div>
+
+          <!-- Step 1: Manager -->
+          <div data-wo-panel="1" class="wo-panel p-6 space-y-4 hidden">
+            <h3 class="text-base font-bold">Step 2 — Bilfinger Manager Reviews</h3>
+
+            <div class="space-y-3">
+              <div class="flex gap-3">
+                <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">A</div>
+                <div class="flex-1">
+                  <div class="text-sm font-semibold">Eng. Abdullah Al-Mutairi <span class="text-[10px] bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded-full uppercase ml-1">MEW</span></div>
+                  <div class="text-sm text-slate-600">Created Issue Request WO-2026-0487</div>
+                  <div class="text-xs text-slate-400">14 Apr 2026 · 08:15 AM</div>
+                </div>
+              </div>
+              <div class="flex gap-3">
+                <div class="w-10 h-10 bg-brand-500 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">T</div>
+                <div class="flex-1">
+                  <div class="text-sm font-semibold">Thomas Weber <span class="text-[10px] bg-brand-100 text-brand-700 font-bold px-2 py-0.5 rounded-full uppercase ml-1">Bilfinger Manager</span></div>
+                  <div class="text-sm text-slate-600">Reviewed · Confirmed urgency: <strong class="text-danger-500">Very Urgent</strong> · Assigned to supervisor</div>
+                  <div class="text-xs text-slate-400">14 Apr 2026 · 08:42 AM (27 min response · SLA: 4 hrs ✓)</div>
+                  <div class="mt-2 p-2 bg-slate-50 rounded text-xs italic text-slate-600">"Confirmed — FIT-34 is critical for outlet flow monitoring. Assign to Khalid's team immediately."</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-4 border-t border-slate-200">
+              <div>
+                <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mb-1">Assign to Supervisor *</div>
+                <select class="w-full border border-slate-200 rounded px-3 py-2 text-sm"><option>Khalid Al-Otaibi (Available)</option><option>Ahmad Hassan</option><option>Faisal Al-Rashidi</option></select>
+              </div>
+              <div>
+                <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mb-1">Confirm Priority *</div>
+                <select class="w-full border border-slate-200 rounded px-3 py-2 text-sm text-danger-500 font-bold"><option>Very Urgent</option><option>Same Day</option><option>Normal</option><option>Low</option></select>
+              </div>
+              <div>
+                <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mb-1">Manager Notes</div>
+                <input type="text" value="Assign to Khalid immediately" class="w-full border border-slate-200 rounded px-3 py-2 text-sm italic text-slate-600"/>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+              <button class="border border-danger-500 text-danger-500 text-sm font-bold px-4 py-2 rounded hover:bg-danger-50">Reject &amp; Send Back to MEW</button>
+              <button onclick="wo(2)" class="bg-brand-500 text-white text-sm font-bold px-5 py-2 rounded hover:bg-brand-700">Approve &amp; Assign to Supervisor →</button>
+            </div>
+          </div>
+
+          <!-- Step 2: Supervisor -->
+          <div data-wo-panel="2" class="wo-panel p-6 space-y-4 hidden">
+            <h3 class="text-base font-bold">Step 3 — Supervisor Assigns Site Engineer</h3>
+
+            <div class="space-y-3">
+              <div class="flex gap-3">
+                <div class="w-10 h-10 bg-warn-500 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">K</div>
+                <div class="flex-1">
+                  <div class="text-sm font-semibold">Khalid Al-Otaibi <span class="text-[10px] bg-warn-100 text-warn-700 font-bold px-2 py-0.5 rounded-full uppercase ml-1">Supervisor</span></div>
+                  <div class="text-sm text-slate-600">Assigned to <strong>Mohammad Rafique</strong> — currently at Doha PS</div>
+                  <div class="text-xs text-slate-400">14 Apr 2026 · 08:58 AM</div>
+                  <div class="mt-2 p-2 bg-slate-50 rounded text-xs italic text-slate-600">"Mohammad is already on-site at Doha. He has experience with electromagnetic flow transmitters."</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-4 border-t border-slate-200">
+              <div>
+                <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mb-1">Assign to Site Engineer *</div>
+                <select class="w-full border border-slate-200 rounded px-3 py-2 text-sm"><option>Mohammad Rafique (On-site, Doha PS)</option><option>Naveen Kumar (En route)</option><option>Bilal Siddiqui (Available)</option></select>
+              </div>
+              <div>
+                <div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold mb-1">Supervisor Notes</div>
+                <input type="text" value="Mohammad is on-site, experienced with flow transmitters" class="w-full border border-slate-200 rounded px-3 py-2 text-sm italic text-slate-600"/>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+              <button class="border border-danger-500 text-danger-500 text-sm font-bold px-4 py-2 rounded hover:bg-danger-50">Reject &amp; Send Back to Manager</button>
+              <button onclick="wo(3)" class="bg-warn-500 text-white text-sm font-bold px-5 py-2 rounded hover:bg-warn-700">Assign to Engineer →</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Engineer -->
+          <div data-wo-panel="3" class="wo-panel p-6 space-y-4 hidden">
+            <h3 class="text-base font-bold">Step 4 — Site Engineer Performs Work</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+              <div class="bg-slate-50 rounded p-3"><div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold">Work Started</div><div class="font-semibold mt-1">14 Apr 2026, 09:20 AM</div></div>
+              <div class="bg-slate-50 rounded p-3"><div class="text-[10px] uppercase tracking-wide text-slate-500 font-bold">GPS Location</div><div class="font-semibold mt-1">29.3475°N, 47.7893°E</div></div>
+              <div class="bg-success-50 rounded p-3"><div class="text-[10px] uppercase tracking-wide text-success-700 font-bold">Work Completed</div><div class="font-semibold mt-1 text-success-700">14 Apr 2026, 11:45 AM</div></div>
+            </div>
+
+            <div class="bg-success-50 border border-success-200 rounded-lg p-4">
+              <div class="text-xs font-bold text-success-700 uppercase mb-1">Work Report (Mohammad Rafique)</div>
+              <p class="text-sm text-slate-700 leading-relaxed">"Arrived at Outlet Line 34. Inspected flow transmitter FIT-34 (Electromagnetic type). Found corroded cable gland causing intermittent signal loss. Replaced cable gland and re-terminated the signal cable. Performed loop test — transmitter now reading correctly at 67.3% flow rate. Calibrated to 0-100% range using HART communicator. All readings within ±0.5% accuracy."</p>
+            </div>
+
+            <h4 class="text-sm font-bold mt-2">Spare Parts Used</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
+                  <tr><th class="text-left p-2 font-semibold">Item</th><th class="text-left p-2 font-semibold">Part No.</th><th class="text-left p-2 font-semibold">Qty</th><th class="text-left p-2 font-semibold">Source</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="p-2">Cable Gland M20 (SS316)</td><td class="p-2">CG-M20-SS</td><td class="p-2">1</td><td class="p-2"><span class="bg-success-100 text-success-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">From stock</span></td></tr>
+                  <tr><td class="p-2">Signal Cable 2-Core Shielded</td><td class="p-2">SC-2C-SH</td><td class="p-2">3m</td><td class="p-2"><span class="bg-success-100 text-success-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">From stock</span></td></tr>
+                  <tr><td class="p-2">Terminal Block (4-way)</td><td class="p-2">TB-4W-DIN</td><td class="p-2">1</td><td class="p-2"><span class="bg-success-100 text-success-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">From stock</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+              <span class="text-xs text-slate-500">Work completed · Ready for checklist</span>
+              <button onclick="wo(4)" class="bg-success-500 text-white text-sm font-bold px-5 py-2 rounded hover:bg-success-700">Proceed to Checklist →</button>
+            </div>
+          </div>
+
+          <!-- Step 4: Checklist -->
+          <div data-wo-panel="4" class="wo-panel p-6 space-y-4 hidden">
+            <h3 class="text-base font-bold">Step 5 — Inspection Checklist &amp; Signatures</h3>
+            <p class="text-sm text-slate-600">Equipment: <strong>FIT-34 — Electromagnetic Flow Transmitter</strong> · Doha PS, Outlet Line 34</p>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
+                  <tr><th class="text-left p-2 font-semibold">Inspection Item</th><th class="text-center p-2 font-semibold">Before</th><th class="text-center p-2 font-semibold">After</th><th class="text-center p-2 font-semibold">Unit</th><th class="text-center p-2 font-semibold">Status</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="p-2">Flow Reading (0%)</td><td class="p-2 text-center">0.0</td><td class="p-2 text-center">0.0</td><td class="p-2 text-center">%</td><td class="p-2 text-center text-success-700 font-bold">✓ PASS</td></tr>
+                  <tr><td class="p-2">Flow Reading (25%)</td><td class="p-2 text-center text-danger-500">—</td><td class="p-2 text-center">24.8</td><td class="p-2 text-center">%</td><td class="p-2 text-center text-success-700 font-bold">✓ PASS</td></tr>
+                  <tr><td class="p-2">Flow Reading (50%)</td><td class="p-2 text-center text-danger-500">—</td><td class="p-2 text-center">50.2</td><td class="p-2 text-center">%</td><td class="p-2 text-center text-success-700 font-bold">✓ PASS</td></tr>
+                  <tr><td class="p-2">Flow Reading (75%)</td><td class="p-2 text-center text-danger-500">—</td><td class="p-2 text-center">74.9</td><td class="p-2 text-center">%</td><td class="p-2 text-center text-success-700 font-bold">✓ PASS</td></tr>
+                  <tr><td class="p-2">Flow Reading (100%)</td><td class="p-2 text-center text-danger-500">—</td><td class="p-2 text-center">100.1</td><td class="p-2 text-center">%</td><td class="p-2 text-center text-success-700 font-bold">✓ PASS</td></tr>
+                  <tr><td class="p-2">Signal Output (4-20mA)</td><td class="p-2 text-center text-danger-500">0 mA</td><td class="p-2 text-center">4.02 mA</td><td class="p-2 text-center">mA</td><td class="p-2 text-center text-success-700 font-bold">✓ PASS</td></tr>
+                  <tr><td class="p-2">Cable Insulation</td><td class="p-2 text-center text-danger-500">0.2 MΩ</td><td class="p-2 text-center">&gt;100 MΩ</td><td class="p-2 text-center">MΩ</td><td class="p-2 text-center text-success-700 font-bold">✓ PASS</td></tr>
+                  <tr><td class="p-2">DCS Display Match</td><td class="p-2 text-center text-danger-500">NO</td><td class="p-2 text-center">YES</td><td class="p-2 text-center">—</td><td class="p-2 text-center text-success-700 font-bold">✓ PASS</td></tr>
+                  <tr><td class="p-2">Physical Condition</td><td class="p-2 text-center text-danger-500">DAMAGED</td><td class="p-2 text-center">GOOD</td><td class="p-2 text-center">—</td><td class="p-2 text-center text-success-700 font-bold">✓ PASS</td></tr>
+                  <tr><td class="p-2">Calibration Error</td><td class="p-2 text-center text-danger-500">N/A</td><td class="p-2 text-center">±0.3%</td><td class="p-2 text-center">%</td><td class="p-2 text-center text-success-700 font-bold">✓ PASS</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 mt-4">
+              <div class="bg-success-50 border border-success-200 rounded-lg p-3 text-center"><div class="text-2xl font-extrabold text-success-700">10/10</div><div class="text-[10px] uppercase tracking-wide font-bold text-success-700 mt-1">Passed</div></div>
+              <div class="bg-danger-50 border border-danger-200 rounded-lg p-3 text-center"><div class="text-2xl font-extrabold text-danger-700">0</div><div class="text-[10px] uppercase tracking-wide font-bold text-danger-700 mt-1">Failed</div></div>
+              <div class="bg-brand-50 border border-brand-100 rounded-lg p-3 text-center"><div class="text-2xl font-extrabold text-brand-500">±0.3%</div><div class="text-[10px] uppercase tracking-wide font-bold text-brand-500 mt-1">Max Error</div></div>
+            </div>
+
+            <!-- Signatures -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4 pt-4 border-t border-slate-200">
+              <div class="border border-slate-200 rounded-lg p-4 text-center">
+                <div class="font-bold text-sm">Mohammad Rafique</div>
+                <div class="text-xs text-slate-500">Site Engineer · Bilfinger</div>
+                <div class="font-bold italic text-brand-500 border-t-2 border-slate-700 mt-4 pt-2">M. Rafique</div>
+                <div class="text-[10px] text-slate-400 mt-1">14 Apr 2026, 11:47 AM · GPS verified</div>
+              </div>
+              <div class="border border-slate-200 rounded-lg p-4 text-center">
+                <div class="font-bold text-sm">Eng. Abdullah Al-Mutairi</div>
+                <div class="text-xs text-slate-500">MEW Site Representative</div>
+                <div class="font-bold italic text-brand-500 border-t-2 border-slate-700 mt-4 pt-2">A. Al-Mutairi</div>
+                <div class="text-[10px] text-slate-400 mt-1">14 Apr 2026, 11:52 AM · GPS verified</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+              <span class="text-xs text-slate-500">Both parties signed · Ready to submit</span>
+              <button onclick="wo(5)" class="bg-success-500 text-white text-sm font-bold px-5 py-2 rounded hover:bg-success-700">Submit to Supervisor for Invoice →</button>
+            </div>
+          </div>
+
+          <!-- Step 5: Invoice -->
+          <div data-wo-panel="5" class="wo-panel p-6 space-y-4 hidden">
+            <h3 class="text-base font-bold">Step 6 — Supervisor Reviews &amp; Creates BOQ Invoice</h3>
+
+            <h4 class="text-sm font-bold">BOQ Invoice — INV-2026-0487</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
+                  <tr><th class="text-left p-2 font-semibold">BOQ Code</th><th class="text-left p-2 font-semibold">Description</th><th class="text-left p-2 font-semibold">Dept</th><th class="text-center p-2 font-semibold">Qty</th><th class="text-right p-2 font-semibold">Unit Price</th><th class="text-right p-2 font-semibold">Amount</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="p-2 font-bold text-brand-500">IC-FLW-003</td><td class="p-2">Troubleshooting — Flow Transmitter</td><td class="p-2">I&amp;C</td><td class="p-2 text-center">1</td><td class="p-2 text-right">45.000</td><td class="p-2 text-right font-bold">45.000 KWD</td></tr>
+                  <tr><td class="p-2 font-bold text-brand-500">IC-CAL-001</td><td class="p-2">Calibration — Flow Transmitter (5-point)</td><td class="p-2">I&amp;C</td><td class="p-2 text-center">1</td><td class="p-2 text-right">35.000</td><td class="p-2 text-right font-bold">35.000 KWD</td></tr>
+                  <tr><td class="p-2 font-bold text-brand-500">IC-CBL-002</td><td class="p-2">Cable Repair / Replacement (per meter)</td><td class="p-2">I&amp;C</td><td class="p-2 text-center">3</td><td class="p-2 text-right">8.500</td><td class="p-2 text-right font-bold">25.500 KWD</td></tr>
+                  <tr><td class="p-2 font-bold text-brand-500">IC-SPR-015</td><td class="p-2">Cable Gland M20 SS316 — Supply &amp; Install</td><td class="p-2">I&amp;C</td><td class="p-2 text-center">1</td><td class="p-2 text-right">12.000</td><td class="p-2 text-right font-bold">12.000 KWD</td></tr>
+                  <tr><td class="p-2 font-bold text-brand-500">GEN-RPT-001</td><td class="p-2">Work Report Documentation</td><td class="p-2">General</td><td class="p-2 text-center">1</td><td class="p-2 text-right">15.000</td><td class="p-2 text-right font-bold">15.000 KWD</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="flex justify-end gap-6 pt-3 px-3 bg-brand-50 rounded text-base font-bold text-brand-500">
+              <span>5 line items</span><span>Total: 132.500 KWD</span>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+              <button class="border border-danger-500 text-danger-500 text-sm font-bold px-4 py-2 rounded hover:bg-danger-50">Reject &amp; Send Back to Engineer</button>
+              <button onclick="wo(6)" class="bg-warn-500 text-white text-sm font-bold px-5 py-2 rounded hover:bg-warn-700">Approve &amp; Submit to Manager →</button>
+            </div>
+          </div>
+
+          <!-- Step 6: MEW Final -->
+          <div data-wo-panel="6" class="wo-panel p-6 space-y-4 hidden">
+            <h3 class="text-base font-bold">Step 7 — Manager Approves → MEW Final Approval</h3>
+
+            <div class="bg-success-50 border-2 border-success-500 rounded-lg p-6 text-center">
+              <div class="text-2xl font-extrabold text-success-700">✓ Work Order Complete</div>
+              <div class="text-sm text-success-700 mt-2">Invoice INV-2026-0487 · <strong>132.500 KWD</strong> — Added to April 2026 Receivables</div>
+            </div>
+
+            <h4 class="text-sm font-bold mt-2">Complete Timeline</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
+                  <tr><th class="text-left p-2 font-semibold">Step</th><th class="text-left p-2 font-semibold">Action</th><th class="text-left p-2 font-semibold">By</th><th class="text-left p-2 font-semibold">When</th><th class="text-left p-2 font-semibold">Duration</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="p-2"><span class="bg-purple-100 text-purple-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">1</span></td><td class="p-2">MEW Created Request</td><td class="p-2">Abdullah Al-Mutairi</td><td class="p-2">14 Apr, 08:15</td><td class="p-2">—</td></tr>
+                  <tr><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">2</span></td><td class="p-2">Manager Approved &amp; Assigned</td><td class="p-2">Thomas Weber</td><td class="p-2">14 Apr, 08:42</td><td class="p-2">27 min</td></tr>
+                  <tr><td class="p-2"><span class="bg-warn-100 text-warn-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">3</span></td><td class="p-2">Supervisor Assigned Engineer</td><td class="p-2">Khalid Al-Otaibi</td><td class="p-2">14 Apr, 08:58</td><td class="p-2">16 min</td></tr>
+                  <tr><td class="p-2"><span class="bg-success-100 text-success-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">4</span></td><td class="p-2">Engineer Completed Work</td><td class="p-2">Mohammad Rafique</td><td class="p-2">14 Apr, 11:45</td><td class="p-2">2h 32m</td></tr>
+                  <tr><td class="p-2"><span class="bg-warn-100 text-warn-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">5</span></td><td class="p-2">Supervisor Created Invoice</td><td class="p-2">Khalid Al-Otaibi</td><td class="p-2">14 Apr, 13:18</td><td class="p-2">1h 33m</td></tr>
+                  <tr><td class="p-2"><span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">6</span></td><td class="p-2">Manager Approved Invoice</td><td class="p-2">Thomas Weber</td><td class="p-2">14 Apr, 14:05</td><td class="p-2">47 min</td></tr>
+                  <tr><td class="p-2"><span class="bg-purple-100 text-purple-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">7</span></td><td class="p-2">MEW Final Approval</td><td class="p-2">Abdullah Al-Mutairi</td><td class="p-2">15 Apr, 09:30</td><td class="p-2">19h 25m</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="bg-brand-50 rounded-lg p-3 flex items-center justify-between text-sm font-bold text-brand-500">
+              <span>Total Resolution: 25h 15m</span>
+              <span>SLA: 24h — <span class="text-warn-700">Exceeded by 1h 15m</span></span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+</div>
+
+<script>
+// Navigation
+function showPage(name) {
+  document.querySelectorAll('[data-page]').forEach(p => p.classList.remove('active'));
+  document.querySelector('[data-page="'+name+'"]').classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.classList.remove('bg-slate-800', 'text-white', 'border-brand-500');
+    l.classList.add('border-transparent');
+  });
+  var link = document.querySelector('.nav-link[data-nav="'+name+'"]');
+  if (link) {
+    link.classList.add('bg-slate-800', 'text-white', 'border-brand-500');
+    link.classList.remove('border-transparent');
+  }
+  var titles = {dashboard:'Dashboard',workflow:'Approval Workflow',workorder:'Sample Work Order — WO-2026-0487',stores:'Stores & Inventory Management'};
+  document.getElementById('page-title').textContent = titles[name] || name;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.querySelectorAll('.nav-link').forEach(l => {
+  l.addEventListener('click', (e) => { e.preventDefault(); showPage(l.dataset.nav); });
+});
+// Set initial active nav
+document.querySelector('.nav-link[data-nav="dashboard"]').classList.add('bg-slate-800', 'text-white', 'border-brand-500');
+
+// Work order step navigation
+function wo(n) {
+  document.querySelectorAll('.wo-panel').forEach(p => p.classList.add('hidden'));
+  document.querySelector('[data-wo-panel="'+n+'"]').classList.remove('hidden');
+  document.querySelectorAll('.wo-tab').forEach((t, i) => {
+    if (i === n) {
+      t.classList.add('border-brand-500', 'bg-brand-50', 'text-brand-500');
+      t.classList.remove('border-transparent', 'text-slate-500');
+    } else {
+      t.classList.remove('border-brand-500', 'bg-brand-50', 'text-brand-500');
+      t.classList.add('border-transparent', 'text-slate-500');
+    }
+  });
+}
+
+// Charts
+window.addEventListener('load', () => {
+  // Jobs by Department
+  new Chart(document.getElementById('chart-dept'), {
+    type: 'bar',
+    data: {
+      labels: ['Instrumentation', 'DCS & Computer', 'Chemical', 'Electrical', 'HVAC'],
+      datasets: [{
+        label: 'Active Jobs',
+        data: [12, 8, 6, 5, 3],
+        backgroundColor: ['#1e40af', '#1e40af', '#1e40af', '#f59e0b', '#f59e0b'],
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true, grid: { color: '#f1f5f9' } }, y: { grid: { display: false } } }
+    }
+  });
+
+  // Invoice pipeline
+  new Chart(document.getElementById('chart-invoice'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Draft', 'Pending Bilfinger', 'Pending MEW', 'Rejected', 'Received'],
+      datasets: [{
+        data: [1240, 1614, 3247, 664, 14832],
+        backgroundColor: ['#94a3b8', '#1e40af', '#f59e0b', '#dc2626', '#10b981']
+      }]
+    },
+    options: { plugins: { legend: { position: 'right', labels: { font: { size: 10 } } } } }
+  });
+
+  // Monthly receivables
+  new Chart(document.getElementById('chart-receivables'), {
+    type: 'bar',
+    data: {
+      labels: ['Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr'],
+      datasets: [
+        { label: 'Received', data: [2840, 3127, 2455, 3563, 2847, 3210, 2190, 2980, 3415, 3037, 1900], backgroundColor: '#10b981' },
+        { label: 'Pending', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1347], backgroundColor: '#f59e0b' }
+      ]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, grid: { color: '#f1f5f9' } } }
+    }
+  });
+
+  // Stock by category
+  new Chart(document.getElementById('chart-stock-cat'), {
+    type: 'bar',
+    data: {
+      labels: ['Instrumentation', 'Electrical', 'Mechanical', 'Civil', 'HVAC', 'Agriculture'],
+      datasets: [{
+        label: 'Items',
+        data: [324, 218, 152, 73, 48, 32],
+        backgroundColor: ['#1e40af', '#1e40af', '#1e40af', '#f59e0b', '#f59e0b', '#f59e0b'],
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true, grid: { color: '#f1f5f9' } }, y: { grid: { display: false } } }
+    }
+  });
+
+  // Stock movement
+  new Chart(document.getElementById('chart-stock-move'), {
+    type: 'bar',
+    data: {
+      labels: ['Issued (Out)', 'Received (In)', 'Returned', 'Damaged'],
+      datasets: [{
+        data: [182, 224, 42, 14],
+        backgroundColor: ['#dc2626', '#10b981', '#1e40af', '#94a3b8'],
+        borderRadius: 4
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: '#f1f5f9' } } }
+    }
+  });
+});
+</script>
+</body>
+</html>
