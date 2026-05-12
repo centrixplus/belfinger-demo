@@ -156,7 +156,9 @@ tr:hover td{background:#f8fafc}
     <div class="group">
       <div class="group-label">Work Management</div>
       <a href="#" onclick="show('workflow')">🔄 Approval Workflow</a>
+      <a href="#" onclick="show('newjob')" style="color:#86efac;font-weight:600">➕ New Work Order Request</a>
       <a href="#" onclick="show('jobs')">📋 All Jobs <span class="badge">34</span></a>
+      <a href="#" onclick="show('newpermit')" style="color:#86efac;font-weight:600">➕ New Permit Request</a>
       <a href="#" onclick="show('permits')">📜 Work Permits <span class="badge warn">5</span></a>
       <a href="#" onclick="show('invoices')">💰 Invoices <span class="badge warn">6</span></a>
     </div>
@@ -650,11 +652,14 @@ tr:hover td{background:#f8fafc}
 
 <!-- ==================== JOBS ==================== -->
 <div class="page" id="p-jobs">
-  <div class="screen-tabs">
-    <div class="screen-tab on">All Jobs (34)</div>
-    <div class="screen-tab">Issue Requests (22)</div>
-    <div class="screen-tab">Preventive Maintenance (12)</div>
-    <div class="screen-tab">SLA Breached (2)</div>
+  <div class="flex between center mb" style="gap:1rem;flex-wrap:wrap">
+    <div class="screen-tabs">
+      <div class="screen-tab on">All Jobs (34)</div>
+      <div class="screen-tab">Issue Requests (22)</div>
+      <div class="screen-tab">Preventive Maintenance (12)</div>
+      <div class="screen-tab">SLA Breached (2)</div>
+    </div>
+    <button onclick="show('newjob')" style="background:var(--purple);color:#fff;border:none;padding:.55rem 1.1rem;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:.4rem">➕ New Work Order Request</button>
   </div>
 
   <div class="grid g4 mb">
@@ -1236,7 +1241,7 @@ tr:hover td{background:#f8fafc}
   <div class="card mb">
     <div class="flex between center mb">
       <h3 style="margin:0">Work Permit Types</h3>
-      <button class="btn btn-blue" style="font-size:.78rem;padding:.4rem .85rem">+ New Permit Request</button>
+      <button onclick="show('newpermit')" style="background:var(--amber);color:#fff;border:none;padding:.5rem 1rem;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer">➕ New Permit Request</button>
     </div>
     <div class="grid g3" style="gap:.75rem">
       <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:.85rem">
@@ -1650,6 +1655,448 @@ tr:hover td{background:#f8fafc}
 
 </div>
 
+<!-- ==================== NEW WORK ORDER REQUEST ==================== -->
+<div class="page" id="p-newjob">
+
+  <div class="card mb" style="border:2px solid var(--purple);border-top:4px solid var(--purple)">
+    <div class="flex between center mb">
+      <h3 style="margin:0"><span class="b b-purple">New Request</span> Maintenance / Defect Sheet</h3>
+      <span style="font-size:.72rem;color:var(--ink3)">Digital replacement of the paper-based form</span>
+    </div>
+    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:1.25rem">Fill in all required fields. Equipment details are auto-loaded from the register after selecting the tag number.</p>
+
+    <!-- Request Info -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Request Information</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.65rem;margin-bottom:1.25rem">
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Request Date *</div>
+        <input type="text" value="14 April 2026, 08:15 AM" readonly style="width:100%;background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem;color:var(--ink2)"/>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Requested By *</div>
+        <input type="text" value="Eng. Abdullah Al-Mutairi" style="width:100%;background:var(--white);border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem;color:var(--ink)"/>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Request Type *</div>
+        <select style="width:100%;background:var(--amber-l);border:1px solid #fcd34d;border-radius:6px;padding:.5rem .75rem;font-size:.85rem;font-weight:600;color:#92400e">
+          <option>Issue Request (Defect)</option>
+          <option>Preventive Maintenance</option>
+          <option>Inspection Request</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Administration & Site -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Administration, Site &amp; Department</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.65rem;margin-bottom:1.25rem">
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Administration *</div>
+        <select style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem">
+          <option>O&amp;M (Operations &amp; Maintenance)</option>
+          <option>Chemical</option>
+          <option>Networks</option>
+          <option>RO (Reverse Osmosis)</option>
+          <option>Underground</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Zone *</div>
+        <select style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem">
+          <option>Middle Zone</option>
+          <option>North Zone</option>
+          <option>South Zone</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Site *</div>
+        <select style="width:100%;background:var(--blue-l);border:1px solid #93c5fd;border-radius:6px;padding:.5rem .75rem;font-size:.85rem;font-weight:600;color:var(--blue)">
+          <option>Doha Pumping Station</option>
+          <option>Shuwaikh PS</option>
+          <option>Mina Abdullah PS 1</option>
+          <option>Az-Zour 1 PS</option>
+          <option>D12 Mina Abdullah Tower</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Department *</div>
+        <select style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem">
+          <option>I&amp;C (Instrumentation)</option>
+          <option>Electrical</option>
+          <option>Mechanical</option>
+          <option>Civil</option>
+          <option>HVAC</option>
+          <option>Agriculture</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Equipment selection -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Equipment Selection</div>
+    <p style="font-size:.78rem;color:var(--ink3);margin-bottom:.5rem">Search by tag number, category, or scan QR code to auto-fill details.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.65rem;margin-bottom:.65rem">
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Category *</div>
+        <select style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem">
+          <option>Flow</option>
+          <option>Level</option>
+          <option>Pressure</option>
+          <option>Temperature</option>
+          <option>Vibration</option>
+          <option>Panel</option>
+          <option>Limit</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Tag Number *</div>
+        <select style="width:100%;background:var(--blue-l);border:1px solid #93c5fd;border-radius:6px;padding:.5rem .75rem;font-size:.85rem;font-weight:700;color:var(--blue)">
+          <option>FIT-34 (Outlet Line 34) — NOT WORKING</option>
+          <option>FIT-61A (Outlet Line 61A)</option>
+          <option>FIT-61B (Outlet Line 61B)</option>
+          <option>FIT-62A (Outlet Line 62A)</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <button class="btn btn-white" style="font-size:.78rem;padding:.5rem .85rem;width:100%">📷 Scan QR Code</button>
+      </div>
+    </div>
+
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:.75rem 1rem;margin-bottom:1.25rem">
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;color:#0369a1;margin-bottom:.4rem">Auto-filled from Equipment Register</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.5rem;font-size:.8rem">
+        <div><span style="color:var(--ink3);font-size:.65rem;display:block">Sub Category</span><strong>Flow Transmitter</strong></div>
+        <div><span style="color:var(--ink3);font-size:.65rem;display:block">Tech Spec</span><strong>Electromagnetic</strong></div>
+        <div><span style="color:var(--ink3);font-size:.65rem;display:block">Location</span><strong>Outlet Line</strong></div>
+        <div><span style="color:var(--ink3);font-size:.65rem;display:block">Location No.</span><strong>34</strong></div>
+        <div><span style="color:var(--ink3);font-size:.65rem;display:block">Current Status</span><strong style="color:var(--red)">NOT WORKING</strong></div>
+        <div><span style="color:var(--ink3);font-size:.65rem;display:block">Last PM</span><strong>15.06.2025</strong></div>
+      </div>
+    </div>
+
+    <!-- Urgency -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Urgency &amp; Priority</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem;margin-bottom:1.25rem">
+      <div style="border:2px solid var(--red);background:var(--red-l);border-radius:8px;padding:.6rem;text-align:center;cursor:pointer">
+        <div style="font-weight:800;color:#991b1b;font-size:.85rem">Very Urgent</div>
+        <div style="font-size:.65rem;color:#991b1b">Response: 4h · Fix: 24h</div>
+      </div>
+      <div style="border:1px solid var(--line);border-radius:8px;padding:.6rem;text-align:center;cursor:pointer">
+        <div style="font-weight:700;color:var(--ink2);font-size:.85rem">Same Day</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Response: 8h · Fix: 24h</div>
+      </div>
+      <div style="border:1px solid var(--line);border-radius:8px;padding:.6rem;text-align:center;cursor:pointer">
+        <div style="font-weight:700;color:var(--ink2);font-size:.85rem">Normal</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Response: 48h · Fix: 7d</div>
+      </div>
+      <div style="border:1px solid var(--line);border-radius:8px;padding:.6rem;text-align:center;cursor:pointer">
+        <div style="font-weight:700;color:var(--ink2);font-size:.85rem">Low</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Response: 72h · Fix: 14d</div>
+      </div>
+    </div>
+
+    <!-- Problem Description -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Problem Description *</div>
+    <textarea style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.75rem 1rem;font-size:.85rem;color:var(--ink2);line-height:1.65;min-height:90px;font-family:inherit;margin-bottom:1.25rem;resize:vertical">Flow transmitter FIT-34 on Outlet Line 34 is showing erratic readings and intermittent signal loss since yesterday morning. The DCS is receiving 0% reading even though the pump is running. This is affecting our flow monitoring for the entire outlet line. Please inspect and repair urgently.</textarea>
+
+    <!-- Photo Upload -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--purple-l)">Photo Evidence (Optional)</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.5rem;margin-bottom:1.25rem">
+      <div style="background:#f8fafc;border:2px dashed var(--line);border-radius:8px;padding:1.25rem;text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:.25rem">📷</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--blue)">DCS_Screen_0pct.jpg</div>
+        <div style="font-size:.65rem;color:var(--ink3)">2.1 MB · uploaded</div>
+      </div>
+      <div style="background:#f8fafc;border:2px dashed var(--line);border-radius:8px;padding:1.25rem;text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:.25rem">📷</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--blue)">FIT34_cable.jpg</div>
+        <div style="font-size:.65rem;color:var(--ink3)">1.8 MB · uploaded</div>
+      </div>
+      <div style="background:#f8fafc;border:2px dashed var(--line);border-radius:8px;padding:1.25rem;text-align:center;cursor:pointer">
+        <div style="font-size:1.4rem;margin-bottom:.25rem">➕</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--ink3)">Add Photo</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Tap to upload</div>
+      </div>
+    </div>
+
+    <!-- Submit bar -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--line);flex-wrap:wrap;gap:.5rem">
+      <div style="font-size:.75rem;color:var(--ink3)">All fields marked * are required · System will create WO-2026-0488 on submit</div>
+      <div style="display:flex;gap:.5rem">
+        <button class="btn btn-white" onclick="show('jobs')">Cancel</button>
+        <button class="btn" style="background:#f8fafc;border:1px solid var(--line);color:var(--ink2);padding:.6rem 1.25rem;font-size:.85rem;font-weight:600;border-radius:8px;cursor:pointer">Save Draft</button>
+        <button onclick="alert('✓ Work Order WO-2026-0488 created successfully!\nSLA clock started · Manager notified via email + in-app');show('workflow')" style="background:var(--purple);color:#fff;border:none;padding:.6rem 1.5rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Submit Request →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- After submit info -->
+  <div class="card" style="background:var(--purple-l);border-color:#ddd6fe">
+    <div style="display:flex;align-items:flex-start;gap:1rem">
+      <div style="font-size:1.5rem">ℹ️</div>
+      <div>
+        <div style="font-weight:700;font-size:.9rem;color:var(--purple);margin-bottom:.25rem">What happens after submit?</div>
+        <ol style="margin:0;padding-left:1.25rem;font-size:.82rem;color:var(--ink2);line-height:1.7">
+          <li>Work Order ID created (e.g., <strong>WO-2026-0488</strong>) and SLA clock starts</li>
+          <li>Equipment status changes to <strong style="color:var(--red)">NOT WORKING</strong> automatically</li>
+          <li>Belfinger Manager receives instant notification (in-app + email)</li>
+          <li>Request enters the 7-step approval workflow</li>
+          <li>You can track progress in real-time from your dashboard</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== NEW PERMIT REQUEST ==================== -->
+<div class="page" id="p-newpermit">
+
+  <div class="card mb" style="border:2px solid var(--amber);border-top:4px solid var(--amber)">
+    <div class="flex between center mb">
+      <h3 style="margin:0"><span class="b b-amber">New Permit</span> Work Permit Request Form</h3>
+      <span style="font-size:.72rem;color:var(--ink3)">Required for any safety-critical work</span>
+    </div>
+    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:1.25rem">Work cannot commence until all 4 signatures are collected. Submit at least 30 minutes before work start time.</p>
+
+    <!-- Permit type selection -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--amber-l)">Select Permit Type *</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.5rem;margin-bottom:1.25rem">
+      <div style="background:#fef2f2;border:2px solid var(--red);border-radius:10px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+          <span style="font-size:1.05rem">🔥</span>
+          <strong style="color:#991b1b;font-size:.85rem">Hot Work</strong>
+        </div>
+        <div style="font-size:.7rem;color:var(--ink2)">Welding, cutting, grinding</div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+          <span style="font-size:1.05rem">⚡</span>
+          <strong style="color:var(--blue);font-size:.85rem">Electrical</strong>
+        </div>
+        <div style="font-size:.7rem;color:var(--ink2)">Energized equipment, isolation</div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+          <span style="font-size:1.05rem">🕳️</span>
+          <strong style="color:#92400e;font-size:.85rem">Confined Space</strong>
+        </div>
+        <div style="font-size:.7rem;color:var(--ink2)">Reservoirs, tanks, vaults</div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+          <span style="font-size:1.05rem">🏗️</span>
+          <strong style="color:#065f46;font-size:.85rem">Working at Height</strong>
+        </div>
+        <div style="font-size:.7rem;color:var(--ink2)">Above 1.8m, scaffolding</div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+          <span style="font-size:1.05rem">🧪</span>
+          <strong style="color:#5b21b6;font-size:.85rem">Chemical Handling</strong>
+        </div>
+        <div style="font-size:.7rem;color:var(--ink2)">Chlorine, acids, chemicals</div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+          <span style="font-size:1.05rem">🔧</span>
+          <strong style="font-size:.85rem">General Work</strong>
+        </div>
+        <div style="font-size:.7rem;color:var(--ink2)">Routine maintenance</div>
+      </div>
+    </div>
+
+    <!-- Request Information -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--amber-l)">Request Information</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.65rem;margin-bottom:1.25rem">
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Permit Number</div>
+        <input type="text" value="WP-2026-0144 (auto)" readonly style="width:100%;background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem;color:var(--ink2);font-weight:700"/>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Requested By *</div>
+        <input type="text" value="Mohammad Rafique" style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem"/>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Related Work Order</div>
+        <select style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem">
+          <option>WO-2026-0487 (FIT-34, Doha PS)</option>
+          <option>WO-2026-0418 (D12 Mina Abdullah)</option>
+          <option>WO-2026-0420 (Qairawan Towers)</option>
+          <option>No related work order</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Site & Location -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--amber-l)">Site &amp; Location</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.65rem;margin-bottom:1.25rem">
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Site *</div>
+        <select style="width:100%;background:var(--blue-l);border:1px solid #93c5fd;border-radius:6px;padding:.5rem .75rem;font-size:.85rem;font-weight:600;color:var(--blue)">
+          <option>Doha Pumping Station</option>
+          <option>Shuwaikh PS</option>
+          <option>Mina Abdullah PS 1</option>
+          <option>D12 Mina Abdullah Tower</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Specific Location *</div>
+        <input type="text" value="Outlet Line 34 — Pump Discharge Area" style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem"/>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">GPS Coordinates</div>
+        <input type="text" value="29.3475°N, 47.7893°E (auto)" readonly style="width:100%;background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem;color:var(--ink2)"/>
+      </div>
+    </div>
+
+    <!-- Validity Period -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--amber-l)">Validity Period</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.65rem;margin-bottom:1.25rem">
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Valid From *</div>
+        <input type="text" value="15 April 2026, 08:00 AM" style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem"/>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Valid Until *</div>
+        <input type="text" value="15 April 2026, 06:00 PM" style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem"/>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Estimated Duration</div>
+        <input type="text" value="8 hours" readonly style="width:100%;background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem;color:var(--ink2)"/>
+      </div>
+    </div>
+
+    <!-- Personnel -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--amber-l)">Personnel Involved</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.65rem;margin-bottom:1.25rem">
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Site Engineer (Permit Holder) *</div>
+        <select style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem">
+          <option>Mohammad Rafique</option>
+          <option>Naveen Kumar</option>
+          <option>Bilal Siddiqui</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Supervisor *</div>
+        <select style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem">
+          <option>Khalid Al-Otaibi</option>
+          <option>Ahmad Hassan</option>
+          <option>Faisal Al-Rashidi</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--ink3);margin-bottom:.25rem">Number of Workers</div>
+        <input type="number" value="2" min="1" style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.5rem .75rem;font-size:.85rem"/>
+      </div>
+    </div>
+
+    <!-- Work Description -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--amber-l)">Work Description *</div>
+    <textarea style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.75rem 1rem;font-size:.85rem;color:var(--ink2);line-height:1.65;min-height:80px;font-family:inherit;margin-bottom:1.25rem;resize:vertical">Welding repair on flow transmitter mounting bracket. Cutting and welding work near pump discharge line. Will isolate pump and depressurize line before commencing work. Hot work area to be clear of all combustibles and a fire watch will be in place throughout.</textarea>
+
+    <!-- Hazards & Mitigation -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--amber-l)">Hazards Identified *</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.4rem;margin-bottom:1.25rem;font-size:.82rem">
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:var(--red-l);border:1px solid #fecaca;border-radius:6px;cursor:pointer">
+        <input type="checkbox" checked> Fire / Spark hazard
+      </label>
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:var(--amber-l);border:1px solid #fcd34d;border-radius:6px;cursor:pointer">
+        <input type="checkbox" checked> Hot surfaces
+      </label>
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:#fff;border:1px solid var(--line);border-radius:6px;cursor:pointer">
+        <input type="checkbox"> Toxic fumes
+      </label>
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:#fff;border:1px solid var(--line);border-radius:6px;cursor:pointer">
+        <input type="checkbox"> Electrical
+      </label>
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:#fff;border:1px solid var(--line);border-radius:6px;cursor:pointer">
+        <input type="checkbox"> Working at height
+      </label>
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:#fff;border:1px solid var(--line);border-radius:6px;cursor:pointer">
+        <input type="checkbox"> Confined space
+      </label>
+    </div>
+
+    <!-- PPE Required -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--amber-l)">PPE &amp; Safety Equipment Required</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.4rem;margin-bottom:1.25rem;font-size:.82rem">
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:var(--green-l);border:1px solid #6ee7b7;border-radius:6px;cursor:pointer">
+        <input type="checkbox" checked> Welding helmet &amp; gloves
+      </label>
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:var(--green-l);border:1px solid #6ee7b7;border-radius:6px;cursor:pointer">
+        <input type="checkbox" checked> Fire-resistant coverall
+      </label>
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:var(--green-l);border:1px solid #6ee7b7;border-radius:6px;cursor:pointer">
+        <input type="checkbox" checked> Fire extinguisher on standby
+      </label>
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:var(--green-l);border:1px solid #6ee7b7;border-radius:6px;cursor:pointer">
+        <input type="checkbox" checked> Fire blanket
+      </label>
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:var(--green-l);border:1px solid #6ee7b7;border-radius:6px;cursor:pointer">
+        <input type="checkbox" checked> Safety glasses
+      </label>
+      <label style="display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;background:var(--green-l);border:1px solid #6ee7b7;border-radius:6px;cursor:pointer">
+        <input type="checkbox" checked> Dedicated fire watch
+      </label>
+    </div>
+
+    <!-- Approval Chain Preview -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:2px solid var(--amber-l)">Required Signatures (4 levels)</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.6rem;margin-bottom:1.25rem">
+      <div style="background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:.85rem;text-align:center">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--green-l);color:#065f46;display:flex;align-items:center;justify-content:center;margin:0 auto .4rem;font-weight:800;font-size:.85rem;border:2px solid var(--green)">1</div>
+        <div style="font-weight:700;font-size:.78rem">Site Engineer</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Mohammad Rafique</div>
+        <div style="font-size:.6rem;color:var(--green);margin-top:.3rem;font-weight:700">YOU (will sign first)</div>
+      </div>
+      <div style="background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:.85rem;text-align:center">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--amber-l);color:#92400e;display:flex;align-items:center;justify-content:center;margin:0 auto .4rem;font-weight:800;font-size:.85rem;border:2px solid var(--amber)">2</div>
+        <div style="font-weight:700;font-size:.78rem">Supervisor</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Khalid Al-Otaibi</div>
+        <div style="font-size:.6rem;color:var(--amber);margin-top:.3rem;font-weight:700">Notified next</div>
+      </div>
+      <div style="background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:.85rem;text-align:center">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--blue-l);color:var(--blue-d);display:flex;align-items:center;justify-content:center;margin:0 auto .4rem;font-weight:800;font-size:.85rem;border:2px solid var(--blue)">3</div>
+        <div style="font-weight:700;font-size:.78rem">Safety Officer</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Ahmad Hassan</div>
+        <div style="font-size:.6rem;color:var(--blue);margin-top:.3rem;font-weight:700">After supervisor</div>
+      </div>
+      <div style="background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:.85rem;text-align:center">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--purple-l);color:var(--purple);display:flex;align-items:center;justify-content:center;margin:0 auto .4rem;font-weight:800;font-size:.85rem;border:2px solid var(--purple)">4</div>
+        <div style="font-weight:700;font-size:.78rem">MEW Authority</div>
+        <div style="font-size:.65rem;color:var(--ink3)">Abdullah Al-Mutairi</div>
+        <div style="font-size:.6rem;color:var(--purple);margin-top:.3rem;font-weight:700">Final approver</div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--line);flex-wrap:wrap;gap:.5rem">
+      <div style="font-size:.75rem;color:var(--ink3)">Permit will be valid only after all 4 signatures are collected</div>
+      <div style="display:flex;gap:.5rem">
+        <button class="btn btn-white" onclick="show('permits')">Cancel</button>
+        <button style="background:#f8fafc;border:1px solid var(--line);color:var(--ink2);padding:.6rem 1.25rem;font-size:.85rem;font-weight:600;border-radius:8px;cursor:pointer">Save Draft</button>
+        <button onclick="alert('✓ Permit WP-2026-0144 created!\nSubmitted to Supervisor for signature\nETA for all 4 signatures: ~45 minutes');show('permits')" style="background:var(--amber);color:#fff;border:none;padding:.6rem 1.5rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Sign &amp; Submit for Approval →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info box -->
+  <div class="card" style="background:var(--amber-l);border-color:#fcd34d">
+    <div style="display:flex;align-items:flex-start;gap:1rem">
+      <div style="font-size:1.5rem">⚠️</div>
+      <div>
+        <div style="font-weight:700;font-size:.9rem;color:#92400e;margin-bottom:.25rem">Important — Hot Work Permits</div>
+        <ul style="margin:0;padding-left:1.25rem;font-size:.82rem;color:var(--ink2);line-height:1.7">
+          <li>Must be submitted at least <strong>30 minutes before work start time</strong></li>
+          <li>All 4 signatures required — work cannot commence without complete approval</li>
+          <li>Permit auto-expires at the end time — extension requires re-submission</li>
+          <li>Fire watch must remain on site for <strong>30 minutes after work completion</strong></li>
+          <li>System will send reminder 1 hour before expiry</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div><!-- /body -->
 </div><!-- /shell -->
 
@@ -1662,7 +2109,7 @@ function show(page) {
   // Find the sidebar link for this page and mark it active
   var navLink = document.querySelector('.side nav a[onclick*="\'' + page + '\'"]');
   if (navLink) navLink.classList.add('on');
-  const titles = {dashboard:'Dashboard',workflow:'Approval Workflow',jobs:'All Jobs',permits:'Work Permits',invoices:'Invoices',equipment:'Equipment Register',stores:'Stores & Inventory Management',qrcodes:'QR Code Management',sitemap:'Site Map View',sites:'All Sites (40)',ipad:'iPad / Mobile View'};
+  const titles = {dashboard:'Dashboard',workflow:'Approval Workflow',newjob:'New Work Order Request',jobs:'All Jobs',newpermit:'New Permit Request',permits:'Work Permits',invoices:'Invoices',equipment:'Equipment Register',stores:'Stores & Inventory Management',qrcodes:'QR Code Management',sitemap:'Site Map View',sites:'All Sites (40)',ipad:'iPad / Mobile View'};
   document.getElementById('page-title').textContent = titles[page] || page;
   if(page==='ipad') ipad(0, document.querySelector('.screen-tab'));
   window.scrollTo({top:0, behavior:'smooth'});
