@@ -39,17 +39,24 @@ a{color:var(--blue);text-decoration:none}
 /* Cards */
 .card{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:1.25rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .card h3{font-size:1rem;font-weight:700;margin-bottom:.75rem}
-.grid{display:grid;gap:1rem}
-.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.g4{grid-template-columns:1fr 1fr 1fr 1fr}.g5{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
+.grid{display:grid;gap:.75rem}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media (max-width:1400px){.g5{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:1200px){.g5,.g4{grid-template-columns:repeat(3,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.g5,.g4,.g3,.g2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.g5,.g4,.g3,.g2{grid-template-columns:1fr}}
 .mb{margin-bottom:1rem}
 
 /* Stat cards */
-.stat{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:1rem 1.25rem;border-left:4px solid var(--blue)}
+.stat{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:.85rem 1rem;border-left:4px solid var(--blue);min-width:0;overflow:hidden}
 .stat.green{border-left-color:var(--green)}.stat.red{border-left-color:var(--red)}.stat.amber{border-left-color:var(--amber)}
-.stat .num{font-size:1.8rem;font-weight:800;line-height:1;color:var(--ink)}
+.stat .num{font-size:1.5rem;font-weight:800;line-height:1;color:var(--ink)}
 .stat.green .num{color:var(--green)}.stat.red .num{color:var(--red)}.stat.amber .num{color:var(--amber)}.stat.blue .num{color:var(--blue)}
-.stat .label{font-size:.7rem;text-transform:uppercase;letter-spacing:.4px;color:var(--ink3);margin-top:.3rem;font-weight:600}
-.stat .sub{font-size:.72rem;color:var(--ink3);margin-top:.15rem}
+.stat .label{font-size:.65rem;text-transform:uppercase;letter-spacing:.3px;color:var(--ink3);margin-top:.25rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat .sub{font-size:.68rem;color:var(--ink3);margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* Table */
 table{width:100%;border-collapse:collapse;font-size:.82rem}
