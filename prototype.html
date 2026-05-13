@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Bilfinger CMMS — Maintenance Management System</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root{--blue:#1e40af;--blue-d:#1e3a8a;--blue-l:#dbeafe;--green:#10b981;--green-l:#d1fae5;--red:#dc2626;--red-l:#fee2e2;--amber:#f59e0b;--amber-l:#fef3c7;--ink:#0f172a;--ink2:#334155;--ink3:#64748b;--line:#e2e8f0;--bg:#f1f5f9;--white:#fff}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -152,6 +153,8 @@ tr:hover td{background:#f8fafc}
     <div class="group">
       <div class="group-label">Overview</div>
       <a class="on" href="#" onclick="show('dashboard')">📊 Dashboard</a>
+      <a href="#" onclick="show('reports')">📈 Executive Reports</a>
+      <a href="#" onclick="show('calendar')">📅 PM Calendar</a>
     </div>
     <div class="group">
       <div class="group-label">Work Management</div>
@@ -183,7 +186,82 @@ tr:hover td{background:#f8fafc}
 <!-- ========== TOP BAR ========== -->
 <div class="top">
   <div class="title" id="page-title">Dashboard</div>
-  <div class="user">
+  <div class="user" style="position:relative">
+    <!-- Notifications bell -->
+    <button onclick="toggleNotif(event)" style="background:transparent;border:none;cursor:pointer;position:relative;padding:.4rem;border-radius:6px;font-size:1rem" title="Notifications">
+      🔔
+      <span style="position:absolute;top:0;right:0;background:var(--red);color:#fff;font-size:.55rem;font-weight:700;padding:1px 4px;border-radius:99px;min-width:14px;text-align:center">7</span>
+    </button>
+
+    <!-- Notifications dropdown -->
+    <div id="notif-panel" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);width:380px;max-height:500px;overflow-y:auto;z-index:100">
+      <div style="padding:.85rem 1rem;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:700;font-size:.9rem">Notifications</div>
+        <a href="#" style="font-size:.72rem;color:var(--blue);text-decoration:none">Mark all read</a>
+      </div>
+      <div style="padding:.5rem 0">
+        <!-- SLA Breach -->
+        <div style="padding:.65rem 1rem;border-left:3px solid var(--red);background:#fef2f2;cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem">
+            <div style="font-size:.82rem;font-weight:700;color:#991b1b">⚠ SLA Breached</div>
+            <span style="font-size:.65rem;color:var(--ink3);white-space:nowrap">2 min ago</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--ink2);margin-top:.2rem">WO-2026-0414 (DCS · D12 Mina Abdullah) exceeded resolution time by 3 hours</div>
+        </div>
+        <!-- Approval needed -->
+        <div style="padding:.65rem 1rem;border-left:3px solid var(--amber);background:#fffbeb;cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem">
+            <div style="font-size:.82rem;font-weight:700;color:#92400e">📋 Invoice Approval Needed</div>
+            <span style="font-size:.65rem;color:var(--ink3);white-space:nowrap">12 min ago</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--ink2);margin-top:.2rem">INV-2026-0487 (132.500 KWD) submitted by Khalid Al-Otaibi — your review required</div>
+        </div>
+        <!-- Permit signature -->
+        <div style="padding:.65rem 1rem;border-left:3px solid var(--blue);cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem">
+            <div style="font-size:.82rem;font-weight:700;color:var(--blue)">✍ Permit Signature Required</div>
+            <span style="font-size:.65rem;color:var(--ink3);white-space:nowrap">28 min ago</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--ink2);margin-top:.2rem">WP-2026-0142 (Hot Work, Doha PS) — Safety Officer signed. Your approval needed.</div>
+        </div>
+        <!-- Low stock -->
+        <div style="padding:.65rem 1rem;border-left:3px solid var(--red);background:#fef2f2;cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem">
+            <div style="font-size:.82rem;font-weight:700;color:#991b1b">📦 Low Stock Alert</div>
+            <span style="font-size:.65rem;color:var(--ink3);white-space:nowrap">1 hr ago</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--ink2);margin-top:.2rem">PT-DIA-M20 (Pressure Transmitter) at Doha PS: 2 units (below setpoint of 5)</div>
+        </div>
+        <!-- New request -->
+        <div style="padding:.65rem 1rem;border-left:3px solid var(--purple);cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem">
+            <div style="font-size:.82rem;font-weight:700;color:var(--purple)">📩 New Issue Request</div>
+            <span style="font-size:.65rem;color:var(--ink3);white-space:nowrap">2 hr ago</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--ink2);margin-top:.2rem">MEW reported FIT-34 (Doha PS) not working — Very Urgent priority</div>
+        </div>
+        <!-- PM upcoming -->
+        <div style="padding:.65rem 1rem;border-left:3px solid var(--blue);cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem">
+            <div style="font-size:.82rem;font-weight:700;color:var(--blue)">📅 PM Schedule Reminder</div>
+            <span style="font-size:.65rem;color:var(--ink3);white-space:nowrap">3 hr ago</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--ink2);margin-top:.2rem">5 sites due for preventive maintenance this week (Az-Zour 1, Subhan, Mutla Low, +2)</div>
+        </div>
+        <!-- MEW approved -->
+        <div style="padding:.65rem 1rem;border-left:3px solid var(--green);cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem">
+            <div style="font-size:.82rem;font-weight:700;color:#065f46">✅ MEW Approved Invoice</div>
+            <span style="font-size:.65rem;color:var(--ink3);white-space:nowrap">5 hr ago</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--ink2);margin-top:.2rem">INV-2026-0415 (218.500 KWD) approved by MEW — added to April receivables</div>
+        </div>
+      </div>
+      <div style="padding:.6rem 1rem;border-top:1px solid var(--line);text-align:center">
+        <a href="#" style="font-size:.78rem;color:var(--blue);text-decoration:none;font-weight:600">View all notifications →</a>
+      </div>
+    </div>
+
     <span>Thomas Weber · Bilfinger Manager</span>
     <div class="avatar">TW</div>
   </div>
@@ -2097,10 +2175,413 @@ tr:hover td{background:#f8fafc}
   </div>
 </div>
 
+<!-- ==================== EXECUTIVE REPORTS ==================== -->
+<div class="page" id="p-reports">
+
+  <!-- Executive Summary Bar -->
+  <div class="card mb" style="background:linear-gradient(135deg,#1e3a8a,#1e40af);color:#fff;border:none">
+    <div class="flex between center" style="margin-bottom:.5rem">
+      <div>
+        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:#bfdbfe;font-weight:600">Executive Report — April 2026</div>
+        <h3 style="margin:0;color:#fff;font-size:1.2rem;margin-top:.2rem">Monthly Performance Overview</h3>
+      </div>
+      <div class="flex gap">
+        <button style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:.45rem .85rem;border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer">📤 Export PDF</button>
+        <button style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:.45rem .85rem;border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer">📊 Export Excel</button>
+        <button style="background:#fff;color:var(--blue);border:none;padding:.45rem .85rem;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer">📧 Email to Board</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.75rem;margin-top:1.25rem">
+      <div><div style="font-size:1.6rem;font-weight:800;line-height:1">14,832</div><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.5px;color:#bfdbfe;font-weight:600;margin-top:.2rem">Receivable (KWD)</div></div>
+      <div><div style="font-size:1.6rem;font-weight:800;line-height:1">94%</div><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.5px;color:#bfdbfe;font-weight:600;margin-top:.2rem">SLA Compliance</div></div>
+      <div><div style="font-size:1.6rem;font-weight:800;line-height:1">47</div><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.5px;color:#bfdbfe;font-weight:600;margin-top:.2rem">Jobs Closed</div></div>
+      <div><div style="font-size:1.6rem;font-weight:800;line-height:1">25h 15m</div><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.5px;color:#bfdbfe;font-weight:600;margin-top:.2rem">Avg Resolution</div></div>
+      <div><div style="font-size:1.6rem;font-weight:800;line-height:1">+18%</div><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.5px;color:#bfdbfe;font-weight:600;margin-top:.2rem">vs Last Month</div></div>
+    </div>
+  </div>
+
+  <!-- Charts row -->
+  <div class="grid g2 mb">
+    <div class="card">
+      <h3>SLA Compliance Trend — 12 Months</h3>
+      <canvas id="rpt-sla" height="180"></canvas>
+    </div>
+    <div class="card">
+      <h3>Cost vs Budget — By Department</h3>
+      <canvas id="rpt-cost" height="180"></canvas>
+    </div>
+  </div>
+
+  <!-- Cost vs Budget Table -->
+  <div class="card mb">
+    <div class="flex between center mb">
+      <h3 style="margin:0">Cost vs Budget — April 2026</h3>
+      <div class="flex gap">
+        <span style="padding:.3rem .65rem;background:var(--green-l);color:#065f46;border-radius:99px;font-size:.7rem;font-weight:700">📈 Under budget by 8%</span>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Department</th><th style="text-align:right">Budget (KWD)</th><th style="text-align:right">Spent (KWD)</th><th style="text-align:right">Variance</th><th>Utilization</th></tr></thead>
+      <tbody>
+        <tr><td class="fw">Instrumentation (I&amp;C)</td><td style="text-align:right">5,000.000</td><td style="text-align:right">4,287.000</td><td style="text-align:right;color:var(--green)">-713.000</td>
+          <td><div style="background:#e2e8f0;height:14px;border-radius:99px;overflow:hidden"><div style="width:86%;height:100%;background:var(--green)"></div></div></td>
+        </tr>
+        <tr><td class="fw">Electrical</td><td style="text-align:right">3,500.000</td><td style="text-align:right">2,985.000</td><td style="text-align:right;color:var(--green)">-515.000</td>
+          <td><div style="background:#e2e8f0;height:14px;border-radius:99px;overflow:hidden"><div style="width:85%;height:100%;background:var(--green)"></div></div></td>
+        </tr>
+        <tr><td class="fw">Chemical</td><td style="text-align:right">2,500.000</td><td style="text-align:right">2,890.000</td><td style="text-align:right;color:var(--red)">+390.000</td>
+          <td><div style="background:#e2e8f0;height:14px;border-radius:99px;overflow:hidden"><div style="width:100%;height:100%;background:var(--red)"></div></div></td>
+        </tr>
+        <tr><td class="fw">Mechanical</td><td style="text-align:right">2,000.000</td><td style="text-align:right">1,620.000</td><td style="text-align:right;color:var(--green)">-380.000</td>
+          <td><div style="background:#e2e8f0;height:14px;border-radius:99px;overflow:hidden"><div style="width:81%;height:100%;background:var(--green)"></div></div></td>
+        </tr>
+        <tr><td class="fw">HVAC</td><td style="text-align:right">1,000.000</td><td style="text-align:right">945.000</td><td style="text-align:right;color:var(--amber)">-55.000</td>
+          <td><div style="background:#e2e8f0;height:14px;border-radius:99px;overflow:hidden"><div style="width:94%;height:100%;background:var(--amber)"></div></div></td>
+        </tr>
+        <tr><td class="fw">Civil</td><td style="text-align:right">800.000</td><td style="text-align:right">523.000</td><td style="text-align:right;color:var(--green)">-277.000</td>
+          <td><div style="background:#e2e8f0;height:14px;border-radius:99px;overflow:hidden"><div style="width:65%;height:100%;background:var(--green)"></div></div></td>
+        </tr>
+        <tr style="background:var(--blue-l);font-weight:700"><td class="fw">TOTAL</td><td style="text-align:right">14,800.000</td><td style="text-align:right">13,250.000</td><td style="text-align:right;color:var(--green)">-1,550.000</td><td style="font-weight:800;color:var(--blue)">90% utilized</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Top Performers + Issues -->
+  <div class="grid g2 mb">
+    <div class="card">
+      <h3>🏆 Top Performing Sites — April</h3>
+      <table>
+        <thead><tr><th>Rank</th><th>Site</th><th>Jobs Done</th><th>SLA %</th></tr></thead>
+        <tbody>
+          <tr><td>🥇 1</td><td class="fw">Shuwaikh PS</td><td>12</td><td style="color:var(--green);font-weight:700">100%</td></tr>
+          <tr><td>🥈 2</td><td class="fw">D8 Jahra Towers</td><td>9</td><td style="color:var(--green);font-weight:700">100%</td></tr>
+          <tr><td>🥉 3</td><td class="fw">Mutla High</td><td>8</td><td style="color:var(--green);font-weight:700">100%</td></tr>
+          <tr><td>4</td><td class="fw">Subiya PS</td><td>11</td><td style="color:var(--green);font-weight:700">98%</td></tr>
+          <tr><td>5</td><td class="fw">Mina Abdullah PS 1</td><td>7</td><td style="color:var(--green);font-weight:700">95%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>⚠ Sites Needing Attention</h3>
+      <table>
+        <thead><tr><th>Site</th><th>Issues</th><th>SLA %</th><th>Trend</th></tr></thead>
+        <tbody>
+          <tr style="background:#fee2e2"><td class="fw">D12 Mina Abdullah</td><td>4 open</td><td style="color:var(--red);font-weight:700">72%</td><td>📉 -8%</td></tr>
+          <tr style="background:#fef3c7"><td class="fw">Doha PS</td><td>2 critical</td><td style="color:var(--amber);font-weight:700">85%</td><td>📉 -3%</td></tr>
+          <tr style="background:#fef3c7"><td class="fw">Az-Zour 2</td><td>3 SLA risk</td><td style="color:var(--amber);font-weight:700">88%</td><td>→ same</td></tr>
+          <tr><td class="fw">Hawally PS</td><td>1 overdue</td><td style="color:var(--amber);font-weight:700">90%</td><td>📈 +2%</td></tr>
+          <tr><td class="fw">Wafra PS</td><td>2 pending</td><td>92%</td><td>📈 +5%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Department Performance -->
+  <div class="card mb">
+    <h3>Department Performance — Last 6 Months</h3>
+    <canvas id="rpt-dept" height="100"></canvas>
+  </div>
+
+  <!-- Available Reports -->
+  <div class="card">
+    <h3>Available Reports — Quick Access</h3>
+    <div class="grid g3" style="gap:.65rem;margin-top:.5rem">
+      <div style="background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:.4rem"><span style="font-size:1.05rem">📊</span><strong style="font-size:.85rem">Monthly Performance</strong></div>
+        <div style="font-size:.72rem;color:var(--ink3)">KPIs, SLA compliance, cost trends</div>
+      </div>
+      <div style="background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:.4rem"><span style="font-size:1.05rem">💰</span><strong style="font-size:.85rem">Financial Summary</strong></div>
+        <div style="font-size:.72rem;color:var(--ink3)">Invoiced, paid, receivable, aging</div>
+      </div>
+      <div style="background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:.4rem"><span style="font-size:1.05rem">⚙️</span><strong style="font-size:.85rem">Equipment Status Report</strong></div>
+        <div style="font-size:.72rem;color:var(--ink3)">By site, category, working vs defective</div>
+      </div>
+      <div style="background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:.4rem"><span style="font-size:1.05rem">👷</span><strong style="font-size:.85rem">Engineer Productivity</strong></div>
+        <div style="font-size:.72rem;color:var(--ink3)">Jobs per engineer, avg time, ratings</div>
+      </div>
+      <div style="background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:.4rem"><span style="font-size:1.05rem">📜</span><strong style="font-size:.85rem">Audit Compliance</strong></div>
+        <div style="font-size:.72rem;color:var(--ink3)">Permits, signatures, audit trail</div>
+      </div>
+      <div style="background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:.85rem;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:.4rem"><span style="font-size:1.05rem">📦</span><strong style="font-size:.85rem">Inventory &amp; Stores</strong></div>
+        <div style="font-size:.72rem;color:var(--ink3)">Stock movement, reorder, valuation</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PM CALENDAR ==================== -->
+<div class="page" id="p-calendar">
+
+  <!-- Calendar header -->
+  <div class="card mb">
+    <div class="flex between center" style="margin-bottom:.75rem">
+      <div>
+        <h3 style="margin:0">Preventive Maintenance Calendar</h3>
+        <div style="font-size:.78rem;color:var(--ink3);margin-top:.2rem">Semi-annual cycle &middot; All 40 sites scheduled twice per year</div>
+      </div>
+      <div class="flex gap" style="align-items:center">
+        <button style="background:#fff;border:1px solid var(--line);padding:.4rem .65rem;border-radius:6px;font-size:.78rem;cursor:pointer">← Mar</button>
+        <div style="font-weight:700;font-size:.95rem;padding:0 .5rem">April 2026</div>
+        <button style="background:#fff;border:1px solid var(--line);padding:.4rem .65rem;border-radius:6px;font-size:.78rem;cursor:pointer">May →</button>
+        <button style="background:var(--blue);color:#fff;border:none;padding:.4rem .85rem;border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;margin-left:.5rem">Today</button>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="flex gap" style="font-size:.72rem;flex-wrap:wrap;margin-bottom:.5rem">
+      <span style="display:inline-flex;align-items:center;gap:.35rem"><div style="width:12px;height:12px;background:var(--blue);border-radius:3px"></div> Pump Station PM</span>
+      <span style="display:inline-flex;align-items:center;gap:.35rem"><div style="width:12px;height:12px;background:var(--green);border-radius:3px"></div> Tower PM</span>
+      <span style="display:inline-flex;align-items:center;gap:.35rem"><div style="width:12px;height:12px;background:var(--amber);border-radius:3px"></div> Calibration</span>
+      <span style="display:inline-flex;align-items:center;gap:.35rem"><div style="width:12px;height:12px;background:var(--red);border-radius:3px"></div> Overdue</span>
+      <span style="display:inline-flex;align-items:center;gap:.35rem"><div style="width:12px;height:12px;background:var(--purple);border-radius:3px"></div> Compliance Audit</span>
+      <span style="display:inline-flex;align-items:center;gap:.35rem;margin-left:auto"><div style="width:12px;height:12px;background:#94a3b8;border-radius:3px"></div> Completed</span>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div style="border:1px solid var(--line);border-radius:8px;overflow:hidden">
+      <!-- Days header -->
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);background:#f8fafc;border-bottom:1px solid var(--line)">
+        <div style="padding:.5rem;text-align:center;font-size:.65rem;text-transform:uppercase;font-weight:700;color:var(--ink3);letter-spacing:.4px">Sun</div>
+        <div style="padding:.5rem;text-align:center;font-size:.65rem;text-transform:uppercase;font-weight:700;color:var(--ink3);letter-spacing:.4px">Mon</div>
+        <div style="padding:.5rem;text-align:center;font-size:.65rem;text-transform:uppercase;font-weight:700;color:var(--ink3);letter-spacing:.4px">Tue</div>
+        <div style="padding:.5rem;text-align:center;font-size:.65rem;text-transform:uppercase;font-weight:700;color:var(--ink3);letter-spacing:.4px">Wed</div>
+        <div style="padding:.5rem;text-align:center;font-size:.65rem;text-transform:uppercase;font-weight:700;color:var(--ink3);letter-spacing:.4px">Thu</div>
+        <div style="padding:.5rem;text-align:center;font-size:.65rem;text-transform:uppercase;font-weight:700;color:var(--ink3);letter-spacing:.4px;background:#f1f5f9">Fri (Weekend)</div>
+        <div style="padding:.5rem;text-align:center;font-size:.65rem;text-transform:uppercase;font-weight:700;color:var(--ink3);letter-spacing:.4px;background:#f1f5f9">Sat (Weekend)</div>
+      </div>
+
+      <!-- Calendar cells (April 2026 starts on Wednesday April 1) -->
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);min-height:100%">
+        <!-- Week 1 -->
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#f8fafc;color:#cbd5e1"><div style="font-size:.72rem;font-weight:700">29</div></div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#f8fafc;color:#cbd5e1"><div style="font-size:.72rem;font-weight:700">30</div></div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#f8fafc;color:#cbd5e1"><div style="font-size:.72rem;font-weight:700">31</div></div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">1</div>
+          <div style="background:#94a3b8;color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">✓ Subiya PS</div>
+          <div style="background:#94a3b8;color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:2px;line-height:1.3">✓ D8 Jahra</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">2</div>
+          <div style="background:#94a3b8;color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">✓ Shuwaikh</div>
+          <div style="background:#94a3b8;color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:2px;line-height:1.3">✓ Mina Abd 1</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#f1f5f9"><div style="font-size:.72rem;font-weight:700;color:var(--ink3)">3</div></div>
+        <div style="min-height:100px;padding:.4rem;border-bottom:1px solid var(--line);background:#f1f5f9"><div style="font-size:.72rem;font-weight:700;color:var(--ink3)">4</div></div>
+
+        <!-- Week 2 -->
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">5</div>
+          <div style="background:#94a3b8;color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">✓ Ardiya PS</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">6</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Mutla High</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:2px;line-height:1.3">Hawally PS</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">7</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Mina Abd 2</div>
+          <div style="background:var(--green);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:2px;line-height:1.3">D2 Bayan</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">8</div>
+          <div style="background:var(--amber);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Calibration</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">9</div>
+          <div style="background:var(--red);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">⚠ D12 Mina Abd</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#f1f5f9"><div style="font-size:.72rem;font-weight:700;color:var(--ink3)">10</div></div>
+        <div style="min-height:100px;padding:.4rem;border-bottom:1px solid var(--line);background:#f1f5f9"><div style="font-size:.72rem;font-weight:700;color:var(--ink3)">11</div></div>
+
+        <!-- Week 3 -->
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">12</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Mutla Low</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">13</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Subhan PS</div>
+          <div style="background:var(--green);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:2px;line-height:1.3">Qairawan</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#dbeafe">
+          <div style="font-size:.72rem;font-weight:700;color:var(--blue-d)">14 <span style="background:var(--blue);color:#fff;padding:1px 5px;border-radius:99px;font-size:.55rem;margin-left:3px">TODAY</span></div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Az-Zour 1</div>
+          <div style="background:var(--purple);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:2px;line-height:1.3">Compliance</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">15</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Az-Zour 2</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">16</div>
+          <div style="background:var(--green);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">D3 Ardiya</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#f1f5f9"><div style="font-size:.72rem;font-weight:700;color:var(--ink3)">17</div></div>
+        <div style="min-height:100px;padding:.4rem;border-bottom:1px solid var(--line);background:#f1f5f9"><div style="font-size:.72rem;font-weight:700;color:var(--ink3)">18</div></div>
+
+        <!-- Week 4 -->
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">19</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">East Ahmadi</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">20</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Wafra PS</div>
+          <div style="background:var(--green);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:2px;line-height:1.3">D5 Khaitan</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">21</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Shuaiba PS</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">22</div>
+          <div style="background:var(--green);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">D14 Saad</div>
+          <div style="background:var(--amber);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:2px;line-height:1.3">Calibration</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">23</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">West Funaitees</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#f1f5f9"><div style="font-size:.72rem;font-weight:700;color:var(--ink3)">24</div></div>
+        <div style="min-height:100px;padding:.4rem;border-bottom:1px solid var(--line);background:#f1f5f9"><div style="font-size:.72rem;font-weight:700;color:var(--ink3)">25</div></div>
+
+        <!-- Week 5 -->
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">26</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Jahra PS</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">27</div>
+          <div style="background:var(--green);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">D20 New Jahra</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">28</div>
+          <div style="background:var(--green);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Sabah Al Ahmed</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">29</div>
+          <div style="background:var(--purple);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Quarterly Audit</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <div style="font-size:.72rem;font-weight:700;color:var(--ink2)">30</div>
+          <div style="background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-top:.25rem;line-height:1.3">Messila</div>
+        </div>
+        <div style="min-height:100px;padding:.4rem;border-right:1px solid var(--line);background:#f1f5f9;color:#cbd5e1"><div style="font-size:.72rem;font-weight:700">1</div></div>
+        <div style="min-height:100px;padding:.4rem;background:#f1f5f9;color:#cbd5e1"><div style="font-size:.72rem;font-weight:700">2</div></div>
+      </div>
+    </div>
+
+    <div class="flex between" style="margin-top:.75rem;font-size:.72rem;color:var(--ink3)">
+      <span>Click any event to view details · Drag &amp; drop to reschedule</span>
+      <span>Total scheduled in April: <strong style="color:var(--ink)">28 PM jobs across 20 sites</strong></span>
+    </div>
+  </div>
+
+  <!-- This week summary -->
+  <div class="grid g4 mb">
+    <div class="stat green"><div class="num">10</div><div class="label">Completed (Wk 1-2)</div></div>
+    <div class="stat blue"><div class="num">3</div><div class="label">In Progress (Wk 3)</div></div>
+    <div class="stat amber"><div class="num">11</div><div class="label">Upcoming (Wk 4-5)</div></div>
+    <div class="stat red"><div class="num">1</div><div class="label">⚠ Overdue</div></div>
+  </div>
+
+  <!-- Upcoming jobs -->
+  <div class="card">
+    <h3>Upcoming This Week (15-19 April)</h3>
+    <table>
+      <thead><tr><th>Date</th><th>Site</th><th>Type</th><th>Equipment Count</th><th>Engineer</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td class="fw">15 Apr (Tue)</td><td>Az-Zour 2</td><td><span class="b b-blue">PS</span></td><td>54 instruments</td><td>Mohammad Rafique</td><td><button class="btn btn-white" style="font-size:.7rem;padding:.3rem .6rem">View</button></td></tr>
+        <tr><td class="fw">16 Apr (Wed)</td><td>D3 Ardiya</td><td><span class="b b-green">Tower</span></td><td>34 instruments</td><td>Bilal Siddiqui</td><td><button class="btn btn-white" style="font-size:.7rem;padding:.3rem .6rem">View</button></td></tr>
+        <tr><td class="fw">19 Apr (Sat)</td><td>East Ahmadi</td><td><span class="b b-blue">PS</span></td><td>48 instruments</td><td>Naveen Kumar</td><td><button class="btn btn-white" style="font-size:.7rem;padding:.3rem .6rem">View</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
 </div><!-- /body -->
 </div><!-- /shell -->
 
 <script>
+// Notifications dropdown toggle
+function toggleNotif(e) {
+  e.stopPropagation();
+  var p = document.getElementById('notif-panel');
+  p.style.display = p.style.display === 'block' ? 'none' : 'block';
+}
+document.addEventListener('click', function(e) {
+  var p = document.getElementById('notif-panel');
+  if (p && !p.contains(e.target)) p.style.display = 'none';
+});
+
+// Reports charts (initialized when reports page shown)
+let chartsInit = false;
+function initReportsCharts() {
+  if (chartsInit || typeof Chart === 'undefined') return;
+  chartsInit = true;
+  // SLA Compliance trend
+  new Chart(document.getElementById('rpt-sla'), {
+    type: 'line',
+    data: {
+      labels: ['May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr'],
+      datasets: [{
+        label: 'SLA Compliance %',
+        data: [88, 90, 87, 91, 93, 89, 92, 90, 91, 93, 92, 94],
+        borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', tension: 0.3, fill: true, borderWidth: 3
+      }, {
+        label: 'Target (90%)',
+        data: [90,90,90,90,90,90,90,90,90,90,90,90],
+        borderColor: '#94a3b8', borderDash:[5,5], pointRadius:0, borderWidth: 2
+      }]
+    },
+    options: {
+      plugins: { legend: { position:'bottom', labels:{font:{size:10}} } },
+      scales: { y: { beginAtZero:false, min:80, max:100, grid:{color:'#f1f5f9'} }, x:{grid:{display:false}} }
+    }
+  });
+  // Cost vs Budget
+  new Chart(document.getElementById('rpt-cost'), {
+    type: 'bar',
+    data: {
+      labels: ['I&C','Electrical','Chemical','Mechanical','HVAC','Civil'],
+      datasets: [
+        { label: 'Budget', data:[5000,3500,2500,2000,1000,800], backgroundColor:'#94a3b8' },
+        { label: 'Spent', data:[4287,2985,2890,1620,945,523], backgroundColor:'#1e40af' }
+      ]
+    },
+    options: {
+      plugins: { legend: { position:'bottom', labels:{font:{size:10}} } },
+      scales: { y: { beginAtZero:true, grid:{color:'#f1f5f9'} }, x:{grid:{display:false}} }
+    }
+  });
+  // Department perf
+  new Chart(document.getElementById('rpt-dept'), {
+    type: 'line',
+    data: {
+      labels: ['Nov','Dec','Jan','Feb','Mar','Apr'],
+      datasets: [
+        { label:'Instrumentation', data:[24,28,31,35,38,42], borderColor:'#1e40af', tension:0.3, borderWidth:2 },
+        { label:'Electrical', data:[18,22,20,25,27,29], borderColor:'#10b981', tension:0.3, borderWidth:2 },
+        { label:'Chemical', data:[12,14,18,16,20,22], borderColor:'#f59e0b', tension:0.3, borderWidth:2 },
+        { label:'Mechanical', data:[8,11,13,15,17,19], borderColor:'#7c3aed', tension:0.3, borderWidth:2 },
+        { label:'HVAC', data:[5,6,8,9,10,11], borderColor:'#dc2626', tension:0.3, borderWidth:2 }
+      ]
+    },
+    options: {
+      plugins: { legend: { position:'bottom', labels:{font:{size:10}} } },
+      scales: { y: { beginAtZero:true, grid:{color:'#f1f5f9'} }, x:{grid:{display:false}} }
+    }
+  });
+}
+
 function show(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('show'));
   var target = document.getElementById('p-' + page);
@@ -2109,9 +2590,10 @@ function show(page) {
   // Find the sidebar link for this page and mark it active
   var navLink = document.querySelector('.side nav a[onclick*="\'' + page + '\'"]');
   if (navLink) navLink.classList.add('on');
-  const titles = {dashboard:'Dashboard',workflow:'Approval Workflow',newjob:'New Work Order Request',jobs:'All Jobs',newpermit:'New Permit Request',permits:'Work Permits',invoices:'Invoices',equipment:'Equipment Register',stores:'Stores & Inventory Management',qrcodes:'QR Code Management',sitemap:'Site Map View',sites:'All Sites (40)',ipad:'iPad / Mobile View'};
+  const titles = {dashboard:'Dashboard',reports:'Executive Reports & Analytics',calendar:'PM Calendar',workflow:'Approval Workflow',newjob:'New Work Order Request',jobs:'All Jobs',newpermit:'New Permit Request',permits:'Work Permits',invoices:'Invoices',equipment:'Equipment Register',stores:'Stores & Inventory Management',qrcodes:'QR Code Management',sitemap:'Site Map View',sites:'All Sites (40)',ipad:'iPad / Mobile View'};
   document.getElementById('page-title').textContent = titles[page] || page;
   if(page==='ipad') ipad(0, document.querySelector('.screen-tab'));
+  if(page==='reports') setTimeout(initReportsCharts, 50);
   window.scrollTo({top:0, behavior:'smooth'});
 }
 function ipad(n, el) {
